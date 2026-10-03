@@ -1,0 +1,271 @@
+{
+  "n_train": 18998,
+  "n_test": 4750,
+  "results": [
+    {
+      "model": "Logistic Regression",
+      "fit_seconds": 1.9,
+      "accuracy": 0.551,
+      "macro_f1": 0.53,
+      "per_class": {
+        "Fixed": {
+          "precision": 0.776,
+          "recall": 0.536,
+          "f1": 0.634
+        },
+        "Repairable": {
+          "precision": 0.494,
+          "recall": 0.527,
+          "f1": 0.509
+        },
+        "End of life": {
+          "precision": 0.346,
+          "recall": 0.633,
+          "f1": 0.448
+        }
+      },
+      "cost_score_by_ratio": {
+        "1": 0.317,
+        "2": 0.534,
+        "3": 0.75,
+        "4": 0.967,
+        "5": 1.184,
+        "6": 1.401,
+        "7": 1.618,
+        "8": 1.835,
+        "9": 2.051,
+        "10": 2.268
+      }
+    },
+    {
+      "model": "Random Forest",
+      "fit_seconds": 3.7,
+      "accuracy": 0.498,
+      "macro_f1": 0.49,
+      "per_class": {
+        "Fixed": {
+          "precision": 0.783,
+          "recall": 0.43,
+          "f1": 0.555
+        },
+        "Repairable": {
+          "precision": 0.5,
+          "recall": 0.5,
+          "f1": 0.5
+        },
+        "End of life": {
+          "precision": 0.297,
+          "recall": 0.698,
+          "f1": 0.416
+        }
+      },
+      "cost_score_by_ratio": {
+        "1": 0.385,
+        "2": 0.685,
+        "3": 0.986,
+        "4": 1.286,
+        "5": 1.586,
+        "6": 1.887,
+        "7": 2.187,
+        "8": 2.488,
+        "9": 2.788,
+        "10": 3.089
+      }
+    },
+    {
+      "model": "XGBoost",
+      "fit_seconds": 52.4,
+      "accuracy": 0.559,
+      "macro_f1": 0.54,
+      "per_class": {
+        "Fixed": {
+          "precision": 0.774,
+          "recall": 0.539,
+          "f1": 0.636
+        },
+        "Repairable": {
+          "precision": 0.506,
+          "recall": 0.54,
+          "f1": 0.523
+        },
+        "End of life": {
+          "precision": 0.357,
+          "recall": 0.645,
+          "f1": 0.46
+        }
+      },
+      "cost_score_by_ratio": {
+        "1": 0.309,
+        "2": 0.52,
+        "3": 0.732,
+        "4": 0.943,
+        "5": 1.154,
+        "6": 1.366,
+        "7": 1.577,
+        "8": 1.788,
+        "9": 2.0,
+        "10": 2.211
+      }
+    },
+    {
+      "model": "MLP",
+      "fit_seconds": 52.8,
+      "accuracy": 0.542,
+      "macro_f1": 0.495,
+      "per_class": {
+        "Fixed": {
+          "precision": 0.67,
+          "recall": 0.625,
+          "f1": 0.647
+        },
+        "Repairable": {
+          "precision": 0.45,
+          "recall": 0.463,
+          "f1": 0.456
+        },
+        "End of life": {
+          "precision": 0.356,
+          "recall": 0.41,
+          "f1": 0.381
+        }
+      },
+      "cost_score_by_ratio": {
+        "1": 0.285,
+        "2": 0.42,
+        "3": 0.555,
+        "4": 0.69,
+        "5": 0.825,
+        "6": 0.96,
+        "7": 1.095,
+        "8": 1.23,
+        "9": 1.365,
+        "10": 1.5
+      }
+    }
+  ],
+  "accuracy_best_model": "XGBoost",
+  "cost_ratio_sweep": {
+    "1": "MLP",
+    "2": "MLP",
+    "3": "MLP",
+    "4": "MLP",
+    "5": "MLP",
+    "6": "MLP",
+    "7": "MLP",
+    "8": "MLP",
+    "9": "MLP",
+    "10": "MLP"
+  },
+  "disagreement_ratios": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10"
+  ],
+  "cost_selected_model_at_1to5": "MLP",
+  "cv_5fold": {
+    "Logistic Regression": {
+      "macro_f1_mean": 0.529,
+      "macro_f1_std": 0.004,
+      "eol_recall_mean": 0.625,
+      "eol_recall_std": 0.018,
+      "cost5_mean": 1.181,
+      "cost5_std": 0.047
+    },
+    "Random Forest": {
+      "macro_f1_mean": 0.477,
+      "macro_f1_std": 0.012,
+      "eol_recall_mean": 0.706,
+      "eol_recall_std": 0.026,
+      "cost5_mean": 1.655,
+      "cost5_std": 0.134
+    },
+    "XGBoost": {
+      "macro_f1_mean": 0.532,
+      "macro_f1_std": 0.005,
+      "eol_recall_mean": 0.644,
+      "eol_recall_std": 0.015,
+      "cost5_mean": 1.199,
+      "cost5_std": 0.044
+    },
+    "MLP": {
+      "macro_f1_mean": 0.504,
+      "macro_f1_std": 0.003,
+      "eol_recall_mean": 0.487,
+      "eol_recall_std": 0.023,
+      "cost5_mean": 0.982,
+      "cost5_std": 0.073
+    }
+  },
+  "cv_cost_best_model": "MLP",
+  "shap_top_features_eol": [],
+  "runtime_seconds": 470.7,
+  "shap_top_features_eol_xgboost": [
+    {
+      "feature": "txt__opnieuw",
+      "mean_abs_shap": 0.6465
+    },
+    {
+      "feature": "txt__files",
+      "mean_abs_shap": 0.5473
+    },
+    {
+      "feature": "txt__virus",
+      "mean_abs_shap": 0.472
+    },
+    {
+      "feature": "txt__wieder",
+      "mean_abs_shap": 0.3952
+    },
+    {
+      "feature": "txt__casse",
+      "mean_abs_shap": 0.3944
+    },
+    {
+      "feature": "txt__lent",
+      "mean_abs_shap": 0.3081
+    },
+    {
+      "feature": "txt__changement",
+      "mean_abs_shap": 0.2843
+    },
+    {
+      "feature": "txt__slow",
+      "mean_abs_shap": 0.2816
+    },
+    {
+      "feature": "txt__dem",
+      "mean_abs_shap": 0.2621
+    },
+    {
+      "feature": "cat__brand_Compaq",
+      "mean_abs_shap": 0.2529
+    },
+    {
+      "feature": "txt__back",
+      "mean_abs_shap": 0.2263
+    },
+    {
+      "feature": "txt__have",
+      "mean_abs_shap": 0.2198
+    },
+    {
+      "feature": "txt__op",
+      "mean_abs_shap": 0.2122
+    },
+    {
+      "feature": "txt__disk",
+      "mean_abs_shap": 0.1913
+    },
+    {
+      "feature": "txt__board",
+      "mean_abs_shap": 0.1903
+    }
+  ]
+}

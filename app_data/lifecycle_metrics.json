@@ -1,0 +1,296 @@
+{
+  "n_records": 23748,
+  "n_groups": 8,
+  "folds": 4,
+  "distribution": {
+    "Fixed": 12937,
+    "Repairable": 6495,
+    "End of life": 4316
+  },
+  "results": [
+    {
+      "model": "Baseline (majority)",
+      "representation": "none",
+      "random": {
+        "accuracy": 0.545,
+        "macro_f1": 0.235,
+        "eol_recall": 0.0,
+        "eol_precision": 0.0,
+        "fixed_recall": 1.0
+      },
+      "grouped": {
+        "accuracy": 0.545,
+        "macro_f1": 0.235,
+        "eol_recall": 0.0,
+        "eol_precision": 0.0,
+        "fixed_recall": 1.0
+      }
+    },
+    {
+      "model": "Logistic Regression",
+      "representation": "tokens",
+      "random": {
+        "accuracy": 0.551,
+        "macro_f1": 0.53,
+        "eol_recall": 0.633,
+        "eol_precision": 0.346,
+        "fixed_recall": 0.536
+      },
+      "grouped": {
+        "accuracy": 0.483,
+        "macro_f1": 0.41,
+        "eol_recall": 0.31,
+        "eol_precision": 0.278,
+        "fixed_recall": 0.578,
+        "macro_f1_sd": 0.012,
+        "eol_recall_sd": 0.102
+      }
+    },
+    {
+      "model": "Random Forest",
+      "representation": "tokens",
+      "random": {
+        "accuracy": 0.498,
+        "macro_f1": 0.491,
+        "eol_recall": 0.698,
+        "eol_precision": 0.297,
+        "fixed_recall": 0.43
+      },
+      "grouped": {
+        "accuracy": 0.362,
+        "macro_f1": 0.34,
+        "eol_recall": 0.638,
+        "eol_precision": 0.247,
+        "fixed_recall": 0.251,
+        "macro_f1_sd": 0.049,
+        "eol_recall_sd": 0.155
+      }
+    },
+    {
+      "model": "XGBoost",
+      "representation": "tokens",
+      "random": {
+        "accuracy": 0.559,
+        "macro_f1": 0.539,
+        "eol_recall": 0.645,
+        "eol_precision": 0.357,
+        "fixed_recall": 0.539
+      },
+      "grouped": {
+        "accuracy": 0.446,
+        "macro_f1": 0.388,
+        "eol_recall": 0.402,
+        "eol_precision": 0.259,
+        "fixed_recall": 0.485,
+        "macro_f1_sd": 0.029,
+        "eol_recall_sd": 0.176
+      }
+    },
+    {
+      "model": "Logistic Regression",
+      "representation": "lexicon",
+      "random": {
+        "accuracy": 0.431,
+        "macro_f1": 0.418,
+        "eol_recall": 0.516,
+        "eol_precision": 0.265,
+        "fixed_recall": 0.395
+      },
+      "grouped": {
+        "accuracy": 0.396,
+        "macro_f1": 0.331,
+        "eol_recall": 0.245,
+        "eol_precision": 0.207,
+        "fixed_recall": 0.411,
+        "macro_f1_sd": 0.045,
+        "eol_recall_sd": 0.123
+      }
+    },
+    {
+      "model": "Random Forest",
+      "representation": "lexicon",
+      "random": {
+        "accuracy": 0.442,
+        "macro_f1": 0.433,
+        "eol_recall": 0.547,
+        "eol_precision": 0.273,
+        "fixed_recall": 0.375
+      },
+      "grouped": {
+        "accuracy": 0.377,
+        "macro_f1": 0.343,
+        "eol_recall": 0.317,
+        "eol_precision": 0.237,
+        "fixed_recall": 0.315,
+        "macro_f1_sd": 0.049,
+        "eol_recall_sd": 0.094
+      }
+    },
+    {
+      "model": "XGBoost",
+      "representation": "lexicon",
+      "random": {
+        "accuracy": 0.456,
+        "macro_f1": 0.441,
+        "eol_recall": 0.514,
+        "eol_precision": 0.27,
+        "fixed_recall": 0.425
+      },
+      "grouped": {
+        "accuracy": 0.397,
+        "macro_f1": 0.338,
+        "eol_recall": 0.277,
+        "eol_precision": 0.211,
+        "fixed_recall": 0.434,
+        "macro_f1_sd": 0.032,
+        "eol_recall_sd": 0.153
+      }
+    },
+    {
+      "model": "Logistic Regression",
+      "representation": "invariant",
+      "random": {
+        "accuracy": 0.403,
+        "macro_f1": 0.393,
+        "eol_recall": 0.583,
+        "eol_precision": 0.247,
+        "fixed_recall": 0.367
+      },
+      "grouped": {
+        "accuracy": 0.385,
+        "macro_f1": 0.364,
+        "eol_recall": 0.477,
+        "eol_precision": 0.243,
+        "fixed_recall": 0.347,
+        "macro_f1_sd": 0.014,
+        "eol_recall_sd": 0.148
+      }
+    },
+    {
+      "model": "Random Forest",
+      "representation": "invariant",
+      "random": {
+        "accuracy": 0.419,
+        "macro_f1": 0.407,
+        "eol_recall": 0.541,
+        "eol_precision": 0.258,
+        "fixed_recall": 0.383
+      },
+      "grouped": {
+        "accuracy": 0.372,
+        "macro_f1": 0.354,
+        "eol_recall": 0.447,
+        "eol_precision": 0.241,
+        "fixed_recall": 0.324,
+        "macro_f1_sd": 0.007,
+        "eol_recall_sd": 0.088
+      }
+    },
+    {
+      "model": "XGBoost",
+      "representation": "invariant",
+      "random": {
+        "accuracy": 0.429,
+        "macro_f1": 0.41,
+        "eol_recall": 0.477,
+        "eol_precision": 0.251,
+        "fixed_recall": 0.427
+      },
+      "grouped": {
+        "accuracy": 0.375,
+        "macro_f1": 0.355,
+        "eol_recall": 0.442,
+        "eol_precision": 0.239,
+        "fixed_recall": 0.346,
+        "macro_f1_sd": 0.005,
+        "eol_recall_sd": 0.117
+      }
+    }
+  ],
+  "winner": "Random Forest",
+  "winner_representation": "tokens",
+  "winner_grouped": {
+    "accuracy": 0.362,
+    "macro_f1": 0.34,
+    "eol_recall": 0.638,
+    "eol_precision": 0.247,
+    "fixed_recall": 0.251,
+    "macro_f1_sd": 0.049,
+    "eol_recall_sd": 0.155
+  },
+  "best_macro_f1": {
+    "model": "Logistic Regression",
+    "representation": "tokens",
+    "grouped": {
+      "accuracy": 0.483,
+      "macro_f1": 0.41,
+      "eol_recall": 0.31,
+      "eol_precision": 0.278,
+      "fixed_recall": 0.578,
+      "macro_f1_sd": 0.012,
+      "eol_recall_sd": 0.102
+    }
+  },
+  "venue_leakage": {
+    "model": "Logistic Regression",
+    "representation": "tokens",
+    "macro_f1": 0.12,
+    "accuracy": 0.068
+  },
+  "calibration": {
+    "ece_raw": 0.1407,
+    "ece_calibrated": 0.025,
+    "mean_points_docked_raw": 4.83,
+    "mean_points_docked_calibrated": 3.05,
+    "mean_absolute_shift_points": 1.79,
+    "base_rate": 0.182
+  },
+  "by_category": [
+    {
+      "category": "Laptop",
+      "n": 11903,
+      "share": 0.501,
+      "macro_f1": 0.411,
+      "eol_recall": 0.326,
+      "eol_base_rate": 0.159,
+      "age_known": 0.333
+    },
+    {
+      "category": "Mobile",
+      "n": 5032,
+      "share": 0.212,
+      "macro_f1": 0.326,
+      "eol_recall": 0.676,
+      "eol_base_rate": 0.16,
+      "age_known": 0.296
+    },
+    {
+      "category": "Tablet",
+      "n": 3606,
+      "share": 0.152,
+      "macro_f1": 0.293,
+      "eol_recall": 0.81,
+      "eol_base_rate": 0.254,
+      "age_known": 0.325
+    },
+    {
+      "category": "Desktop computer",
+      "n": 2204,
+      "share": 0.093,
+      "macro_f1": 0.373,
+      "eol_recall": 0.71,
+      "eol_base_rate": 0.196,
+      "age_known": 0.27
+    },
+    {
+      "category": "Games console",
+      "n": 1003,
+      "share": 0.042,
+      "macro_f1": 0.37,
+      "eol_recall": 0.695,
+      "eol_base_rate": 0.268,
+      "age_known": 0.381
+    }
+  ],
+  "protocol": "Grouped K-fold by data provider: every test record comes from a repair venue absent from training. Random-split figures are reported alongside to quantify what venue memorisation is worth."
+}
