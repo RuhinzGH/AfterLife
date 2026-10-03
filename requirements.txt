@@ -1,0 +1,20 @@
+# --- API (what the running backend needs) ---
+fastapi
+uvicorn[standard]
+cryptography            # Ed25519 passport signing
+joblib                  # loads the trained model
+pandas
+numpy
+scikit-learn>=1.9,<1.10 # the model was saved with 1.9; keep the same minor version
+xgboost                 # one of the compared models
+requests
+
+# --- Data and training scripts (scripts/) ---
+pyarrow                 # parquet cache for the drive datasets
+scipy                   # scripts/survival_failslow.py
+shap                    # scripts/research_experiment.py
+matplotlib              # scripts/train_lifecycle.py figures
+
+# --- Tests ---
+pytest
+httpx                   # FastAPI's TestClient

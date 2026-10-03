@@ -1,0 +1,25 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+.vercel
+
+# Secrets and local settings -- never commit these
+.env
+.env.*
+data/keys/
+
+# Raw datasets downloaded by scripts/ (large; re-fetchable)
+data/raw/
+data/derived/
+data/cache/
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db
+~$*
