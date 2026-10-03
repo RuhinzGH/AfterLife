@@ -1,0 +1,123 @@
+{
+  "source": "Open Repair Alliance, openrepair_202507",
+  "categories": [
+    "Laptop",
+    "Desktop computer",
+    "Tablet",
+    "Mobile",
+    "Games console"
+  ],
+  "min_n": 50,
+  "n_records": 23748,
+  "overall_fixed_pct": 54.5,
+  "themes": [
+    {
+      "key": "software",
+      "label": "Software / operating system",
+      "plain": "slow, won't update, or won't boot into Windows",
+      "n": 3544,
+      "fixed": 2344,
+      "fixed_pct": 66.1,
+      "eol": 299,
+      "eol_pct": 8.4,
+      "top_barrier": "Lack of equipment",
+      "top_barrier_n": 23
+    },
+    {
+      "key": "screen",
+      "label": "Screen",
+      "plain": "display cracked, dim or blank",
+      "n": 2591,
+      "fixed": 1050,
+      "fixed_pct": 40.5,
+      "eol": 494,
+      "eol_pct": 19.1,
+      "top_barrier": "Spare parts too expensive",
+      "top_barrier_n": 73
+    },
+    {
+      "key": "battery",
+      "label": "Battery",
+      "plain": "battery won't hold charge, or has swollen",
+      "n": 1779,
+      "fixed": 852,
+      "fixed_pct": 47.9,
+      "eol": 244,
+      "eol_pct": 13.7,
+      "top_barrier": "Spare parts too expensive",
+      "top_barrier_n": 33
+    },
+    {
+      "key": "storage",
+      "label": "Storage",
+      "plain": "hard drive or SSD failing",
+      "n": 1383,
+      "fixed": 976,
+      "fixed_pct": 70.6,
+      "eol": 115,
+      "eol_pct": 8.3,
+      "top_barrier": "Spare parts too expensive",
+      "top_barrier_n": 12
+    },
+    {
+      "key": "ports",
+      "label": "Ports / connectors",
+      "plain": "a socket or port has stopped working",
+      "n": 1315,
+      "fixed": 590,
+      "fixed_pct": 44.9,
+      "eol": 222,
+      "eol_pct": 16.9,
+      "top_barrier": "Spare parts not available",
+      "top_barrier_n": 21
+    },
+    {
+      "key": "power",
+      "label": "Power / won't start",
+      "plain": "won't turn on, or won't charge",
+      "n": 1227,
+      "fixed": 456,
+      "fixed_pct": 37.2,
+      "eol": 326,
+      "eol_pct": 26.6,
+      "top_barrier": "Spare parts too expensive",
+      "top_barrier_n": 19
+    },
+    {
+      "key": "physical",
+      "label": "Hinge / casing",
+      "plain": "hinge, lid or case broken",
+      "n": 914,
+      "fixed": 450,
+      "fixed_pct": 49.2,
+      "eol": 150,
+      "eol_pct": 16.4,
+      "top_barrier": "Spare parts too expensive",
+      "top_barrier_n": 15
+    },
+    {
+      "key": "keyboard",
+      "label": "Keyboard / trackpad",
+      "plain": "keys or trackpad not responding",
+      "n": 550,
+      "fixed": 259,
+      "fixed_pct": 47.1,
+      "eol": 76,
+      "eol_pct": 13.8,
+      "top_barrier": "Spare parts not available",
+      "top_barrier_n": 11
+    },
+    {
+      "key": "overheating",
+      "label": "Overheating / fan",
+      "plain": "runs hot, or the fan is loud",
+      "n": 452,
+      "fixed": 282,
+      "fixed_pct": 62.4,
+      "eol": 46,
+      "eol_pct": 10.2,
+      "top_barrier": "Spare parts too expensive",
+      "top_barrier_n": 5
+    }
+  ]
+}

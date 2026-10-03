@@ -1,0 +1,105 @@
+{
+  "source": "Lu et al., NVMe SSD Failures in the Field, USENIX ATC 2022 (CC BY-NC-SA 4.0)",
+  "caveats": [
+    "workload used as cluster proxy (cluster IDs not in public release)",
+    "no IOPS/throughput filter available -> rates are an upper bound"
+  ],
+  "ssd": {
+    "label": "NVMe SSD",
+    "drives": 25855,
+    "slow_drive_pct_5min": 2.646,
+    "slow_drive_pct_15min": 2.116,
+    "slow_drive_pct_30min": 1.845,
+    "slow_drive_pct_60min": 1.609
+  },
+  "hdd": {
+    "label": "SATA HDD",
+    "drives": 20373,
+    "slow_drive_pct_5min": 6.469,
+    "slow_drive_pct_15min": 2.862,
+    "slow_drive_pct_30min": 1.796,
+    "slow_drive_pct_60min": 1.271
+  },
+  "ssd_hdd_ratio": {
+    "5min": 0.41,
+    "15min": 0.74,
+    "30min": 1.03,
+    "60min": 1.27
+  },
+  "by_model": [
+    {
+      "model": "II-A-1920",
+      "drives": 12,
+      "slow": 11,
+      "slow_pct": 91.67
+    },
+    {
+      "model": "I-A-2000",
+      "drives": 190,
+      "slow": 65,
+      "slow_pct": 34.21
+    },
+    {
+      "model": "II-C-1920",
+      "drives": 162,
+      "slow": 36,
+      "slow_pct": 22.22
+    },
+    {
+      "model": "II-C-4000",
+      "drives": 138,
+      "slow": 14,
+      "slow_pct": 10.14
+    },
+    {
+      "model": "III-B-3800",
+      "drives": 2849,
+      "slow": 162,
+      "slow_pct": 5.69
+    },
+    {
+      "model": "II-D-3840",
+      "drives": 17749,
+      "slow": 385,
+      "slow_pct": 2.17
+    },
+    {
+      "model": "III-B-1900",
+      "drives": 3631,
+      "slow": 11,
+      "slow_pct": 0.3
+    },
+    {
+      "model": "II-D-1920",
+      "drives": 1124,
+      "slow": 0,
+      "slow_pct": 0.0
+    }
+  ],
+  "by_workload": [
+    {
+      "workload": "Buffer",
+      "drives": 2427,
+      "slow": 146,
+      "slow_pct": 6.02
+    },
+    {
+      "workload": "Object",
+      "drives": 516,
+      "slow": 16,
+      "slow_pct": 3.1
+    },
+    {
+      "workload": "Block",
+      "drives": 15543,
+      "slow": 383,
+      "slow_pct": 2.46
+    },
+    {
+      "workload": "Query",
+      "drives": 12,
+      "slow": 0,
+      "slow_pct": 0.0
+    }
+  ]
+}

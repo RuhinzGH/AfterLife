@@ -1,0 +1,193 @@
+{
+  "source": "Alibaba Fail-Slow Detection Open Dataset (Tianchi 144479)",
+  "url": "https://tianchi.aliyun.com/dataset/144479",
+  "fetched": "2026-09-01",
+  "method": "Empirical hazard: fail-slow events per 1,000 drive-days, bucketed by drive age. Non-parametric and confined to the observation window. See the module docstring for why a Weibull fit was attempted, rejected, and is not reported.",
+  "event_definition": "a drive-day flagged fail-slow at the event_30min threshold",
+  "n_drives": 22587,
+  "drive_days": 87748,
+  "events": 5307,
+  "overall_rate_per_1k_drive_days": 60.48,
+  "age_range_days": [
+    10.0,
+    1368.0
+  ],
+  "bands": [
+    {
+      "band": "0-182",
+      "from_days": 0,
+      "to_days": 182,
+      "drive_days": 11063,
+      "events": 842,
+      "rate_per_1k_drive_days": 76.11,
+      "ci95": [
+        71.055,
+        81.429
+      ],
+      "thin": false
+    },
+    {
+      "band": "182-365",
+      "from_days": 182,
+      "to_days": 365,
+      "drive_days": 18255,
+      "events": 915,
+      "rate_per_1k_drive_days": 50.123,
+      "ci95": [
+        46.928,
+        53.479
+      ],
+      "thin": false
+    },
+    {
+      "band": "365-547",
+      "from_days": 365,
+      "to_days": 547,
+      "drive_days": 14588,
+      "events": 666,
+      "rate_per_1k_drive_days": 45.654,
+      "ci95": [
+        42.252,
+        49.257
+      ],
+      "thin": false
+    },
+    {
+      "band": "547-730",
+      "from_days": 547,
+      "to_days": 730,
+      "drive_days": 5329,
+      "events": 676,
+      "rate_per_1k_drive_days": 126.853,
+      "ci95": [
+        117.469,
+        136.787
+      ],
+      "thin": false
+    },
+    {
+      "band": "730-912",
+      "from_days": 730,
+      "to_days": 912,
+      "drive_days": 11274,
+      "events": 1179,
+      "rate_per_1k_drive_days": 104.577,
+      "ci95": [
+        98.692,
+        110.721
+      ],
+      "thin": false
+    },
+    {
+      "band": "912-1095",
+      "from_days": 912,
+      "to_days": 1095,
+      "drive_days": 23063,
+      "events": 580,
+      "rate_per_1k_drive_days": 25.149,
+      "ci95": [
+        23.143,
+        27.281
+      ],
+      "thin": false
+    },
+    {
+      "band": "1095+",
+      "from_days": 1095,
+      "to_days": null,
+      "drive_days": 4176,
+      "events": 449,
+      "rate_per_1k_drive_days": 107.519,
+      "ci95": [
+        97.803,
+        117.94
+      ],
+      "thin": false
+    }
+  ],
+  "trend": {
+    "verdict": "age-independent",
+    "note": "No monotone trend with age (Spearman rho=0.18, p=0.702). Within the observed range, age is a poor predictor of whether a drive is degrading.",
+    "spearman_rho": 0.179,
+    "p_value": 0.7016579425162727
+  },
+  "by_model": {
+    "I-A-2000": {
+      "drive_days": 1746,
+      "events": 424,
+      "rate_per_1k_drive_days": 242.841,
+      "ci95": [
+        220.273,
+        267.093
+      ],
+      "median_age_days": 1149.0
+    },
+    "II-C-1920": {
+      "drive_days": 708,
+      "events": 93,
+      "rate_per_1k_drive_days": 131.356,
+      "ci95": [
+        106.021,
+        160.92
+      ],
+      "median_age_days": 849.0
+    },
+    "II-C-4000": {
+      "drive_days": 1619,
+      "events": 6,
+      "rate_per_1k_drive_days": 3.706,
+      "ci95": [
+        1.36,
+        8.066
+      ],
+      "median_age_days": 1266.0
+    },
+    "II-D-1920": {
+      "drive_days": 2939,
+      "events": 108,
+      "rate_per_1k_drive_days": 36.747,
+      "ci95": [
+        30.144,
+        44.366
+      ],
+      "median_age_days": 948.0
+    },
+    "II-D-3840": {
+      "drive_days": 51924,
+      "events": 3091,
+      "rate_per_1k_drive_days": 59.529,
+      "ci95": [
+        57.449,
+        61.666
+      ],
+      "median_age_days": 287.0
+    },
+    "III-B-1900": {
+      "drive_days": 21005,
+      "events": 620,
+      "rate_per_1k_drive_days": 29.517,
+      "ci95": [
+        27.239,
+        31.934
+      ],
+      "median_age_days": 967.0
+    },
+    "III-B-3800": {
+      "drive_days": 7759,
+      "events": 961,
+      "rate_per_1k_drive_days": 123.856,
+      "ci95": [
+        116.148,
+        131.941
+      ],
+      "median_age_days": 754.0
+    }
+  },
+  "model_spread_x": 65.5,
+  "caveats": [
+    "Enterprise datacenter SSDs under datacenter workloads. A consumer laptop SSD is a different population -- what might transfer is the SHAPE of the age relationship, never the absolute rates.",
+    "The event is fail-SLOW, not failure: a drive persistently far slower than its peers, degraded rather than dead.",
+    "The window is about sixteen weeks and the median drive is seen for four days of its own age, so this describes rates WITHIN the observed age range and supports no extrapolation beyond it.",
+    "Bands marked thin hold under 500 drive-days; their rates are not estimates worth reading."
+  ]
+}
