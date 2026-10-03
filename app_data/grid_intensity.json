@@ -1,0 +1,978 @@
+{
+  "source": "Our World in Data \u2014 Carbon intensity of electricity generation",
+  "url": "https://ourworldindata.org/grapher/carbon-intensity-electricity",
+  "unit": "gCO2e per kWh",
+  "fetched": "2026-09-11",
+  "note": "Latest available year per country; grids decarbonise, so a figure two or three years old understates how clean a grid is today.",
+  "world": {
+    "year": 2025,
+    "gco2_kwh": 458.3
+  },
+  "countries": {
+    "AE": {
+      "name": "United Arab Emirates",
+      "year": 2024,
+      "gco2_kwh": 467.5
+    },
+    "AF": {
+      "name": "Afghanistan",
+      "year": 2024,
+      "gco2_kwh": 131.3
+    },
+    "AL": {
+      "name": "Albania",
+      "year": 2024,
+      "gco2_kwh": 25.2
+    },
+    "AM": {
+      "name": "Armenia",
+      "year": 2025,
+      "gco2_kwh": 211.9
+    },
+    "AO": {
+      "name": "Angola",
+      "year": 2024,
+      "gco2_kwh": 185.4
+    },
+    "AR": {
+      "name": "Argentina",
+      "year": 2025,
+      "gco2_kwh": 346.0
+    },
+    "AS": {
+      "name": "American Samoa",
+      "year": 2024,
+      "gco2_kwh": 611.1
+    },
+    "AT": {
+      "name": "Austria",
+      "year": 2025,
+      "gco2_kwh": 116.9
+    },
+    "AU": {
+      "name": "Australia",
+      "year": 2025,
+      "gco2_kwh": 525.2
+    },
+    "AW": {
+      "name": "Aruba",
+      "year": 2024,
+      "gco2_kwh": 550.0
+    },
+    "AZ": {
+      "name": "Azerbaijan",
+      "year": 2025,
+      "gco2_kwh": 631.9
+    },
+    "BB": {
+      "name": "Barbados",
+      "year": 2024,
+      "gco2_kwh": 594.6
+    },
+    "BD": {
+      "name": "Bangladesh",
+      "year": 2025,
+      "gco2_kwh": 696.1
+    },
+    "BE": {
+      "name": "Belgium",
+      "year": 2025,
+      "gco2_kwh": 149.8
+    },
+    "BF": {
+      "name": "Burkina Faso",
+      "year": 2024,
+      "gco2_kwh": 562.1
+    },
+    "BG": {
+      "name": "Bulgaria",
+      "year": 2025,
+      "gco2_kwh": 275.6
+    },
+    "BH": {
+      "name": "Bahrain",
+      "year": 2024,
+      "gco2_kwh": 902.2
+    },
+    "BI": {
+      "name": "Burundi",
+      "year": 2024,
+      "gco2_kwh": 183.7
+    },
+    "BJ": {
+      "name": "Benin",
+      "year": 2024,
+      "gco2_kwh": 584.2
+    },
+    "BM": {
+      "name": "Bermuda",
+      "year": 2024,
+      "gco2_kwh": 639.3
+    },
+    "BN": {
+      "name": "Brunei",
+      "year": 2024,
+      "gco2_kwh": 892.1
+    },
+    "BO": {
+      "name": "Bolivia",
+      "year": 2025,
+      "gco2_kwh": 481.3
+    },
+    "BR": {
+      "name": "Brazil",
+      "year": 2025,
+      "gco2_kwh": 110.0
+    },
+    "BS": {
+      "name": "Bahamas",
+      "year": 2024,
+      "gco2_kwh": 653.3
+    },
+    "BT": {
+      "name": "Bhutan",
+      "year": 2024,
+      "gco2_kwh": 23.6
+    },
+    "BW": {
+      "name": "Botswana",
+      "year": 2024,
+      "gco2_kwh": 851.3
+    },
+    "BY": {
+      "name": "Belarus",
+      "year": 2025,
+      "gco2_kwh": 309.2
+    },
+    "BZ": {
+      "name": "Belize",
+      "year": 2024,
+      "gco2_kwh": 170.2
+    },
+    "CA": {
+      "name": "Canada",
+      "year": 2025,
+      "gco2_kwh": 190.7
+    },
+    "CF": {
+      "name": "Central African Republic",
+      "year": 2023,
+      "gco2_kwh": 0.0
+    },
+    "CH": {
+      "name": "Switzerland",
+      "year": 2025,
+      "gco2_kwh": 39.2
+    },
+    "CK": {
+      "name": "Cook Islands",
+      "year": 2024,
+      "gco2_kwh": 250.0
+    },
+    "CL": {
+      "name": "Chile",
+      "year": 2025,
+      "gco2_kwh": 289.5
+    },
+    "CM": {
+      "name": "Cameroon",
+      "year": 2024,
+      "gco2_kwh": 225.9
+    },
+    "CN": {
+      "name": "China",
+      "year": 2025,
+      "gco2_kwh": 525.3
+    },
+    "CO": {
+      "name": "Colombia",
+      "year": 2025,
+      "gco2_kwh": 186.8
+    },
+    "CR": {
+      "name": "Costa Rica",
+      "year": 2025,
+      "gco2_kwh": 24.2
+    },
+    "CU": {
+      "name": "Cuba",
+      "year": 2024,
+      "gco2_kwh": 642.8
+    },
+    "CV": {
+      "name": "Cape Verde",
+      "year": 2024,
+      "gco2_kwh": 461.5
+    },
+    "CY": {
+      "name": "Cyprus",
+      "year": 2025,
+      "gco2_kwh": 489.0
+    },
+    "CZ": {
+      "name": "Czechia",
+      "year": 2025,
+      "gco2_kwh": 401.5
+    },
+    "DE": {
+      "name": "Germany",
+      "year": 2025,
+      "gco2_kwh": 329.6
+    },
+    "DJ": {
+      "name": "Djibouti",
+      "year": 2024,
+      "gco2_kwh": 450.0
+    },
+    "DK": {
+      "name": "Denmark",
+      "year": 2025,
+      "gco2_kwh": 114.4
+    },
+    "DM": {
+      "name": "Dominica",
+      "year": 2023,
+      "gco2_kwh": 600.0
+    },
+    "DO": {
+      "name": "Dominican Republic",
+      "year": 2025,
+      "gco2_kwh": 537.5
+    },
+    "DZ": {
+      "name": "Algeria",
+      "year": 2024,
+      "gco2_kwh": 632.9
+    },
+    "EC": {
+      "name": "Ecuador",
+      "year": 2025,
+      "gco2_kwh": 159.0
+    },
+    "EE": {
+      "name": "Estonia",
+      "year": 2025,
+      "gco2_kwh": 319.1
+    },
+    "EG": {
+      "name": "Egypt",
+      "year": 2025,
+      "gco2_kwh": 563.2
+    },
+    "EH": {
+      "name": "Western Sahara",
+      "year": 2009,
+      "gco2_kwh": 666.7
+    },
+    "ER": {
+      "name": "Eritrea",
+      "year": 2024,
+      "gco2_kwh": 577.8
+    },
+    "ES": {
+      "name": "Spain",
+      "year": 2025,
+      "gco2_kwh": 153.6
+    },
+    "ET": {
+      "name": "Ethiopia",
+      "year": 2025,
+      "gco2_kwh": 23.1
+    },
+    "FI": {
+      "name": "Finland",
+      "year": 2025,
+      "gco2_kwh": 57.5
+    },
+    "FJ": {
+      "name": "Fiji",
+      "year": 2024,
+      "gco2_kwh": 278.3
+    },
+    "FK": {
+      "name": "Falkland Islands",
+      "year": 2023,
+      "gco2_kwh": 1000.0
+    },
+    "FO": {
+      "name": "Faroe Islands",
+      "year": 2023,
+      "gco2_kwh": 346.9
+    },
+    "FR": {
+      "name": "France",
+      "year": 2025,
+      "gco2_kwh": 41.4
+    },
+    "GA": {
+      "name": "Gabon",
+      "year": 2024,
+      "gco2_kwh": 523.1
+    },
+    "GB": {
+      "name": "United Kingdom",
+      "year": 2025,
+      "gco2_kwh": 217.4
+    },
+    "GD": {
+      "name": "Grenada",
+      "year": 2024,
+      "gco2_kwh": 666.7
+    },
+    "GE": {
+      "name": "Georgia",
+      "year": 2025,
+      "gco2_kwh": 145.9
+    },
+    "GF": {
+      "name": "French Guiana",
+      "year": 2023,
+      "gco2_kwh": 244.9
+    },
+    "GH": {
+      "name": "Ghana",
+      "year": 2024,
+      "gco2_kwh": 468.9
+    },
+    "GI": {
+      "name": "Gibraltar",
+      "year": 2024,
+      "gco2_kwh": 590.9
+    },
+    "GL": {
+      "name": "Greenland",
+      "year": 2024,
+      "gco2_kwh": 150.0
+    },
+    "GM": {
+      "name": "Gambia",
+      "year": 2024,
+      "gco2_kwh": 666.7
+    },
+    "GN": {
+      "name": "Guinea",
+      "year": 2024,
+      "gco2_kwh": 181.1
+    },
+    "GP": {
+      "name": "Guadeloupe",
+      "year": 2023,
+      "gco2_kwh": 497.0
+    },
+    "GQ": {
+      "name": "Equatorial Guinea",
+      "year": 2024,
+      "gco2_kwh": 644.3
+    },
+    "GR": {
+      "name": "Greece",
+      "year": 2025,
+      "gco2_kwh": 315.1
+    },
+    "GT": {
+      "name": "Guatemala",
+      "year": 2024,
+      "gco2_kwh": 301.5
+    },
+    "GU": {
+      "name": "Guam",
+      "year": 2024,
+      "gco2_kwh": 607.5
+    },
+    "GW": {
+      "name": "Guinea-Bissau",
+      "year": 2024,
+      "gco2_kwh": 625.0
+    },
+    "GY": {
+      "name": "Guyana",
+      "year": 2024,
+      "gco2_kwh": 644.9
+    },
+    "HN": {
+      "name": "Honduras",
+      "year": 2024,
+      "gco2_kwh": 322.1
+    },
+    "HR": {
+      "name": "Croatia",
+      "year": 2025,
+      "gco2_kwh": 158.5
+    },
+    "HT": {
+      "name": "Haiti",
+      "year": 2024,
+      "gco2_kwh": 534.9
+    },
+    "HU": {
+      "name": "Hungary",
+      "year": 2025,
+      "gco2_kwh": 163.0
+    },
+    "ID": {
+      "name": "Indonesia",
+      "year": 2024,
+      "gco2_kwh": 680.2
+    },
+    "IE": {
+      "name": "Ireland",
+      "year": 2025,
+      "gco2_kwh": 256.5
+    },
+    "IL": {
+      "name": "Israel",
+      "year": 2025,
+      "gco2_kwh": 492.7
+    },
+    "IN": {
+      "name": "India",
+      "year": 2025,
+      "gco2_kwh": 670.1
+    },
+    "IQ": {
+      "name": "Iraq",
+      "year": 2024,
+      "gco2_kwh": 683.1
+    },
+    "IR": {
+      "name": "Iran",
+      "year": 2025,
+      "gco2_kwh": 659.5
+    },
+    "IS": {
+      "name": "Iceland",
+      "year": 2024,
+      "gco2_kwh": 27.8
+    },
+    "IT": {
+      "name": "Italy",
+      "year": 2025,
+      "gco2_kwh": 284.8
+    },
+    "JM": {
+      "name": "Jamaica",
+      "year": 2024,
+      "gco2_kwh": 563.0
+    },
+    "JO": {
+      "name": "Jordan",
+      "year": 2024,
+      "gco2_kwh": 529.8
+    },
+    "JP": {
+      "name": "Japan",
+      "year": 2025,
+      "gco2_kwh": 477.3
+    },
+    "KE": {
+      "name": "Kenya",
+      "year": 2025,
+      "gco2_kwh": 95.4
+    },
+    "KG": {
+      "name": "Kyrgyzstan",
+      "year": 2025,
+      "gco2_kwh": 152.7
+    },
+    "KH": {
+      "name": "Cambodia",
+      "year": 2025,
+      "gco2_kwh": 498.9
+    },
+    "KI": {
+      "name": "Kiribati",
+      "year": 2024,
+      "gco2_kwh": 500.0
+    },
+    "KM": {
+      "name": "Comoros",
+      "year": 2023,
+      "gco2_kwh": 642.9
+    },
+    "KP": {
+      "name": "North Korea",
+      "year": 2024,
+      "gco2_kwh": 340.6
+    },
+    "KR": {
+      "name": "South Korea",
+      "year": 2025,
+      "gco2_kwh": 417.1
+    },
+    "KW": {
+      "name": "Kuwait",
+      "year": 2025,
+      "gco2_kwh": 635.3
+    },
+    "KY": {
+      "name": "Cayman Islands",
+      "year": 2024,
+      "gco2_kwh": 633.8
+    },
+    "KZ": {
+      "name": "Kazakhstan",
+      "year": 2025,
+      "gco2_kwh": 805.3
+    },
+    "LA": {
+      "name": "Laos",
+      "year": 2024,
+      "gco2_kwh": 232.1
+    },
+    "LB": {
+      "name": "Lebanon",
+      "year": 2024,
+      "gco2_kwh": 389.5
+    },
+    "LK": {
+      "name": "Sri Lanka",
+      "year": 2025,
+      "gco2_kwh": 329.3
+    },
+    "LR": {
+      "name": "Liberia",
+      "year": 2024,
+      "gco2_kwh": 315.8
+    },
+    "LS": {
+      "name": "Lesotho",
+      "year": 2022,
+      "gco2_kwh": 20.8
+    },
+    "LT": {
+      "name": "Lithuania",
+      "year": 2025,
+      "gco2_kwh": 138.4
+    },
+    "LU": {
+      "name": "Luxembourg",
+      "year": 2025,
+      "gco2_kwh": 123.4
+    },
+    "LV": {
+      "name": "Latvia",
+      "year": 2025,
+      "gco2_kwh": 138.8
+    },
+    "LY": {
+      "name": "Libya",
+      "year": 2024,
+      "gco2_kwh": 826.8
+    },
+    "MA": {
+      "name": "Morocco",
+      "year": 2025,
+      "gco2_kwh": 596.4
+    },
+    "MD": {
+      "name": "Moldova",
+      "year": 2025,
+      "gco2_kwh": 633.1
+    },
+    "ME": {
+      "name": "Montenegro",
+      "year": 2025,
+      "gco2_kwh": 264.2
+    },
+    "MG": {
+      "name": "Madagascar",
+      "year": 2024,
+      "gco2_kwh": 432.1
+    },
+    "MK": {
+      "name": "North Macedonia",
+      "year": 2025,
+      "gco2_kwh": 441.4
+    },
+    "ML": {
+      "name": "Mali",
+      "year": 2024,
+      "gco2_kwh": 538.6
+    },
+    "MN": {
+      "name": "Mongolia",
+      "year": 2025,
+      "gco2_kwh": 816.3
+    },
+    "MQ": {
+      "name": "Martinique",
+      "year": 2023,
+      "gco2_kwh": 529.8
+    },
+    "MR": {
+      "name": "Mauritania",
+      "year": 2024,
+      "gco2_kwh": 512.1
+    },
+    "MS": {
+      "name": "Montserrat",
+      "year": 2024,
+      "gco2_kwh": 1000.0
+    },
+    "MT": {
+      "name": "Malta",
+      "year": 2025,
+      "gco2_kwh": 484.0
+    },
+    "MU": {
+      "name": "Mauritius",
+      "year": 2024,
+      "gco2_kwh": 642.2
+    },
+    "MV": {
+      "name": "Maldives",
+      "year": 2024,
+      "gco2_kwh": 611.8
+    },
+    "MW": {
+      "name": "Malawi",
+      "year": 2024,
+      "gco2_kwh": 54.6
+    },
+    "MX": {
+      "name": "Mexico",
+      "year": 2025,
+      "gco2_kwh": 474.0
+    },
+    "MY": {
+      "name": "Malaysia",
+      "year": 2025,
+      "gco2_kwh": 602.0
+    },
+    "MZ": {
+      "name": "Mozambique",
+      "year": 2024,
+      "gco2_kwh": 129.4
+    },
+    "NA": {
+      "name": "Namibia",
+      "year": 2024,
+      "gco2_kwh": 48.8
+    },
+    "NC": {
+      "name": "New Caledonia",
+      "year": 2024,
+      "gco2_kwh": 560.9
+    },
+    "NE": {
+      "name": "Niger",
+      "year": 2024,
+      "gco2_kwh": 673.7
+    },
+    "NG": {
+      "name": "Nigeria",
+      "year": 2025,
+      "gco2_kwh": 455.7
+    },
+    "NI": {
+      "name": "Nicaragua",
+      "year": 2024,
+      "gco2_kwh": 300.9
+    },
+    "NL": {
+      "name": "Netherlands",
+      "year": 2025,
+      "gco2_kwh": 253.6
+    },
+    "NO": {
+      "name": "Norway",
+      "year": 2025,
+      "gco2_kwh": 28.1
+    },
+    "NP": {
+      "name": "Nepal",
+      "year": 2024,
+      "gco2_kwh": 24.3
+    },
+    "NR": {
+      "name": "Nauru",
+      "year": 2024,
+      "gco2_kwh": 600.0
+    },
+    "NZ": {
+      "name": "New Zealand",
+      "year": 2025,
+      "gco2_kwh": 92.8
+    },
+    "OM": {
+      "name": "Oman",
+      "year": 2025,
+      "gco2_kwh": 544.5
+    },
+    "PA": {
+      "name": "Panama",
+      "year": 2024,
+      "gco2_kwh": 221.2
+    },
+    "PE": {
+      "name": "Peru",
+      "year": 2025,
+      "gco2_kwh": 238.2
+    },
+    "PF": {
+      "name": "French Polynesia",
+      "year": 2024,
+      "gco2_kwh": 430.6
+    },
+    "PG": {
+      "name": "Papua New Guinea",
+      "year": 2024,
+      "gco2_kwh": 513.7
+    },
+    "PH": {
+      "name": "Philippines",
+      "year": 2025,
+      "gco2_kwh": 588.3
+    },
+    "PK": {
+      "name": "Pakistan",
+      "year": 2025,
+      "gco2_kwh": 346.6
+    },
+    "PL": {
+      "name": "Poland",
+      "year": 2025,
+      "gco2_kwh": 588.6
+    },
+    "PR": {
+      "name": "Puerto Rico",
+      "year": 2025,
+      "gco2_kwh": 654.7
+    },
+    "PT": {
+      "name": "Portugal",
+      "year": 2025,
+      "gco2_kwh": 127.9
+    },
+    "PY": {
+      "name": "Paraguay",
+      "year": 2025,
+      "gco2_kwh": 24.7
+    },
+    "QA": {
+      "name": "Qatar",
+      "year": 2025,
+      "gco2_kwh": 581.5
+    },
+    "RO": {
+      "name": "Romania",
+      "year": 2025,
+      "gco2_kwh": 250.8
+    },
+    "RS": {
+      "name": "Serbia",
+      "year": 2025,
+      "gco2_kwh": 695.8
+    },
+    "RU": {
+      "name": "Russia",
+      "year": 2025,
+      "gco2_kwh": 449.7
+    },
+    "RW": {
+      "name": "Rwanda",
+      "year": 2024,
+      "gco2_kwh": 354.0
+    },
+    "SA": {
+      "name": "Saudi Arabia",
+      "year": 2024,
+      "gco2_kwh": 692.0
+    },
+    "SB": {
+      "name": "Solomon Islands",
+      "year": 2024,
+      "gco2_kwh": 636.4
+    },
+    "SC": {
+      "name": "Seychelles",
+      "year": 2024,
+      "gco2_kwh": 555.6
+    },
+    "SD": {
+      "name": "Sudan",
+      "year": 2024,
+      "gco2_kwh": 153.7
+    },
+    "SE": {
+      "name": "Sweden",
+      "year": 2025,
+      "gco2_kwh": 35.3
+    },
+    "SG": {
+      "name": "Singapore",
+      "year": 2025,
+      "gco2_kwh": 497.1
+    },
+    "SI": {
+      "name": "Slovenia",
+      "year": 2025,
+      "gco2_kwh": 183.3
+    },
+    "SK": {
+      "name": "Slovakia",
+      "year": 2025,
+      "gco2_kwh": 94.8
+    },
+    "SL": {
+      "name": "Sierra Leone",
+      "year": 2024,
+      "gco2_kwh": 47.6
+    },
+    "SN": {
+      "name": "Senegal",
+      "year": 2024,
+      "gco2_kwh": 540.0
+    },
+    "SO": {
+      "name": "Somalia",
+      "year": 2024,
+      "gco2_kwh": 511.6
+    },
+    "SR": {
+      "name": "Suriname",
+      "year": 2024,
+      "gco2_kwh": 321.8
+    },
+    "SS": {
+      "name": "South Sudan",
+      "year": 2024,
+      "gco2_kwh": 642.9
+    },
+    "SV": {
+      "name": "El Salvador",
+      "year": 2025,
+      "gco2_kwh": 139.3
+    },
+    "SY": {
+      "name": "Syria",
+      "year": 2024,
+      "gco2_kwh": 706.2
+    },
+    "SZ": {
+      "name": "Eswatini",
+      "year": 2024,
+      "gco2_kwh": 131.2
+    },
+    "TD": {
+      "name": "Chad",
+      "year": 2024,
+      "gco2_kwh": 621.6
+    },
+    "TG": {
+      "name": "Togo",
+      "year": 2024,
+      "gco2_kwh": 422.5
+    },
+    "TH": {
+      "name": "Thailand",
+      "year": 2025,
+      "gco2_kwh": 545.7
+    },
+    "TJ": {
+      "name": "Tajikistan",
+      "year": 2025,
+      "gco2_kwh": 72.6
+    },
+    "TM": {
+      "name": "Turkmenistan",
+      "year": 2024,
+      "gco2_kwh": 1306.3
+    },
+    "TN": {
+      "name": "Tunisia",
+      "year": 2025,
+      "gco2_kwh": 560.3
+    },
+    "TO": {
+      "name": "Tonga",
+      "year": 2024,
+      "gco2_kwh": 571.4
+    },
+    "TR": {
+      "name": "Turkey",
+      "year": 2025,
+      "gco2_kwh": 474.7
+    },
+    "TW": {
+      "name": "Taiwan",
+      "year": 2025,
+      "gco2_kwh": 633.2
+    },
+    "TZ": {
+      "name": "Tanzania",
+      "year": 2024,
+      "gco2_kwh": 345.0
+    },
+    "UA": {
+      "name": "Ukraine",
+      "year": 2022,
+      "gco2_kwh": 250.5
+    },
+    "UG": {
+      "name": "Uganda",
+      "year": 2024,
+      "gco2_kwh": 58.5
+    },
+    "US": {
+      "name": "United States",
+      "year": 2025,
+      "gco2_kwh": 384.4
+    },
+    "UY": {
+      "name": "Uruguay",
+      "year": 2025,
+      "gco2_kwh": 80.4
+    },
+    "UZ": {
+      "name": "Uzbekistan",
+      "year": 2025,
+      "gco2_kwh": 1000.0
+    },
+    "VE": {
+      "name": "Venezuela",
+      "year": 2024,
+      "gco2_kwh": 85.9
+    },
+    "VG": {
+      "name": "British Virgin Islands",
+      "year": 2023,
+      "gco2_kwh": 647.1
+    },
+    "VN": {
+      "name": "Vietnam",
+      "year": 2025,
+      "gco2_kwh": 460.7
+    },
+    "VU": {
+      "name": "Vanuatu",
+      "year": 2023,
+      "gco2_kwh": 500.0
+    },
+    "WS": {
+      "name": "Samoa",
+      "year": 2024,
+      "gco2_kwh": 375.0
+    },
+    "YE": {
+      "name": "Yemen",
+      "year": 2024,
+      "gco2_kwh": 592.4
+    },
+    "ZA": {
+      "name": "South Africa",
+      "year": 2025,
+      "gco2_kwh": 699.3
+    },
+    "ZM": {
+      "name": "Zambia",
+      "year": 2024,
+      "gco2_kwh": 119.7
+    },
+    "ZW": {
+      "name": "Zimbabwe",
+      "year": 2024,
+      "gco2_kwh": 384.0
+    }
+  }
+}
