@@ -1,0 +1,2422 @@
+{
+ "sources": {
+  "timezones": "IANA tz database via pytz (public domain)",
+  "names_currencies": "Unicode CLDR via babel",
+  "evidence": "Open Repair Alliance, 305649 records, Oct 2025 release (CC BY-SA 4.0)"
+ },
+ "ora_total": 305649,
+ "timezone_to_country": {
+  "Europe/Andorra": "AD",
+  "Asia/Dubai": "AE",
+  "Asia/Kabul": "AF",
+  "America/Antigua": "AG",
+  "America/Anguilla": "AI",
+  "Europe/Tirane": "AL",
+  "Asia/Yerevan": "AM",
+  "Africa/Luanda": "AO",
+  "Antarctica/McMurdo": "AQ",
+  "Antarctica/Casey": "AQ",
+  "Antarctica/Davis": "AQ",
+  "Antarctica/DumontDUrville": "AQ",
+  "Antarctica/Mawson": "AQ",
+  "Antarctica/Palmer": "AQ",
+  "Antarctica/Rothera": "AQ",
+  "Antarctica/Syowa": "AQ",
+  "Antarctica/Troll": "AQ",
+  "Antarctica/Vostok": "AQ",
+  "America/Argentina/Buenos_Aires": "AR",
+  "America/Argentina/Cordoba": "AR",
+  "America/Argentina/Salta": "AR",
+  "America/Argentina/Jujuy": "AR",
+  "America/Argentina/Tucuman": "AR",
+  "America/Argentina/Catamarca": "AR",
+  "America/Argentina/La_Rioja": "AR",
+  "America/Argentina/San_Juan": "AR",
+  "America/Argentina/Mendoza": "AR",
+  "America/Argentina/San_Luis": "AR",
+  "America/Argentina/Rio_Gallegos": "AR",
+  "America/Argentina/Ushuaia": "AR",
+  "Pacific/Pago_Pago": "AS",
+  "Europe/Vienna": "AT",
+  "Australia/Lord_Howe": "AU",
+  "Antarctica/Macquarie": "AU",
+  "Australia/Hobart": "AU",
+  "Australia/Melbourne": "AU",
+  "Australia/Sydney": "AU",
+  "Australia/Broken_Hill": "AU",
+  "Australia/Brisbane": "AU",
+  "Australia/Lindeman": "AU",
+  "Australia/Adelaide": "AU",
+  "Australia/Darwin": "AU",
+  "Australia/Perth": "AU",
+  "Australia/Eucla": "AU",
+  "America/Aruba": "AW",
+  "Europe/Mariehamn": "AX",
+  "Asia/Baku": "AZ",
+  "Europe/Sarajevo": "BA",
+  "America/Barbados": "BB",
+  "Asia/Dhaka": "BD",
+  "Europe/Brussels": "BE",
+  "Africa/Ouagadougou": "BF",
+  "Europe/Sofia": "BG",
+  "Asia/Bahrain": "BH",
+  "Africa/Bujumbura": "BI",
+  "Africa/Porto-Novo": "BJ",
+  "America/St_Barthelemy": "BL",
+  "Atlantic/Bermuda": "BM",
+  "Asia/Brunei": "BN",
+  "America/La_Paz": "BO",
+  "America/Kralendijk": "BQ",
+  "America/Noronha": "BR",
+  "America/Belem": "BR",
+  "America/Fortaleza": "BR",
+  "America/Recife": "BR",
+  "America/Araguaina": "BR",
+  "America/Maceio": "BR",
+  "America/Bahia": "BR",
+  "America/Sao_Paulo": "BR",
+  "America/Campo_Grande": "BR",
+  "America/Cuiaba": "BR",
+  "America/Santarem": "BR",
+  "America/Porto_Velho": "BR",
+  "America/Boa_Vista": "BR",
+  "America/Manaus": "BR",
+  "America/Eirunepe": "BR",
+  "America/Rio_Branco": "BR",
+  "America/Nassau": "BS",
+  "Asia/Thimphu": "BT",
+  "Africa/Gaborone": "BW",
+  "Europe/Minsk": "BY",
+  "America/Belize": "BZ",
+  "America/St_Johns": "CA",
+  "America/Halifax": "CA",
+  "America/Glace_Bay": "CA",
+  "America/Moncton": "CA",
+  "America/Goose_Bay": "CA",
+  "America/Blanc-Sablon": "CA",
+  "America/Toronto": "CA",
+  "America/Iqaluit": "CA",
+  "America/Atikokan": "CA",
+  "America/Winnipeg": "CA",
+  "America/Resolute": "CA",
+  "America/Rankin_Inlet": "CA",
+  "America/Regina": "CA",
+  "America/Swift_Current": "CA",
+  "America/Edmonton": "CA",
+  "America/Cambridge_Bay": "CA",
+  "America/Inuvik": "CA",
+  "America/Vancouver": "CA",
+  "America/Creston": "CA",
+  "America/Dawson_Creek": "CA",
+  "America/Fort_Nelson": "CA",
+  "America/Whitehorse": "CA",
+  "America/Dawson": "CA",
+  "Indian/Cocos": "CC",
+  "Africa/Kinshasa": "CD",
+  "Africa/Lubumbashi": "CD",
+  "Africa/Bangui": "CF",
+  "Africa/Brazzaville": "CG",
+  "Europe/Zurich": "CH",
+  "Africa/Abidjan": "CI",
+  "Pacific/Rarotonga": "CK",
+  "America/Santiago": "CL",
+  "America/Coyhaique": "CL",
+  "America/Punta_Arenas": "CL",
+  "Pacific/Easter": "CL",
+  "Africa/Douala": "CM",
+  "Asia/Shanghai": "CN",
+  "Asia/Urumqi": "CN",
+  "America/Bogota": "CO",
+  "America/Costa_Rica": "CR",
+  "America/Havana": "CU",
+  "Atlantic/Cape_Verde": "CV",
+  "America/Curacao": "CW",
+  "Indian/Christmas": "CX",
+  "Asia/Nicosia": "CY",
+  "Asia/Famagusta": "CY",
+  "Europe/Prague": "CZ",
+  "Europe/Berlin": "DE",
+  "Europe/Busingen": "DE",
+  "Africa/Djibouti": "DJ",
+  "Europe/Copenhagen": "DK",
+  "America/Dominica": "DM",
+  "America/Santo_Domingo": "DO",
+  "Africa/Algiers": "DZ",
+  "America/Guayaquil": "EC",
+  "Pacific/Galapagos": "EC",
+  "Europe/Tallinn": "EE",
+  "Africa/Cairo": "EG",
+  "Africa/El_Aaiun": "EH",
+  "Africa/Asmara": "ER",
+  "Europe/Madrid": "ES",
+  "Africa/Ceuta": "ES",
+  "Atlantic/Canary": "ES",
+  "Africa/Addis_Ababa": "ET",
+  "Europe/Helsinki": "FI",
+  "Pacific/Fiji": "FJ",
+  "Atlantic/Stanley": "FK",
+  "Pacific/Chuuk": "FM",
+  "Pacific/Pohnpei": "FM",
+  "Pacific/Kosrae": "FM",
+  "Atlantic/Faroe": "FO",
+  "Europe/Paris": "FR",
+  "Africa/Libreville": "GA",
+  "Europe/London": "GB",
+  "America/Grenada": "GD",
+  "Asia/Tbilisi": "GE",
+  "America/Cayenne": "GF",
+  "Europe/Guernsey": "GG",
+  "Africa/Accra": "GH",
+  "Europe/Gibraltar": "GI",
+  "America/Nuuk": "GL",
+  "America/Danmarkshavn": "GL",
+  "America/Scoresbysund": "GL",
+  "America/Thule": "GL",
+  "Africa/Banjul": "GM",
+  "Africa/Conakry": "GN",
+  "America/Guadeloupe": "GP",
+  "Africa/Malabo": "GQ",
+  "Europe/Athens": "GR",
+  "Atlantic/South_Georgia": "GS",
+  "America/Guatemala": "GT",
+  "Pacific/Guam": "GU",
+  "Africa/Bissau": "GW",
+  "America/Guyana": "GY",
+  "Asia/Hong_Kong": "HK",
+  "America/Tegucigalpa": "HN",
+  "Europe/Zagreb": "HR",
+  "America/Port-au-Prince": "HT",
+  "Europe/Budapest": "HU",
+  "Asia/Jakarta": "ID",
+  "Asia/Pontianak": "ID",
+  "Asia/Makassar": "ID",
+  "Asia/Jayapura": "ID",
+  "Europe/Dublin": "IE",
+  "Asia/Jerusalem": "IL",
+  "Europe/Isle_of_Man": "IM",
+  "Asia/Kolkata": "IN",
+  "Indian/Chagos": "IO",
+  "Asia/Baghdad": "IQ",
+  "Asia/Tehran": "IR",
+  "Atlantic/Reykjavik": "IS",
+  "Europe/Rome": "IT",
+  "Europe/Jersey": "JE",
+  "America/Jamaica": "JM",
+  "Asia/Amman": "JO",
+  "Asia/Tokyo": "JP",
+  "Africa/Nairobi": "KE",
+  "Asia/Bishkek": "KG",
+  "Asia/Phnom_Penh": "KH",
+  "Pacific/Tarawa": "KI",
+  "Pacific/Kanton": "KI",
+  "Pacific/Kiritimati": "KI",
+  "Indian/Comoro": "KM",
+  "America/St_Kitts": "KN",
+  "Asia/Pyongyang": "KP",
+  "Asia/Seoul": "KR",
+  "Asia/Kuwait": "KW",
+  "America/Cayman": "KY",
+  "Asia/Almaty": "KZ",
+  "Asia/Qyzylorda": "KZ",
+  "Asia/Qostanay": "KZ",
+  "Asia/Aqtobe": "KZ",
+  "Asia/Aqtau": "KZ",
+  "Asia/Atyrau": "KZ",
+  "Asia/Oral": "KZ",
+  "Asia/Vientiane": "LA",
+  "Asia/Beirut": "LB",
+  "America/St_Lucia": "LC",
+  "Europe/Vaduz": "LI",
+  "Asia/Colombo": "LK",
+  "Africa/Monrovia": "LR",
+  "Africa/Maseru": "LS",
+  "Europe/Vilnius": "LT",
+  "Europe/Luxembourg": "LU",
+  "Europe/Riga": "LV",
+  "Africa/Tripoli": "LY",
+  "Africa/Casablanca": "MA",
+  "Europe/Monaco": "MC",
+  "Europe/Chisinau": "MD",
+  "Europe/Podgorica": "ME",
+  "America/Marigot": "MF",
+  "Indian/Antananarivo": "MG",
+  "Pacific/Majuro": "MH",
+  "Pacific/Kwajalein": "MH",
+  "Europe/Skopje": "MK",
+  "Africa/Bamako": "ML",
+  "Asia/Yangon": "MM",
+  "Asia/Ulaanbaatar": "MN",
+  "Asia/Hovd": "MN",
+  "Asia/Macau": "MO",
+  "Pacific/Saipan": "MP",
+  "America/Martinique": "MQ",
+  "Africa/Nouakchott": "MR",
+  "America/Montserrat": "MS",
+  "Europe/Malta": "MT",
+  "Indian/Mauritius": "MU",
+  "Indian/Maldives": "MV",
+  "Africa/Blantyre": "MW",
+  "America/Mexico_City": "MX",
+  "America/Cancun": "MX",
+  "America/Merida": "MX",
+  "America/Monterrey": "MX",
+  "America/Matamoros": "MX",
+  "America/Chihuahua": "MX",
+  "America/Ciudad_Juarez": "MX",
+  "America/Ojinaga": "MX",
+  "America/Mazatlan": "MX",
+  "America/Bahia_Banderas": "MX",
+  "America/Hermosillo": "MX",
+  "America/Tijuana": "MX",
+  "Asia/Kuala_Lumpur": "MY",
+  "Asia/Kuching": "MY",
+  "Africa/Maputo": "MZ",
+  "Africa/Windhoek": "NA",
+  "Pacific/Noumea": "NC",
+  "Africa/Niamey": "NE",
+  "Pacific/Norfolk": "NF",
+  "Africa/Lagos": "NG",
+  "America/Managua": "NI",
+  "Europe/Amsterdam": "NL",
+  "Europe/Oslo": "NO",
+  "Asia/Kathmandu": "NP",
+  "Pacific/Nauru": "NR",
+  "Pacific/Niue": "NU",
+  "Pacific/Auckland": "NZ",
+  "Pacific/Chatham": "NZ",
+  "Asia/Muscat": "OM",
+  "America/Panama": "PA",
+  "America/Lima": "PE",
+  "Pacific/Tahiti": "PF",
+  "Pacific/Marquesas": "PF",
+  "Pacific/Gambier": "PF",
+  "Pacific/Port_Moresby": "PG",
+  "Pacific/Bougainville": "PG",
+  "Asia/Manila": "PH",
+  "Asia/Karachi": "PK",
+  "Europe/Warsaw": "PL",
+  "America/Miquelon": "PM",
+  "Pacific/Pitcairn": "PN",
+  "America/Puerto_Rico": "PR",
+  "Asia/Gaza": "PS",
+  "Asia/Hebron": "PS",
+  "Europe/Lisbon": "PT",
+  "Atlantic/Madeira": "PT",
+  "Atlantic/Azores": "PT",
+  "Pacific/Palau": "PW",
+  "America/Asuncion": "PY",
+  "Asia/Qatar": "QA",
+  "Indian/Reunion": "RE",
+  "Europe/Bucharest": "RO",
+  "Europe/Belgrade": "RS",
+  "Europe/Kaliningrad": "RU",
+  "Europe/Moscow": "RU",
+  "Europe/Kirov": "RU",
+  "Europe/Volgograd": "RU",
+  "Europe/Astrakhan": "RU",
+  "Europe/Saratov": "RU",
+  "Europe/Ulyanovsk": "RU",
+  "Europe/Samara": "RU",
+  "Asia/Yekaterinburg": "RU",
+  "Asia/Omsk": "RU",
+  "Asia/Novosibirsk": "RU",
+  "Asia/Barnaul": "RU",
+  "Asia/Tomsk": "RU",
+  "Asia/Novokuznetsk": "RU",
+  "Asia/Krasnoyarsk": "RU",
+  "Asia/Irkutsk": "RU",
+  "Asia/Chita": "RU",
+  "Asia/Yakutsk": "RU",
+  "Asia/Khandyga": "RU",
+  "Asia/Vladivostok": "RU",
+  "Asia/Ust-Nera": "RU",
+  "Asia/Magadan": "RU",
+  "Asia/Sakhalin": "RU",
+  "Asia/Srednekolymsk": "RU",
+  "Asia/Kamchatka": "RU",
+  "Asia/Anadyr": "RU",
+  "Europe/Simferopol": "UA",
+  "Europe/Kyiv": "UA",
+  "Africa/Kigali": "RW",
+  "Asia/Riyadh": "SA",
+  "Pacific/Guadalcanal": "SB",
+  "Indian/Mahe": "SC",
+  "Africa/Khartoum": "SD",
+  "Europe/Stockholm": "SE",
+  "Asia/Singapore": "SG",
+  "Atlantic/St_Helena": "SH",
+  "Europe/Ljubljana": "SI",
+  "Arctic/Longyearbyen": "SJ",
+  "Europe/Bratislava": "SK",
+  "Africa/Freetown": "SL",
+  "Europe/San_Marino": "SM",
+  "Africa/Dakar": "SN",
+  "Africa/Mogadishu": "SO",
+  "America/Paramaribo": "SR",
+  "Africa/Juba": "SS",
+  "Africa/Sao_Tome": "ST",
+  "America/El_Salvador": "SV",
+  "America/Lower_Princes": "SX",
+  "Asia/Damascus": "SY",
+  "Africa/Mbabane": "SZ",
+  "America/Grand_Turk": "TC",
+  "Africa/Ndjamena": "TD",
+  "Indian/Kerguelen": "TF",
+  "Africa/Lome": "TG",
+  "Asia/Bangkok": "TH",
+  "Asia/Dushanbe": "TJ",
+  "Pacific/Fakaofo": "TK",
+  "Asia/Dili": "TL",
+  "Asia/Ashgabat": "TM",
+  "Africa/Tunis": "TN",
+  "Pacific/Tongatapu": "TO",
+  "Europe/Istanbul": "TR",
+  "America/Port_of_Spain": "TT",
+  "Pacific/Funafuti": "TV",
+  "Asia/Taipei": "TW",
+  "Africa/Dar_es_Salaam": "TZ",
+  "Africa/Kampala": "UG",
+  "Pacific/Midway": "UM",
+  "Pacific/Wake": "UM",
+  "America/New_York": "US",
+  "America/Detroit": "US",
+  "America/Kentucky/Louisville": "US",
+  "America/Kentucky/Monticello": "US",
+  "America/Indiana/Indianapolis": "US",
+  "America/Indiana/Vincennes": "US",
+  "America/Indiana/Winamac": "US",
+  "America/Indiana/Marengo": "US",
+  "America/Indiana/Petersburg": "US",
+  "America/Indiana/Vevay": "US",
+  "America/Chicago": "US",
+  "America/Indiana/Tell_City": "US",
+  "America/Indiana/Knox": "US",
+  "America/Menominee": "US",
+  "America/North_Dakota/Center": "US",
+  "America/North_Dakota/New_Salem": "US",
+  "America/North_Dakota/Beulah": "US",
+  "America/Denver": "US",
+  "America/Boise": "US",
+  "America/Phoenix": "US",
+  "America/Los_Angeles": "US",
+  "America/Anchorage": "US",
+  "America/Juneau": "US",
+  "America/Sitka": "US",
+  "America/Metlakatla": "US",
+  "America/Yakutat": "US",
+  "America/Nome": "US",
+  "America/Adak": "US",
+  "Pacific/Honolulu": "US",
+  "America/Montevideo": "UY",
+  "Asia/Samarkand": "UZ",
+  "Asia/Tashkent": "UZ",
+  "Europe/Vatican": "VA",
+  "America/St_Vincent": "VC",
+  "America/Caracas": "VE",
+  "America/Tortola": "VG",
+  "America/St_Thomas": "VI",
+  "Asia/Ho_Chi_Minh": "VN",
+  "Pacific/Efate": "VU",
+  "Pacific/Wallis": "WF",
+  "Pacific/Apia": "WS",
+  "Asia/Aden": "YE",
+  "Indian/Mayotte": "YT",
+  "Africa/Johannesburg": "ZA",
+  "Africa/Lusaka": "ZM",
+  "Africa/Harare": "ZW"
+ },
+ "countries": {
+  "AD": {
+   "name": "Andorra",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AE": {
+   "name": "United Arab Emirates",
+   "currency": "AED",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AF": {
+   "name": "Afghanistan",
+   "currency": "AFN",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AG": {
+   "name": "Antigua & Barbuda",
+   "currency": "XCD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AI": {
+   "name": "Anguilla",
+   "currency": "XCD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AL": {
+   "name": "Albania",
+   "currency": "ALL",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AM": {
+   "name": "Armenia",
+   "currency": "AMD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AO": {
+   "name": "Angola",
+   "currency": "AOA",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AQ": {
+   "name": "Antarctica",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AR": {
+   "name": "Argentina",
+   "currency": "ARS",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 617,
+   "ora_share": 0.202
+  },
+  "AS": {
+   "name": "American Samoa",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AT": {
+   "name": "Austria",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 894,
+   "ora_share": 0.292
+  },
+  "AU": {
+   "name": "Australia",
+   "currency": "AUD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 3108,
+   "ora_share": 1.017
+  },
+  "AW": {
+   "name": "Aruba",
+   "currency": "AWG",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AX": {
+   "name": "Åland Islands",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "AZ": {
+   "name": "Azerbaijan",
+   "currency": "AZN",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BA": {
+   "name": "Bosnia & Herzegovina",
+   "currency": "BAM",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BB": {
+   "name": "Barbados",
+   "currency": "BBD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BD": {
+   "name": "Bangladesh",
+   "currency": "BDT",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BE": {
+   "name": "Belgium",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 37461,
+   "ora_share": 12.256
+  },
+  "BF": {
+   "name": "Burkina Faso",
+   "currency": "XOF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BG": {
+   "name": "Bulgaria",
+   "currency": "BGN",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BH": {
+   "name": "Bahrain",
+   "currency": "BHD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BI": {
+   "name": "Burundi",
+   "currency": "BIF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BJ": {
+   "name": "Benin",
+   "currency": "XOF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 9,
+   "ora_share": 0.003
+  },
+  "BL": {
+   "name": "St. Barthélemy",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BM": {
+   "name": "Bermuda",
+   "currency": "BMD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BN": {
+   "name": "Brunei",
+   "currency": "BND",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BO": {
+   "name": "Bolivia",
+   "currency": "BOB",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BQ": {
+   "name": "Caribbean Netherlands",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BR": {
+   "name": "Brazil",
+   "currency": "BRL",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BS": {
+   "name": "Bahamas",
+   "currency": "BSD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BT": {
+   "name": "Bhutan",
+   "currency": "INR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BV": {
+   "name": "Bouvet Island",
+   "currency": "NOK",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BW": {
+   "name": "Botswana",
+   "currency": "BWP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BY": {
+   "name": "Belarus",
+   "currency": "BYN",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "BZ": {
+   "name": "Belize",
+   "currency": "BZD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CA": {
+   "name": "Canada",
+   "currency": "CAD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 10695,
+   "ora_share": 3.499
+  },
+  "CC": {
+   "name": "Cocos (Keeling) Islands",
+   "currency": "AUD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CD": {
+   "name": "Congo - Kinshasa",
+   "currency": "CDF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CF": {
+   "name": "Central African Republic",
+   "currency": "XAF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CG": {
+   "name": "Congo - Brazzaville",
+   "currency": "XAF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CH": {
+   "name": "Switzerland",
+   "currency": "CHF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 96,
+   "ora_share": 0.031
+  },
+  "CI": {
+   "name": "Côte d’Ivoire",
+   "currency": "XOF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CK": {
+   "name": "Cook Islands",
+   "currency": "NZD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CL": {
+   "name": "Chile",
+   "currency": "CLP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CM": {
+   "name": "Cameroon",
+   "currency": "XAF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CN": {
+   "name": "China",
+   "currency": "CNY",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CO": {
+   "name": "Colombia",
+   "currency": "COP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CR": {
+   "name": "Costa Rica",
+   "currency": "CRC",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CU": {
+   "name": "Cuba",
+   "currency": "CUP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CV": {
+   "name": "Cape Verde",
+   "currency": "CVE",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CW": {
+   "name": "Curaçao",
+   "currency": "XCG",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CX": {
+   "name": "Christmas Island",
+   "currency": "AUD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CY": {
+   "name": "Cyprus",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "CZ": {
+   "name": "Czechia",
+   "currency": "CZK",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "DE": {
+   "name": "Germany",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 36183,
+   "ora_share": 11.838
+  },
+  "DJ": {
+   "name": "Djibouti",
+   "currency": "DJF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "DK": {
+   "name": "Denmark",
+   "currency": "DKK",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 29944,
+   "ora_share": 9.797
+  },
+  "DM": {
+   "name": "Dominica",
+   "currency": "XCD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "DO": {
+   "name": "Dominican Republic",
+   "currency": "DOP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "DZ": {
+   "name": "Algeria",
+   "currency": "DZD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "EC": {
+   "name": "Ecuador",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "EE": {
+   "name": "Estonia",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "EG": {
+   "name": "Egypt",
+   "currency": "EGP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "EH": {
+   "name": "Western Sahara",
+   "currency": "MAD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "ER": {
+   "name": "Eritrea",
+   "currency": "ERN",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "ES": {
+   "name": "Spain",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 1782,
+   "ora_share": 0.583
+  },
+  "ET": {
+   "name": "Ethiopia",
+   "currency": "ETB",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "FI": {
+   "name": "Finland",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 24,
+   "ora_share": 0.008
+  },
+  "FJ": {
+   "name": "Fiji",
+   "currency": "FJD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "FK": {
+   "name": "Falkland Islands",
+   "currency": "FKP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "FM": {
+   "name": "Micronesia",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "FO": {
+   "name": "Faroe Islands",
+   "currency": "DKK",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "FR": {
+   "name": "France",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 21105,
+   "ora_share": 6.905
+  },
+  "GA": {
+   "name": "Gabon",
+   "currency": "XAF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GB": {
+   "name": "United Kingdom",
+   "currency": "GBP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 83436,
+   "ora_share": 27.298
+  },
+  "GD": {
+   "name": "Grenada",
+   "currency": "XCD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GE": {
+   "name": "Georgia",
+   "currency": "GEL",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GF": {
+   "name": "French Guiana",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 23,
+   "ora_share": 0.008
+  },
+  "GG": {
+   "name": "Guernsey",
+   "currency": "GBP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GH": {
+   "name": "Ghana",
+   "currency": "GHS",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GI": {
+   "name": "Gibraltar",
+   "currency": "GIP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GL": {
+   "name": "Greenland",
+   "currency": "DKK",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GM": {
+   "name": "Gambia",
+   "currency": "GMD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GN": {
+   "name": "Guinea",
+   "currency": "GNF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GP": {
+   "name": "Guadeloupe",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GQ": {
+   "name": "Equatorial Guinea",
+   "currency": "XAF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GR": {
+   "name": "Greece",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GS": {
+   "name": "South Georgia & South Sandwich Islands",
+   "currency": "GBP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GT": {
+   "name": "Guatemala",
+   "currency": "GTQ",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GU": {
+   "name": "Guam",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GW": {
+   "name": "Guinea-Bissau",
+   "currency": "XOF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "GY": {
+   "name": "Guyana",
+   "currency": "GYD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "HK": {
+   "name": "Hong Kong SAR China",
+   "currency": "HKD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 178,
+   "ora_share": 0.058
+  },
+  "HM": {
+   "name": "Heard & McDonald Islands",
+   "currency": "AUD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "HN": {
+   "name": "Honduras",
+   "currency": "HNL",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "HR": {
+   "name": "Croatia",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "HT": {
+   "name": "Haiti",
+   "currency": "HTG",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "HU": {
+   "name": "Hungary",
+   "currency": "HUF",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "ID": {
+   "name": "Indonesia",
+   "currency": "IDR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "IE": {
+   "name": "Ireland",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 163,
+   "ora_share": 0.053
+  },
+  "IL": {
+   "name": "Israel",
+   "currency": "ILS",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 528,
+   "ora_share": 0.173
+  },
+  "IM": {
+   "name": "Isle of Man",
+   "currency": "GBP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "IN": {
+   "name": "India",
+   "currency": "INR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "IO": {
+   "name": "British Indian Ocean Territory",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "IQ": {
+   "name": "Iraq",
+   "currency": "IQD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "IR": {
+   "name": "Iran",
+   "currency": "IRR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "IS": {
+   "name": "Iceland",
+   "currency": "ISK",
+   "in_eea": true,
+   "in_eu": false,
+   "ora_records": 91,
+   "ora_share": 0.03
+  },
+  "IT": {
+   "name": "Italy",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 2979,
+   "ora_share": 0.975
+  },
+  "JE": {
+   "name": "Jersey",
+   "currency": "GBP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 1087,
+   "ora_share": 0.356
+  },
+  "JM": {
+   "name": "Jamaica",
+   "currency": "JMD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "JO": {
+   "name": "Jordan",
+   "currency": "JOD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "JP": {
+   "name": "Japan",
+   "currency": "JPY",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KE": {
+   "name": "Kenya",
+   "currency": "KES",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KG": {
+   "name": "Kyrgyzstan",
+   "currency": "KGS",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KH": {
+   "name": "Cambodia",
+   "currency": "KHR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KI": {
+   "name": "Kiribati",
+   "currency": "AUD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KM": {
+   "name": "Comoros",
+   "currency": "KMF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KN": {
+   "name": "St. Kitts & Nevis",
+   "currency": "XCD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KP": {
+   "name": "North Korea",
+   "currency": "KPW",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KR": {
+   "name": "South Korea",
+   "currency": "KRW",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 22,
+   "ora_share": 0.007
+  },
+  "KW": {
+   "name": "Kuwait",
+   "currency": "KWD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KY": {
+   "name": "Cayman Islands",
+   "currency": "KYD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "KZ": {
+   "name": "Kazakhstan",
+   "currency": "KZT",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LA": {
+   "name": "Laos",
+   "currency": "LAK",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LB": {
+   "name": "Lebanon",
+   "currency": "LBP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LC": {
+   "name": "St. Lucia",
+   "currency": "XCD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LI": {
+   "name": "Liechtenstein",
+   "currency": "CHF",
+   "in_eea": true,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LK": {
+   "name": "Sri Lanka",
+   "currency": "LKR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LR": {
+   "name": "Liberia",
+   "currency": "LRD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LS": {
+   "name": "Lesotho",
+   "currency": "ZAR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LT": {
+   "name": "Lithuania",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LU": {
+   "name": "Luxembourg",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 23,
+   "ora_share": 0.008
+  },
+  "LV": {
+   "name": "Latvia",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "LY": {
+   "name": "Libya",
+   "currency": "LYD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MA": {
+   "name": "Morocco",
+   "currency": "MAD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MC": {
+   "name": "Monaco",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MD": {
+   "name": "Moldova",
+   "currency": "MDL",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "ME": {
+   "name": "Montenegro",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MF": {
+   "name": "St. Martin",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MG": {
+   "name": "Madagascar",
+   "currency": "MGA",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MH": {
+   "name": "Marshall Islands",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MK": {
+   "name": "North Macedonia",
+   "currency": "MKD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "ML": {
+   "name": "Mali",
+   "currency": "XOF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MM": {
+   "name": "Myanmar (Burma)",
+   "currency": "MMK",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MN": {
+   "name": "Mongolia",
+   "currency": "MNT",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MO": {
+   "name": "Macao SAR China",
+   "currency": "MOP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MP": {
+   "name": "Northern Mariana Islands",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MQ": {
+   "name": "Martinique",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MR": {
+   "name": "Mauritania",
+   "currency": "MRU",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MS": {
+   "name": "Montserrat",
+   "currency": "XCD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MT": {
+   "name": "Malta",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MU": {
+   "name": "Mauritius",
+   "currency": "MUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MV": {
+   "name": "Maldives",
+   "currency": "MVR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MW": {
+   "name": "Malawi",
+   "currency": "MWK",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MX": {
+   "name": "Mexico",
+   "currency": "MXN",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MY": {
+   "name": "Malaysia",
+   "currency": "MYR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "MZ": {
+   "name": "Mozambique",
+   "currency": "MZN",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NA": {
+   "name": "Namibia",
+   "currency": "ZAR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NC": {
+   "name": "New Caledonia",
+   "currency": "XPF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NE": {
+   "name": "Niger",
+   "currency": "XOF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NF": {
+   "name": "Norfolk Island",
+   "currency": "AUD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NG": {
+   "name": "Nigeria",
+   "currency": "NGN",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NI": {
+   "name": "Nicaragua",
+   "currency": "NIO",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NL": {
+   "name": "Netherlands",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 60956,
+   "ora_share": 19.943
+  },
+  "NO": {
+   "name": "Norway",
+   "currency": "NOK",
+   "in_eea": true,
+   "in_eu": false,
+   "ora_records": 2190,
+   "ora_share": 0.717
+  },
+  "NP": {
+   "name": "Nepal",
+   "currency": "NPR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NR": {
+   "name": "Nauru",
+   "currency": "AUD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NU": {
+   "name": "Niue",
+   "currency": "NZD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "NZ": {
+   "name": "New Zealand",
+   "currency": "NZD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 8229,
+   "ora_share": 2.692
+  },
+  "OM": {
+   "name": "Oman",
+   "currency": "OMR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PA": {
+   "name": "Panama",
+   "currency": "PAB",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PE": {
+   "name": "Peru",
+   "currency": "PEN",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PF": {
+   "name": "French Polynesia",
+   "currency": "XPF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PG": {
+   "name": "Papua New Guinea",
+   "currency": "PGK",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PH": {
+   "name": "Philippines",
+   "currency": "PHP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PK": {
+   "name": "Pakistan",
+   "currency": "PKR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PL": {
+   "name": "Poland",
+   "currency": "PLN",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PM": {
+   "name": "St. Pierre & Miquelon",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PN": {
+   "name": "Pitcairn Islands",
+   "currency": "NZD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PR": {
+   "name": "Puerto Rico",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PS": {
+   "name": "Palestinian Territories",
+   "currency": "ILS",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PT": {
+   "name": "Portugal",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 16,
+   "ora_share": 0.005
+  },
+  "PW": {
+   "name": "Palau",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "PY": {
+   "name": "Paraguay",
+   "currency": "PYG",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "QA": {
+   "name": "Qatar",
+   "currency": "QAR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "RE": {
+   "name": "Réunion",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "RO": {
+   "name": "Romania",
+   "currency": "RON",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "RS": {
+   "name": "Serbia",
+   "currency": "RSD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "RU": {
+   "name": "Russia",
+   "currency": "RUB",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "RW": {
+   "name": "Rwanda",
+   "currency": "RWF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SA": {
+   "name": "Saudi Arabia",
+   "currency": "SAR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SB": {
+   "name": "Solomon Islands",
+   "currency": "SBD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SC": {
+   "name": "Seychelles",
+   "currency": "SCR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SD": {
+   "name": "Sudan",
+   "currency": "SDG",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SE": {
+   "name": "Sweden",
+   "currency": "SEK",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 859,
+   "ora_share": 0.281
+  },
+  "SG": {
+   "name": "Singapore",
+   "currency": "SGD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SH": {
+   "name": "St. Helena",
+   "currency": "SHP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SI": {
+   "name": "Slovenia",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SJ": {
+   "name": "Svalbard & Jan Mayen",
+   "currency": "NOK",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SK": {
+   "name": "Slovakia",
+   "currency": "EUR",
+   "in_eea": true,
+   "in_eu": true,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SL": {
+   "name": "Sierra Leone",
+   "currency": "SLE",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SM": {
+   "name": "San Marino",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SN": {
+   "name": "Senegal",
+   "currency": "XOF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SO": {
+   "name": "Somalia",
+   "currency": "SOS",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SR": {
+   "name": "Suriname",
+   "currency": "SRD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SS": {
+   "name": "South Sudan",
+   "currency": "SSP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "ST": {
+   "name": "São Tomé & Príncipe",
+   "currency": "STN",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SV": {
+   "name": "El Salvador",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SX": {
+   "name": "Sint Maarten",
+   "currency": "XCG",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SY": {
+   "name": "Syria",
+   "currency": "SYP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "SZ": {
+   "name": "Eswatini",
+   "currency": "SZL",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TC": {
+   "name": "Turks & Caicos Islands",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TD": {
+   "name": "Chad",
+   "currency": "XAF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TF": {
+   "name": "French Southern Territories",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TG": {
+   "name": "Togo",
+   "currency": "XOF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TH": {
+   "name": "Thailand",
+   "currency": "THB",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TJ": {
+   "name": "Tajikistan",
+   "currency": "TJS",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TK": {
+   "name": "Tokelau",
+   "currency": "NZD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TL": {
+   "name": "Timor-Leste",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TM": {
+   "name": "Turkmenistan",
+   "currency": "TMT",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TN": {
+   "name": "Tunisia",
+   "currency": "TND",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 98,
+   "ora_share": 0.032
+  },
+  "TO": {
+   "name": "Tonga",
+   "currency": "TOP",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TR": {
+   "name": "Türkiye",
+   "currency": "TRY",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TT": {
+   "name": "Trinidad & Tobago",
+   "currency": "TTD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TV": {
+   "name": "Tuvalu",
+   "currency": "AUD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "TW": {
+   "name": "Taiwan",
+   "currency": "TWD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 77,
+   "ora_share": 0.025
+  },
+  "TZ": {
+   "name": "Tanzania",
+   "currency": "TZS",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "UA": {
+   "name": "Ukraine",
+   "currency": "UAH",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "UG": {
+   "name": "Uganda",
+   "currency": "UGX",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 29,
+   "ora_share": 0.009
+  },
+  "UM": {
+   "name": "U.S. Outlying Islands",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "US": {
+   "name": "United States",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 2735,
+   "ora_share": 0.895
+  },
+  "UY": {
+   "name": "Uruguay",
+   "currency": "UYU",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "UZ": {
+   "name": "Uzbekistan",
+   "currency": "UZS",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "VA": {
+   "name": "Vatican City",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "VC": {
+   "name": "St. Vincent & Grenadines",
+   "currency": "XCD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "VE": {
+   "name": "Venezuela",
+   "currency": "VES",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "VG": {
+   "name": "British Virgin Islands",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "VI": {
+   "name": "U.S. Virgin Islands",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "VN": {
+   "name": "Vietnam",
+   "currency": "VND",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "VU": {
+   "name": "Vanuatu",
+   "currency": "VUV",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "WF": {
+   "name": "Wallis & Futuna",
+   "currency": "XPF",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "WS": {
+   "name": "Samoa",
+   "currency": "WST",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "YE": {
+   "name": "Yemen",
+   "currency": "YER",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "YT": {
+   "name": "Mayotte",
+   "currency": "EUR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "ZA": {
+   "name": "South Africa",
+   "currency": "ZAR",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 12,
+   "ora_share": 0.004
+  },
+  "ZM": {
+   "name": "Zambia",
+   "currency": "ZMW",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  },
+  "ZW": {
+   "name": "Zimbabwe",
+   "currency": "USD",
+   "in_eea": false,
+   "in_eu": false,
+   "ora_records": 0,
+   "ora_share": 0.0
+  }
+ }
+}
