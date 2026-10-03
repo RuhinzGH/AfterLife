@@ -1,0 +1,11 @@
+venv/
+frontend/
+scripts/
+tests/
+data/
+docs/
+.git/
+.github/
+.gitignore
+.env
+README.md
