@@ -6,9 +6,9 @@ eol_risk=1.0` -- "abandoned, maximum risk" -- while Microsoft's consumer ESU
 programme was in fact still shipping it security updates. The product told the
 population it exists to defend that they were unpatched when they were not.
 
-The window closes on 2026-10-13, so most of these tests are written against
-fixed dates on both sides of that cliff rather than against `today`. A test that
-passes only until October would be worse than no test.
+The consumer window was first announced to close on 2026-10-13 and was later
+extended to 2027-10-12. The tests are written against fixed dates on both sides
+of that end date rather than against `today`, so they keep passing as time moves.
 """
 from __future__ import annotations
 
@@ -20,9 +20,9 @@ from afterlife import device_support as ds
 from afterlife import esu
 
 BEFORE_EOL = dt.date(2025, 6, 1)
-IN_ESU = dt.date(2026, 9, 1)
-LAST_ESU_DAY = dt.date(2026, 10, 13)
-AFTER_ESU = dt.date(2026, 10, 14)
+IN_ESU = dt.date(2027, 9, 1)
+LAST_ESU_DAY = dt.date(2027, 10, 12)
+AFTER_ESU = dt.date(2027, 10, 13)
 
 
 def _win10(as_of):
@@ -137,8 +137,8 @@ class TestUserFacingText:
 
     def test_risk_detail_names_the_binding_date(self):
         """A user can check a date. Nobody can check '60% risk'."""
-        assert "2026-10-13" in ds.risk_detail(_win10(IN_ESU))
-        assert "2026-10-13" in ds.risk_detail(_win10(AFTER_ESU))
+        assert "2027-10-12" in ds.risk_detail(_win10(IN_ESU))
+        assert "2027-10-12" in ds.risk_detail(_win10(AFTER_ESU))
 
 
 class TestProgrammeFacts:
@@ -174,3 +174,31 @@ class TestProgrammeFacts:
         assert esu.describe(prog, AFTER_ESU)["ends_in_days"] < 0
         assert esu.describe(prog, IN_ESU)["enrolment_open"] is True
         assert esu.describe(prog, AFTER_ESU)["enrolment_open"] is False
+
+
+class TestTheExtension:
+    """The consumer programme moved from 2026-10-13 to 2027-10-12."""
+
+    def test_the_extended_date_is_in_force(self):
+        assert esu.PROGRAMMES["windows10"].esu_end == dt.date(2027, 10, 12)
+
+    def test_the_original_date_is_kept_and_reported(self):
+        prog = esu.for_product("Windows 10")
+        assert prog.originally_ended == dt.date(2026, 10, 13)
+        d = esu.describe(prog, IN_ESU)
+        assert d["originally_ended"] == "2026-10-13"
+        assert "13 October 2026" in d["headline"]
+
+    def test_the_original_date_was_a_patch_tuesday_too(self):
+        d = esu.PROGRAMMES["windows10"].originally_ended
+        assert d.weekday() == 1 and 8 <= d.day <= 14
+
+    def test_a_machine_in_october_2026_is_still_covered(self):
+        """The day after the original first-year end is inside ESU, not past it."""
+        assert _win10(dt.date(2026, 10, 14)).support_state == "esu"
+
+    def test_the_headline_names_the_business_programme(self):
+        """Consumer ESU ending is not 'no updates at any price' for organisations."""
+        text = esu.describe(esu.for_product("Windows 10"), IN_ESU)["headline"]
+        assert "at any price" not in text
+        assert "Organisations" in text and "2028" in text

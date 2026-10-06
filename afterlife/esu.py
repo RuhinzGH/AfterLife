@@ -18,13 +18,19 @@ hardware gate. Afterlife has been arguing "security is a mitigable cost, not a
 replace trigger" while its own score treated the most common mitigation -- the
 vendor's own extended-updates programme -- as if it did not exist.
 
-THE CLIFF IS THE POINT
-----------------------
-ESU is not a reprieve, it is a countdown with a published end and no successor.
-Consumer ESU closes on 2026-10-13; enrolment closes the same day, so there is no
-late on-ramp, and Microsoft has announced no extension. A device that is
-defensibly "keep and harden" today becomes a different recommendation the
-morning after.
+THE DATES, AND HOW THEY MOVED
+-----------------------------
+Ordinary support ended on 2025-10-14. The consumer ESU programme was first
+announced as one year, ending 2026-10-13. In 2026 Microsoft extended it by a
+year: home users are now covered to 2027-10-12, and can enrol at any point
+until then. Organisations buy a separate, paid programme of up to three years
+after end of support, which runs to 2028-10-10.
+
+ESU is still a countdown with a published end. A device that is defensibly
+"keep and harden" during ESU becomes a different recommendation once its
+programme ends, so the end date is reported rather than smoothed away. The
+original first-year date is kept as `originally_ended`, so the page can say
+plainly that the date moved instead of silently showing a new one.
 
 So this module models three states rather than two, and reports the date each
 one ends. It never smooths the cliff into a gradient -- the whole value of the
@@ -53,7 +59,7 @@ class ExtendedSupport:
     product: str
     #: The day ordinary support ended -- also the day ESU begins.
     support_end: dt.date
-    #: The day the programme itself ends. Nothing after this, at any price.
+    #: The day the programme ends for this audience.
     esu_end: dt.date
     #: Last day to join. Equal to esu_end where enrolment stays open throughout.
     enrol_by: dt.date
@@ -62,6 +68,8 @@ class ExtendedSupport:
     #: What it does and does not cover.
     scope: str
     source: str
+    #: The end date first announced, where Microsoft has since extended it.
+    originally_ended: dt.date | None = None
 
     def state(self, as_of: dt.date) -> SupportState:
         if as_of <= self.support_end:
@@ -86,13 +94,15 @@ PROGRAMMES: dict[str, ExtendedSupport] = {
     "windows10": ExtendedSupport(
         product="Windows 10",
         support_end=dt.date(2025, 10, 14),
-        esu_end=dt.date(2026, 10, 13),
-        enrol_by=dt.date(2026, 10, 13),
-        audience="Consumers (Home and Pro), one year, free via Windows Backup "
-                 "or Microsoft Rewards, or a one-off fee",
+        esu_end=dt.date(2027, 10, 12),
+        enrol_by=dt.date(2027, 10, 12),
+        audience="Home users (Home and Pro): free via Windows Backup or Microsoft "
+                 "Rewards, or a one-off fee. First announced as one year, to "
+                 "13 October 2026; extended in 2026 to 12 October 2027",
         scope="Critical and Important security updates only. No feature updates, "
               "no quality fixes, no new functionality, and no general technical support.",
         source="https://www.microsoft.com/en-us/windows/extended-security-updates",
+        originally_ended=dt.date(2026, 10, 13),
     ),
     "windows10-commercial": ExtendedSupport(
         product="Windows 10 (commercial/education)",
@@ -132,6 +142,18 @@ def for_product(key: str | None, commercial: bool = False) -> ExtendedSupport | 
     return None
 
 
+def _day(d: dt.date) -> str:
+    """'12 October 2027' -- no leading zero, unlike %d."""
+    return f"{d.day} {d:%B %Y}"
+
+
+def _later_programme(prog: ExtendedSupport) -> ExtendedSupport | None:
+    """The commercial programme that outlasts a consumer one, if there is one."""
+    if prog is PROGRAMMES.get("windows10"):
+        return PROGRAMMES.get("windows10-commercial")
+    return None
+
+
 def describe(prog: ExtendedSupport, as_of: dt.date | None = None) -> dict:
     """A JSON-safe account of where a device sits, and what changes when.
 
@@ -143,25 +165,37 @@ def describe(prog: ExtendedSupport, as_of: dt.date | None = None) -> dict:
     state = prog.state(as_of)
     left = prog.days_left(as_of)
 
+    later = _later_programme(prog)
+
     if state is SupportState.SUPPORTED:
         headline = f"{prog.product} still receives ordinary security updates."
     elif state is SupportState.ESU:
         headline = (
-            f"{prog.product} is past end of support, but Extended Security "
-            f"Updates run to {prog.esu_end:%d %B %Y} — about "
-            f"{max(left, 0) // 30} months. After that there are none, at any price."
+            f"{prog.product} reached end of support on {_day(prog.support_end)}. "
+            f"Extended Security Updates{' for home users' if later else ''} "
+            f"continue to {_day(prog.esu_end)}"
         )
+        if prog.originally_ended:
+            headline += f" (first announced to end on {_day(prog.originally_ended)})"
+        headline += "."
+        if later:
+            headline += (f" Organisations can buy up to three years of updates, "
+                         f"to {later.esu_end:%B %Y}.")
     else:
         headline = (
-            f"{prog.product} has received no security updates since "
-            f"{prog.esu_end:%d %B %Y}, when Extended Security Updates ended."
+            f"Extended Security Updates for {prog.product}{' home users' if later else ''} ended on "
+            f"{_day(prog.esu_end)}; it no longer receives security updates."
         )
+        if later and as_of <= later.esu_end:
+            headline += (f" Organisations on the paid programme are covered to "
+                         f"{later.esu_end:%B %Y}.")
 
     return {
         "state": state.value,
         "product": prog.product,
         "support_end": prog.support_end.isoformat(),
         "esu_end": prog.esu_end.isoformat(),
+        "originally_ended": prog.originally_ended.isoformat() if prog.originally_ended else None,
         "enrol_by": prog.enrol_by.isoformat(),
         "ends_in_days": left,
         "enrolment_open": as_of <= prog.enrol_by,

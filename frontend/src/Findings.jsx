@@ -209,41 +209,15 @@ export default function Findings() {
         )}
 
         <div className="card pad-lg">
-          <h2>What actually changed in 2026</h2>
-          <div className="sub">deadlines that move devices in and out of "obsolete"</div>
+          <h2>The dates that move devices in and out of "obsolete"</h2>
+          <div className="sub">Windows 10 support, Secure Boot and EU rules, in date order</div>
           <ul className="reg-timeline">
             <li>
-              <span className="reg-when">Jun 2026 · passed</span>
+              <span className="reg-when">14 Oct 2025 · passed</span>
               <span className="reg-what">
-                <b>Secure Boot certificates expired.</b> The 2011 KEK and UEFI certificates retired.
-                Replacements ship via Windows Update, but some older firmware needs a vendor BIOS
-                update to accept them — and machines that miss it stop getting early-boot security
-                fixes. Afterlife now checks this per device.
-              </span>
-            </li>
-            <li>
-              <span className="reg-when">Oct 2026</span>
-              <span className="reg-what">
-                <b>Windows Production PCA 2011 retires</b> — the certificate that signs the bootloader
-                itself.
-              </span>
-            </li>
-            <li>
-              <span className="reg-when">Oct 2027</span>
-              <span className="reg-what">
-                <b>Free Windows 10 security updates now run to October 2027.</b> Microsoft extended
-                consumer ESU by a year, quietly, via a documentation edit. Every "you must replace
-                this by 2025" article is now two years out of date.
-              </span>
-            </li>
-            <li>
-              <span className="reg-when">Jul 2026 · in force</span>
-              <span className="reg-what">
-                <b>The EU right to repair started applying.</b> For products in scope a maker must
-                now repair on request after the warranty has run out, at a reasonable price, and
-                may not use software or contract terms to block it. Choosing repair over
-                replacement adds a year of legal guarantee. Laptops are <i>not</i> in scope yet —
-                only their displays are — which Afterlife states per device rather than glossing.
+                <b>Windows 10 reached end of support.</b> Ordinary security and quality updates
+                stopped. Home users could enrol in Extended Security Updates (ESU) to keep receiving
+                security fixes.
               </span>
             </li>
             <li>
@@ -254,6 +228,50 @@ export default function Findings() {
                 authentication. Afterlife's passport already has the shape they describe — a QR
                 carrier resolving to a signed, verifiable record — though conformance is a claim
                 we have not tested against the published texts and so do not make.
+              </span>
+            </li>
+            <li>
+              <span className="reg-when">Jun 2026 · passed</span>
+              <span className="reg-what">
+                <b>Secure Boot certificates expired.</b> The 2011 KEK and UEFI certificates retired.
+                Replacements ship via Windows Update, but some older firmware needs a vendor BIOS
+                update to accept them — and machines that miss it stop getting early-boot security
+                fixes.
+              </span>
+            </li>
+            <li>
+              <span className="reg-when">Jul 2026 · in force</span>
+              <span className="reg-what">
+                <b>The EU right to repair started applying.</b> For products in scope a maker must
+                now repair on request after the warranty has run out, at a reasonable price, and
+                may not use software or contract terms to block it. Choosing repair over
+                replacement adds a year of legal guarantee. Laptops are <i>not</i> in scope yet —
+                only their displays are.
+              </span>
+            </li>
+            <li>
+              <span className="reg-when">13 Oct 2026</span>
+              <span className="reg-what">
+                <b>The original end of Windows 10 ESU for home users — now extended.</b> The
+                programme was first announced as one year, ending on this date. In 2026 Microsoft
+                extended it by a further year. The same month, the Windows Production PCA 2011
+                certificate, which signs the bootloader itself, retires.
+              </span>
+            </li>
+            <li>
+              <span className="reg-when">12 Oct 2027</span>
+              <span className="reg-what">
+                <b>Windows 10 ESU for home users ends.</b> After this date a home Windows 10 machine
+                receives no security updates. Advice to replace a working machine “before 2025”
+                was two years early.
+              </span>
+            </li>
+            <li>
+              <span className="reg-when">Oct 2028</span>
+              <span className="reg-what">
+                <b>The paid ESU programme for organisations ends.</b> Businesses and schools can buy
+                up to three years of Windows 10 security updates after end of support, at a price
+                that roughly doubles each year.
               </span>
             </li>
             <li>
