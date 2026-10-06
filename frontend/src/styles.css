@@ -4605,7 +4605,7 @@ body::after {
    Laid out as evidence rather than as a table. Each source states what it
    decides before it states its age, because "what does this change" is the
    question a sceptic actually has and a bare freshness grid does not answer it. */
-.sources-view { max-width: 78ch; }
+.sources-view { max-width: none; }
 
 .src-summary {
   display: flex; gap: 2.4rem; flex-wrap: wrap;
@@ -4685,7 +4685,9 @@ body::after {
    Numbered, because the claims are a sequence rather than a set: each answers
    the objection the previous one raises. A grid of equal cards would say they
    are independent, which is the opposite of the point. */
-.thesis-view { max-width: 80ch; }
+.thesis-view { max-width: none; }
+/* Four claims read as a 2x2 grid where there is room, one column otherwise. */
+@media (min-width: 1180px) { .thesis-list { grid-template-columns: 1fr 1fr; } }
 .thesis-list { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 1rem; counter-reset: claim; }
 .thesis-claim {
   display: grid; grid-template-columns: 3.4rem 1fr; gap: 0.4rem;
