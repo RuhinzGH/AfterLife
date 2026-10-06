@@ -158,7 +158,11 @@ def thesis() -> dict:
             "unit": "more exploitation on remote flaws than local-access ones",
             "detail": f"Serious Windows 10 flaws needing an attacker already on the device "
                       f"score a median {ep['serious_local']['median']} against "
-                      f"{ep['serious_remote']['median']} for remotely reachable ones.",
+                      f"{ep['serious_remote']['median']} for remotely reachable ones. "
+                      f"When a flaw needs an attacker who already has access, controlling "
+                      f"access (a password, a locked screen, no untrusted accounts) "
+                      f"reduces its practical risk. Unsupported status alone is "
+                      f"therefore not a reason to replace a device.",
             "basis": f"{ep['serious']:,} serious CVEs, all carrying an EPSS score",
             "source": "FIRST Exploit Prediction Scoring System",
         })
@@ -183,17 +187,18 @@ def thesis() -> dict:
     except Exception:  # noqa: BLE001
         pass
 
-    # 4. The cliff that is actually driving retirement, with a date on it.
+    # 4. The date that is actually driving retirement, read from esu.py.
     try:
         prog = esu.for_product("Windows 10")
         d = esu.describe(prog)
+        end = prog.esu_end
         out["claims"].append({
             "key": "cliff",
             "headline": "What retires a working machine is a date, not a fault",
-            "figure": d["esu_end"],
-            "unit": "when Windows 10 security updates stop for good",
+            "figure": f"{end.day} {end:%b %Y}",
+            "unit": "when Extended Security Updates for Windows 10 home users end",
             "detail": d["headline"],
-            "basis": "Microsoft's published Extended Security Updates programme",
+            "basis": "Microsoft's Windows 10 Extended Security Updates programme",
             "source": d["source"],
         })
     except Exception:  # noqa: BLE001
@@ -407,11 +412,11 @@ def assess(body: AssessIn) -> dict:
             # Null when no end date has been published for this device or OS.
             "support_horizon": ({**horizon.as_dict(), "note": reassess_note(horizon)}
                                 if horizon else None),
-            # The extended-support cliff, when one is published for this OS.
+            # The extended-support end date, when one is published for this OS.
             # support_horizon above is when ordinary updates stopped; this is
-            # the date the LAST of them stop, after which nothing patches the
-            # machine at any price. They are different dates and conflating
-            # them would understate the deadline by a year.
+            # when the home-user Extended Security Updates programme stops.
+            # They are different dates, and conflating them would understate
+            # how long the machine is still patched.
             #
             # Null where no programme exists or where the cliff has already
             # passed -- absence stays absence, and a cliff behind the device is
