@@ -93,7 +93,7 @@ export default function Scanner({ onNavigate }) {
         const data = b64encodeCompressed(signed);
         const url = `${window.location.origin}/?verify=${data}`;
         setQr(await (await import("qrcode")).default.toDataURL(url, {
-          margin: 4, scale: 6, errorCorrectionLevel: "L",
+          margin: 4, scale: 6, errorCorrectionLevel: "M",
           color: { dark: "#0e1518", light: "#ffffff" },
         }));
       } catch (qrErr) {
