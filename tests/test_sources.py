@@ -111,3 +111,12 @@ class TestApiSurface:
         r = client.get("/api/sources").json()
         assert r["total"] == len(SOURCES)
         assert all("fetched_basis" in s for s in r["sources"])
+
+
+def test_no_used_for_text_quotes_a_count():
+    """Counts belong in the computed `rows` column. A number typed into the
+    description goes stale: the EPSS row once said 4,991 while the corpus held 5,495."""
+    import re
+    from afterlife.sources import SOURCES
+    for s in SOURCES:
+        assert not re.search(r"\d[\d,]{2,}|\d+x\b", s["used_for"]), s["key"]

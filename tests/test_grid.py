@@ -110,3 +110,15 @@ class TestApiSurface:
         # the declared figure rather than the 300 kg default.
         assert ct["embodied_basis"] == "matched"
         assert ct["embodied_kg"] != grid.DEFAULT_EMBODIED_KG
+
+
+def test_assessment_uses_the_class_median_when_the_model_is_unknown(client):
+    """A browser scan cannot name the laptop model, so the class median applies.
+    It used to fall back to a flat 300 kg default while labelling it a class figure."""
+    from afterlife.embodied_carbon import class_estimate
+    r = client.post("/api/assess", json={"hardware_trust": 75, "eol_risk": 0.2,
+                                         "age_years": 4, "product_category": "Laptop",
+                                         "timezone": "Asia/Kolkata"}).json()
+    ct = r["carbon_tradeoff"]
+    assert ct["embodied_basis"] == "class"
+    assert ct["embodied_kg"] == class_estimate("Laptop")["median_kg"]

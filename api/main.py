@@ -171,8 +171,11 @@ def thesis() -> dict:
 
     # 3. Replacing costs more carbon than it saves, almost everywhere.
     try:
-        france = grid.break_even("FR", 300.0)
-        india = grid.break_even("IN", 300.0)
+        laptop = _json.loads((APP_DATA / "embodied_carbon.json").read_text(
+            encoding="utf-8"))["classes"]["Laptop"]
+        kg = float(laptop["median_kg"])
+        france = grid.break_even("FR", kg)
+        india = grid.break_even("IN", kg)
         out["claims"].append({
             "key": "carbon",
             "headline": "A replacement rarely repays the carbon of building it",
@@ -181,7 +184,8 @@ def thesis() -> dict:
             "detail": "On a coal-heavy grid a newer machine's efficiency repays its "
                       "manufacturing carbon in about two decades. On a clean one it "
                       "effectively never does. No laptop lives that long either way.",
-            "basis": "300 kg embodied carbon, measured grid intensity per country",
+            "basis": f"{kg:.0f} kg embodied carbon (median of {laptop['n']} laptop "
+                     f"declarations), measured grid intensity per country",
             "source": grid.intensity("FR")["source"],
         })
     except Exception:  # noqa: BLE001
@@ -398,7 +402,9 @@ def assess(body: AssessIn) -> dict:
                                  device_class=body.product_category)
         carbon_tradeoff = grid.break_even(
             geo.country,
-            embodied_kg=(declared or {}).get("gwp_total_kg"),
+            # A matched model carries its own declared figure; a class estimate
+            # carries the median of its class. Either is a measured value.
+            embodied_kg=(declared or {}).get("gwp_total_kg") or (declared or {}).get("median_kg"),
             embodied_basis=(declared or {}).get("basis"),
         )
     except Exception:  # noqa: BLE001
@@ -460,6 +466,16 @@ def findings() -> dict:
     # is for the device lookup, not the research page.
     embodied = _load_json("embodied_carbon.json")
     _laptop_carbon = embodied.get("classes", {}).get("Laptop", {})
+    # Break-even per grid, computed with the same function and the same embodied
+    # figure the per-device carbon card and The Argument use.
+    from afterlife import grid
+    _embodied_kg = _laptop_carbon.get("median_kg") or grid.DEFAULT_EMBODIED_KG
+    _breakeven: dict[str, float] = {}
+    for _label, _code in (("France", "FR"), ("Germany", "DE"), ("United States", "US"),
+                          ("World", None), ("India", "IN")):
+        _be = grid.break_even(_code, _embodied_kg)
+        if _be and _be.get("repays"):
+            _breakeven[_label] = _be["years"]
     dm = decay.get("meta", {})
     # Computed from the corpus rather than hardcoded in the page. These figures
     # change every time the CVE catalogue is refreshed, and a headline finding
@@ -515,8 +531,7 @@ def findings() -> dict:
             "embodied_source": "Boavizta manufacturer LCA declarations, cross-checked against "
                                "the GHG Protocol Scope 3 Standard and ADEME Base Empreinte",
             "embodied_caveat": embodied.get("caveat"),
-            "breakeven_years": {"France": 336, "Germany": 42, "United States": 36,
-                                "World": 30, "India": 21},
+            "breakeven_years": _breakeven,
             "laptop_lifespan": 6,
         },
         # Reshaped when the trainer moved to grouped validation. Every model now

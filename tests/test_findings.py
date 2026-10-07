@@ -173,3 +173,22 @@ class TestArtifactsAreActuallyShipped:
         assert findings.get("research", {}).get("cv_5fold"), (
             "the cross-validation card renders nothing without this"
         )
+
+
+class TestCarbonFiguresAreComputed:
+    """The break-even bars were once a hand-typed table (France 336, India 21)
+    while The Argument computed the same figures live and got different ones."""
+
+    def test_breakeven_bars_come_from_the_grid_calculation(self, findings):
+        from afterlife import grid
+        kg = findings["carbon"]["embodied_kg"]
+        bars = findings["carbon"]["breakeven_years"]
+        assert set(bars) == {"France", "Germany", "United States", "World", "India"}
+        assert bars["India"] == grid.break_even("IN", kg)["years"]
+        assert bars["World"] == grid.break_even(None, kg)["years"]
+
+    def test_the_argument_and_the_research_page_agree(self, client, findings):
+        claim = next(c for c in client.get("/api/thesis").json()["claims"]
+                     if c["key"] == "carbon")
+        bars = findings["carbon"]["breakeven_years"]
+        assert claim["figure"] == f"{bars['India']}\u2013{bars['France']} yr"

@@ -69,7 +69,7 @@ SOURCES: list[dict[str, Any]] = [
         "licence": "Free for any use, attribution requested",
         "url": "https://www.first.org/epss/",
         "expected_days": 7,
-        "used_for": "Turning 4,991 serious flaws into a distribution with a mass "
+        "used_for": "Turning the serious flaws into a distribution with a mass "
                     "and a tail, and testing whether local-access flaws really "
                     "are less exploited.",
     },
@@ -101,7 +101,7 @@ SOURCES: list[dict[str, Any]] = [
         "url": "https://tianchi.aliyun.com/dataset/144479",
         "expected_days": None,      # a one-off academic release
         "used_for": "Whether drive age actually predicts degradation. It does "
-                    "not -- drive model outweighs it by 65x.",
+                    "not -- which drive model it is matters far more.",
     },
     {
         "key": "support",

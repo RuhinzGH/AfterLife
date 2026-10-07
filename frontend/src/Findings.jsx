@@ -101,6 +101,25 @@ export default function Findings() {
   const results = (model.results || []).filter((r) => r.model !== "Baseline (majority)");
   const bestF1 = results.find((r) => r.model === model.best_macro_f1?.model
                                && r.representation === model.best_macro_f1?.representation);
+  // Figures the text below quotes, derived here from the data rather than typed.
+  const clearRatio = Math.round(decay.win10_projected_months / decay.win7_settled_months);
+  const surveyDates = Object.values(decay.series || {}).flat().map((p) => p.date).sort();
+  const survey = surveyDates.length
+    ? { n: new Set(surveyDates).size, from: surveyDates[0], to: surveyDates.at(-1) } : null;
+  const breakevens = Object.values(carbon.breakeven_years || {});
+  const dirtiest = breakevens.length ? Math.round(Math.min(...breakevens)) : null;
+  const exploitedPct = ((security.serious_known_exploited / security.serious_cves) * 100).toFixed(1);
+  const dist = model.distribution || {};
+  const distTotal = Object.values(dist).reduce((a, b) => a + b, 0);
+  const baselinePct = distTotal ? ((100 * (dist.Fixed || 0)) / distTotal).toFixed(1) : null;
+  const shippedCount = (model.experiments || []).filter((e) => e.shipped).length;
+  const meanSd = (rep) => {
+    const v = results.filter((r) => r.representation === rep)
+      .map((r) => r.grouped?.macro_f1_sd).filter(Number.isFinite);
+    return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
+  };
+  const steadier = meanSd("tokens") && meanSd("invariant")
+    ? Math.round(meanSd("tokens") / meanSd("invariant")) : null;
 
   return (
     <div className="view research">
@@ -133,9 +152,9 @@ export default function Findings() {
           cls="green"
           n={mit ? `of ${mit.serious.toLocaleString()} serious ${mit.label} flaws` : "—"}
         />
-        <Stat k="Win 10 clears vs Win 7" v="~3×" cls="amber" n={`${decay.win10_projected_months} vs ${decay.win7_settled_months} months to <5%`} />
+        <Stat k="Win 10 clears vs Win 7" v={`~${clearRatio}×`} cls="amber" n={`${decay.win10_projected_months} vs ${decay.win7_settled_months} months to <5%`} />
         <Stat k="Serious CVEs needing local access" v={`${(security.local_share * 100).toFixed(0)}%`} cls="blue" n="attacker already on device" />
-        <Stat k="Carbon break-even, dirtiest grid" v="21 yr" cls="green" n="no laptop lives that long" />
+        <Stat k="Carbon break-even, dirtiest grid" v={dirtiest != null ? `${dirtiest} yr` : "—"} cls="green" n="no laptop lives that long" />
       </div>
 
       {/* ============================================ 1. the claim itself */}
@@ -371,7 +390,7 @@ export default function Findings() {
 
               <p className="card-takeaway">
                 Severity is a prediction about what a flaw <i>would</i> do. This is a record of what
-                attackers <i>did</i>. Under 5% of the serious flaws on this machine's OS have any
+                attackers <i>did</i>. Only {exploitedPct}% of the serious flaws on this OS have any
                 observed exploitation — which is the honest scale of the risk, and it is far smaller
                 than "thousands of unpatched vulnerabilities" suggests.
               </p>
@@ -404,8 +423,11 @@ export default function Findings() {
           )}
 
           <div className="card pad-lg">
-            <h2>Windows 10 is clearing ~3× slower than Windows 7</h2>
-            <div className="sub">Steam Hardware Survey · 193 months · aligned on end of support</div>
+            <h2>Windows 10 is clearing ~{clearRatio}× slower than Windows 7</h2>
+            <div className="sub">
+              Steam Hardware Survey{survey ? ` · ${survey.n} months, ${survey.from} to ${survey.to}` : ""}
+              {" "}· aligned on end of support
+            </div>
             <DecayChart decay={decay} />
             <p className="card-takeaway">
               Tens of millions of working machines will still be running Windows 10 years after the
@@ -430,7 +452,7 @@ export default function Findings() {
               <SourceNote
                 title="Steam Hardware & Software Survey"
                 dataset="Monthly OS version share among Steam users"
-                sample="193 months of published survey snapshots"
+                sample={survey ? `${survey.n} monthly snapshots, ${survey.from} to ${survey.to}` : "Monthly survey snapshots"}
                 method="Share-over-time aligned on each OS's end-of-support month; exponential decay fitted to the Windows 10 tail"
                 published="Valve, monthly"
                 url="https://store.steampowered.com/hwsurvey"
@@ -480,9 +502,10 @@ export default function Findings() {
                 service life, so the debt is never repaid.
               </p>
               <p className="note">
-                <b>Limitation.</b> Embodied-carbon figures vary by model and by methodology; 300 kg
-                is a mid-range figure for a mainstream laptop, not a measurement of any specific
-                device. Grid intensities also shift year to year as generation mixes change.
+                <b>Limitation.</b> Embodied-carbon figures vary by model and by methodology;
+                {" "}{carbon.embodied_kg} kg is the median of {carbon.embodied_n} laptop declarations,
+                not a measurement of any specific device. Grid intensities also shift year to year
+                as generation mixes change.
               </p>
             </Disclose>
             <SourceNote
@@ -610,7 +633,7 @@ export default function Findings() {
             No configuration wins on everything, so we report the trade instead of picking a
             flattering row. Word features catch the most dead devices but swing wildly depending
             which café you deploy to. The language-free fault list is far steadier — its spread
-            across venues is roughly ten times smaller — which is what you actually want when the
+            across venues is {steadier ? `about ${steadier} times smaller on average` : "smaller"} — which is what you actually want when the
             next device comes from a country the model has never seen.
           </p>
 
@@ -654,7 +677,8 @@ export default function Findings() {
                 What we tried to make it better
               </div>
               <p className="note" style={{ marginTop: "0.3rem", marginBottom: "0.7rem" }}>
-                Five attempts, measured the same way as everything above. One shipped.
+                {model.experiments.length} attempts, measured the same way as everything above.
+                {" "}{shippedCount} shipped.
               </p>
               {model.experiments.map((e, i) => (
                 <div className={`tried-row ${e.verdict.replace(" ", "-")}`} key={i}>
@@ -693,12 +717,12 @@ export default function Findings() {
               </p>
               <p className="note">
                 <b>Selection.</b> Models are chosen on End-of-life recall across held-out venues,
-                not accuracy. A majority-class baseline reaches {(0.545 * 100).toFixed(0)}% accuracy
+                not accuracy. A majority-class baseline reaches {baselinePct}% accuracy
                 while catching <b>zero</b> end-of-life devices, which is precisely the failure this
                 product exists to prevent.
               </p>
               <p className="note">
-                <b>Honest limits.</b> Eight organisations is a small number of groups; one unusual
+                <b>Honest limits.</b> {model.n_groups} organisations is a small number of groups; one unusual
                 café moves a fold a long way, which is why the spread is published beside every
                 figure. And a language-independent representation only helps while the other
                 columns stay venue-free — leaving the country field in simply moves the leak from
