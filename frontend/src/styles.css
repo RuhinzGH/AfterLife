@@ -4682,13 +4682,12 @@ body::after {
 }
 
 /* ---- The Argument -------------------------------------------------------
-   Numbered, because the claims are a sequence rather than a set: each answers
-   the objection the previous one raises. A grid of equal cards would say they
-   are independent, which is the opposite of the point. */
+   Numbered, because the claims are a sequence: each answers the objection the
+   previous one raises. On wide screens they sit in a 2x2 grid that still reads
+   01-02 / 03-04 in order; on narrow screens, one column. */
 .thesis-view { max-width: none; }
-/* Four claims read as a 2x2 grid where there is room, one column otherwise. */
-@media (min-width: 1180px) { .thesis-list { grid-template-columns: 1fr 1fr; } }
 .thesis-list { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 1rem; counter-reset: claim; }
+@media (min-width: 1180px) { .thesis-list { grid-template-columns: 1fr 1fr; } }
 .thesis-claim {
   display: grid; grid-template-columns: 3.4rem 1fr; gap: 0.4rem;
   padding: 1.15rem 1.3rem; border-radius: 15px;
