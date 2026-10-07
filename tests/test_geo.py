@@ -56,3 +56,23 @@ class TestEvidenceCoverage:
     def test_thinly_covered_country_is_flagged(self):
         g = resolve("America/New_York")
         assert g.evidence_level == "thin" and 0 < g.ora_share < 1.0
+
+
+class TestLegacyTimezoneNames:
+    """Browsers still report some zones by their old IANA names. Chrome on
+    Windows reports India as "Asia/Calcutta"; before this was handled, an Indian
+    user's carbon card silently fell back to the world-average grid."""
+
+    @pytest.mark.parametrize("old, new, cc", [
+        ("Asia/Calcutta", "Asia/Kolkata", "IN"),
+        ("Europe/Kiev", "Europe/Kyiv", "UA"),
+        ("Asia/Saigon", "Asia/Ho_Chi_Minh", "VN"),
+        ("Asia/Katmandu", "Asia/Kathmandu", "NP"),
+    ])
+    def test_old_name_resolves_like_the_current_one(self, old, new, cc):
+        assert resolve(old).country == cc
+        assert resolve(old).country == resolve(new).country
+        assert resolve(old).resolved_from == "timezone"
+
+    def test_an_unknown_zone_still_claims_nothing(self):
+        assert resolve("Mars/Olympus_Mons").country == ""
