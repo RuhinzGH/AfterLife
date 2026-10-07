@@ -86,6 +86,24 @@ To stop either one, click in its terminal and press **Ctrl+C**.
 assessment after starting the backend takes 15–25 seconds while the model
 loads. After that it takes about a second.
 
+### Scanning the QR with a phone on a local demo
+
+The QR holds `<site address>/?verify=…`. If the site is open as
+`http://localhost:5173`, the QR says "localhost", which on a phone means the
+phone itself, so nothing opens. On the live site this works as-is. For a local
+demo:
+
+1. Start the frontend with `npm run dev -- --host`. Vite prints a **Network**
+   address such as `http://192.168.1.23:5173`.
+2. On the laptop, open the site at that Network address, not localhost. If
+   Windows asks, allow Node.js through the firewall on **private** networks.
+3. Put the phone on the same Wi-Fi and scan the QR with its normal camera app.
+   It opens the verifier with the passport already checked.
+
+Trade-off: browsers allow the camera only on `localhost` or `https`, so on the
+Network address the laptop's own **Scan with camera** button won't start.
+Uploading a QR image or pasting still works. Show the phone scan instead.
+
 ## 5. Running the tests
 
 ```bat
