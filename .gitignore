@@ -23,3 +23,9 @@ data/cache/
 .DS_Store
 Thumbs.db
 ~$*
+
+# Private, never published: sprint records, course documents, the paper,
+# the live-site signing key, and the code held for later sprints.
+_private/
+CLAUDE.md
+*.log
