@@ -182,6 +182,8 @@ html:has(.v2), body:has(.v2) { background-color: #07060d; }
 
 /* Thesis and Sources cap their root at ~80ch, sized for the old main column.
    In the wider frame the cards grow to ~940px; the prose inside keeps its own
-   62-66ch measure (.thesis-detail, .src-use, .src-method), so line length for
-   reading is unchanged. */
+   62-66ch measure (.thesis-detail, .src-use), so line length for reading is
+   unchanged. The closing method note on Sources spans the full card width so
+   it lines up with the source cards above it. */
 .v2 .sources-view, .v2 .thesis-view { max-width: min(100%, 940px); }
+.v2 .src-method { max-width: none; }
