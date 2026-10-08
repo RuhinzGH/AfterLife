@@ -74,6 +74,9 @@ export default function AppV2() {
 
 function Shell() {
   const [view, setView] = useState(routeFromLocation);
+  // Counts presses of "Scan a device"; each one tells the Scanner to start over.
+  // The plain "Scan" tab leaves the current result alone.
+  const [freshScan, setFreshScan] = useState(0);
 
   const navigate = useCallback((next) => {
     if (!(next in ROUTES)) return;
@@ -106,13 +109,17 @@ function Shell() {
         e.preventDefault();
         document.getElementById("v2-main")?.focus();
       }}>Skip to content</a>
-      <TopNav view={view} navigate={navigate} />
+      <TopNav view={view} navigate={navigate} newScan={() => setFreshScan((n) => n + 1)} />
       <main id="v2-main" tabIndex={-1} className={page.app ? "v2-app v2-wrap" : "v2-bleed"}>
+        {/* Scanner stays mounted so a result survives navigating away. It sits
+            outside the per-page boundary below: that one is keyed by view, so
+            anything inside it is rebuilt (and its state lost) on every page change. */}
+        <div style={{ display: view === "scan" ? "contents" : "none" }}>
+          <ErrorBoundary>
+            <Scanner onNavigate={navigate} freshScan={freshScan} />
+          </ErrorBoundary>
+        </div>
         <ErrorBoundary key={view}>
-          {/* Scanner stays mounted so a result survives navigating away. */}
-          <div style={{ display: view === "scan" ? "contents" : "none" }}>
-            <Scanner onNavigate={navigate} />
-          </div>
           <Suspense fallback={<FindingsSkeleton />}>
             {view === "home" && <Landing onNavigate={navigate} />}
             {view === "how" && <HowItWorks onNavigate={navigate} />}
@@ -155,7 +162,7 @@ function useScrolled(threshold = 8) {
   return scrolled;
 }
 
-function TopNav({ view, navigate }) {
+function TopNav({ view, navigate, newScan }) {
   const [open, setOpen] = useState(null);       // label of the open desktop group
   const [mobile, setMobile] = useState(false);  // mobile panel
   const scrolled = useScrolled();
@@ -164,6 +171,7 @@ function TopNav({ view, navigate }) {
   const panelRef = useRef(null);
 
   const go = (id) => { setOpen(null); setMobile(false); navigate(id); };
+  const scanFresh = () => { newScan(); go("scan"); };
 
   // Outside click closes whichever menu is open.
   useEffect(() => {
@@ -213,7 +221,7 @@ function TopNav({ view, navigate }) {
           ))}
         </nav>
         <div className="v2-nav-end">
-          <button type="button" className="v2-btn v2-nav-cta" onClick={() => go("scan")}>Scan a device</button>
+          <button type="button" className="v2-btn v2-nav-cta" onClick={scanFresh}>Scan a device</button>
           <button ref={burgerRef} type="button" className={`v2-burger${mobile ? " is-open" : ""}`}
                   aria-label={mobile ? "Close menu" : "Open menu"} aria-expanded={mobile}
                   aria-controls="v2-mpanel" onClick={() => { setOpen(null); setMobile(!mobile); }}>
@@ -235,7 +243,7 @@ function TopNav({ view, navigate }) {
                 {g.items.map((id) => <MobileLink key={id} id={id} view={view} go={go} />)}
               </div>
             ))}
-            <button type="button" className="v2-btn v2-mpanel-cta" onClick={() => go("scan")}>Scan a device</button>
+            <button type="button" className="v2-btn v2-mpanel-cta" onClick={scanFresh}>Scan a device</button>
           </nav>
         </div>
       )}

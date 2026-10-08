@@ -19,7 +19,7 @@ const PERSONAS = [
   { value: "editor", label: "Video or photo editing" },
 ];
 
-export default function Scanner({ onNavigate }) {
+export default function Scanner({ onNavigate, freshScan = 0 }) {
   const [stage, setStage] = useState(STAGE.idle);
   const [scan, setScan] = useState(null);
   const [revealed, setRevealed] = useState(0);
@@ -35,8 +35,18 @@ export default function Scanner({ onNavigate }) {
   const [minting, setMinting] = useState(false);
   const [assessment, setAssessment] = useState(null);
   const timers = useRef([]);
+  const run = useRef(0);   // bumped by reset() so a read still in flight is ignored
+
+  // The "Scan a device" button in the top bar asks for a new scan: drop
+  // whatever is on screen and go straight to the consent step.
+  useEffect(() => {
+    if (!freshScan) return;
+    reset();
+    setStage(STAGE.consent);
+  }, [freshScan]);
 
   async function runScan() {
+    const mine = ++run.current;
     setStage(STAGE.scanning);
     setErr(null);
     setScanFailed(null);
@@ -45,6 +55,7 @@ export default function Scanner({ onNavigate }) {
     try {
       data = await scanDevice();
     } catch (e) {
+      if (mine !== run.current) return;
       // A dedicated failed state, not just a banner over the scan tiles: the
       // reader gets a clear reason and a one-click Retry rather than having to
       // work out that re-clicking a tile is how you try again.
@@ -52,6 +63,7 @@ export default function Scanner({ onNavigate }) {
       setStage(STAGE.idle);
       return;
     }
+    if (mine !== run.current) return;
     setScan(data);
 
     // reveal fields one-by-one for the "it's reading my machine" moment
@@ -100,6 +112,7 @@ export default function Scanner({ onNavigate }) {
         console.warn("QR generation failed (passport still valid):", qrErr);
       }
       setStage(STAGE.done);
+      setAssessment(null);
       fetchAssessment(doc.payload, extra).then(setAssessment).catch(() => {});
     } catch (e) {
       setErr("Backend unreachable: " + e.message);
@@ -111,7 +124,9 @@ export default function Scanner({ onNavigate }) {
   function reset() {
     timers.current.forEach(clearTimeout);
     timers.current = [];
+    run.current += 1;
     setStage(STAGE.idle);
+    setAssessment(null);
     setScan(null); setPassport(null); setQr(null); setRevealed(0); setErr(null); setScanFailed(null);
   }
 
