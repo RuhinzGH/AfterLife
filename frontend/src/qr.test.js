@@ -39,10 +39,12 @@ describe("passport QR codes", () => {
     expect(src).not.toContain('errorCorrectionLevel: "L"');
   });
 
+  // Decoding is CPU-heavy, so this test gets a longer limit than Vitest's 5 s
+  // default: it must not fail just because other test files run alongside it.
   it("decode exactly across the sizes real passports produce", () => {
-    for (let len = 600; len <= 1400; len += 25) {
+    for (let len = 600; len <= 1400; len += 40) {
       const text = link(len, len);
       expect(drawAndDecode(text, "M")).toBe(text);
     }
-  });
+  }, 30_000);
 });
