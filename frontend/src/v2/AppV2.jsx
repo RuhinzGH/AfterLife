@@ -7,7 +7,6 @@ import { api } from "../api.js";
 import Scanner from "../Scanner.jsx";
 import FindingsSkeleton from "../FindingsSkeleton.jsx";
 import ErrorBoundary from "../ErrorBoundary.jsx";
-import Intro from "./Intro.jsx";
 import "./tokens.css";
 import "./shell.css";
 import "./skin.css";
@@ -34,7 +33,6 @@ const Landing = lazyWithReload(() => import("./Landing.jsx"));
 const HowItWorks = lazyWithReload(() => import("./HowItWorks.jsx"));
 const EsuCountdown = lazyWithReload(() => import("./EsuCountdown.jsx"));
 const CarbonCalc = lazyWithReload(() => import("./CarbonCalc.jsx"));
-const Compare = lazyWithReload(() => import("./Compare.jsx"));
 const Findings = lazyWithReload(() => import("../Findings.jsx"));
 const Verifier = lazyWithReload(() => import("../Verifier.jsx"));
 const Sources = lazyWithReload(() => import("../Sources.jsx"));
@@ -46,7 +44,6 @@ export const ROUTES = {
   home: { label: "Home" },
   how: { label: "How it works", app: true },
   scan: { label: "Scan", app: true },
-  compare: { label: "Compare", app: true },
   carbon: { label: "Carbon calculator", app: true },
   esu: { label: "Windows 10 countdown", app: true },
   verify: { label: "Verify a passport", app: true },
@@ -58,7 +55,7 @@ export const ROUTES = {
 //: The top bar. Groups open as menus; single items are plain links.
 export const NAV = [
   { id: "scan" },
-  { label: "Tools", items: ["compare", "carbon", "esu"] },
+  { label: "Tools", items: ["carbon", "esu"] },
   { id: "verify" },
   { label: "Evidence", items: ["how", "thesis", "findings", "sources"] },
 ];
@@ -109,9 +106,6 @@ function Shell() {
         e.preventDefault();
         document.getElementById("v2-main")?.focus();
       }}>Skip to content</a>
-      {/* The redesign's own intro plays once per browser session (skipped for a
-          QR deep link); the ambient track from the original shell is opt-in. */}
-      {!new URLSearchParams(window.location.search).has("verify") && <Intro />}
       <TopNav view={view} navigate={navigate} />
       <main id="v2-main" tabIndex={-1} className={page.app ? "v2-app v2-wrap" : "v2-bleed"}>
         <ErrorBoundary key={view}>
@@ -124,7 +118,6 @@ function Shell() {
             {view === "how" && <HowItWorks onNavigate={navigate} />}
             {view === "esu" && <EsuCountdown onNavigate={navigate} />}
             {view === "carbon" && <CarbonCalc onNavigate={navigate} />}
-            {view === "compare" && <Compare onNavigate={navigate} />}
             {view === "findings" && <Findings />}
             {view === "verify" && <Verifier onNavigate={navigate} />}
             {view === "sources" && <Sources />}

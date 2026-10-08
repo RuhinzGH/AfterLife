@@ -288,9 +288,9 @@ function EsuTeaser({ esu, onNavigate }) {
 
 const TOOLS = [
   {
-    id: "compare", title: "Compare devices",
-    text: "Put two devices side by side and see how they stack up.",
-    icon: <><rect x="3" y="7" width="11" height="15" rx="2" /><rect x="18" y="7" width="11" height="15" rx="2" /><path d="M8.5 26h15" /></>,
+    id: "esu", title: "Windows 10 countdown",
+    text: "How long Windows 10 keeps getting security updates, and what changes after.",
+    icon: <><circle cx="16" cy="17" r="11" /><path d="M16 11v6l4 3" /><path d="M12 3h8" /></>,
   },
   {
     id: "carbon", title: "Carbon calculator",
