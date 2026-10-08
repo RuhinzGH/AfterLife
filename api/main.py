@@ -113,6 +113,68 @@ def health() -> dict:
     return {"status": "ok", "service": "afterlife"}
 
 
+@app.get("/api/esu")
+def esu_programmes() -> dict:
+    """Both Windows 10 Extended Security Updates programmes, as they stand today.
+
+    Read straight from afterlife.esu, the same table the score uses, so the
+    countdown page cannot show a different date from the one the assessment
+    applies.
+    """
+    from afterlife import esu
+    return {
+        "as_of": __import__("datetime").date.today().isoformat(),
+        "consumer": esu.describe(esu.PROGRAMMES["windows10"]),
+        "commercial": esu.describe(esu.PROGRAMMES["windows10-commercial"]),
+    }
+
+
+@app.get("/api/grid-countries")
+def grid_countries() -> dict:
+    """The countries the carbon calculator can price, and the device classes it
+    holds declared embodied-carbon distributions for."""
+    from afterlife import embodied_carbon, grid
+    g = grid._load()
+    countries = sorted(
+        ({"code": k, "name": v["name"], "gco2_kwh": v["gco2_kwh"], "year": v["year"]}
+         for k, v in (g.get("countries") or {}).items()),
+        key=lambda c: c["name"])
+    classes = embodied_carbon._load().get("classes", {})
+    return {
+        "countries": countries,
+        "world": g.get("world"),
+        "source": g.get("source"),
+        "device_classes": [{"name": k, "n": v["n"], "median_kg": v["median_kg"],
+                            "p25_kg": v["p25_kg"], "p75_kg": v["p75_kg"]}
+                           for k, v in classes.items()],
+    }
+
+
+@app.get("/api/carbon-calc")
+def carbon_calc(country: str | None = None, device_class: str = "Laptop",
+                old_tdp_w: float = 45.0, new_tdp_w: float = 28.0) -> dict:
+    """Keep vs replace, by carbon, for a device class on a country's grid.
+
+    Embodied carbon is the class median from manufacturer declarations (with
+    its interquartile range, so the spread is visible); the break-even maths is
+    grid.break_even, the same function the assessment uses. An unknown class is
+    a 404 rather than a silent default: there is no honest median for it.
+    """
+    from afterlife import embodied_carbon, grid
+    if not (1 <= old_tdp_w <= 500 and 1 <= new_tdp_w <= 500):
+        raise HTTPException(400, "power draw must be between 1 and 500 W")
+    stats = embodied_carbon.class_estimate(device_class)
+    if not stats:
+        raise HTTPException(404, f"no embodied-carbon declarations held for {device_class!r}")
+    result = grid.break_even(country, stats["median_kg"], old_tdp_w, new_tdp_w,
+                             embodied_basis=f"median of {stats['n']} declarations")
+    if result is None:
+        raise HTTPException(503, "grid intensity data not loaded")
+    return {**result, "device_class": device_class,
+            "embodied_range_kg": [stats["p25_kg"], stats["p75_kg"]],
+            "declarations": stats["n"], "caveat": embodied_carbon.caveat()}
+
+
 @app.get("/api/thesis")
 def thesis() -> dict:
     """The four findings the product's argument actually rests on, computed.

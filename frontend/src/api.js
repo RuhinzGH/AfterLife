@@ -39,4 +39,15 @@ export const api = {
   verify: (passport) => postJson("/verify", { passport }),
   scanPassport: (scan) => postJson("/scan-passport", scan),
   assess: (body) => postJson("/assess", body),
+  // Redesign endpoints: read-only and computed server-side.
+  esu: () => req("/esu"),
+  gridCountries: () => req("/grid-countries"),
+  carbonCalc: ({ country, deviceClass, oldTdp, newTdp }) => {
+    const q = new URLSearchParams();
+    if (country) q.set("country", country);
+    if (deviceClass) q.set("device_class", deviceClass);
+    if (oldTdp != null) q.set("old_tdp_w", String(oldTdp));
+    if (newTdp != null) q.set("new_tdp_w", String(newTdp));
+    return req(`/carbon-calc?${q}`);
+  },
 };
