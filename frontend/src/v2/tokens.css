@@ -1,0 +1,99 @@
+/* Design tokens for the redesigned full edition ("Bold product").
+   Everything in src/v2 is scoped under .v2 so none of it can leak into the
+   original design, which the core (examiner) edition still uses. Old pages that
+   the new shell reuses (Scanner, Verifier, Findings...) keep their own classes
+   and the --ground/--panel tokens from styles.css; the overrides below only
+   retune those tokens inside .v2 so the reused pages sit in the new palette. */
+
+.v2 {
+  /* surfaces */
+  --v2-bg: #07060d;
+  --v2-bg-2: #0d0b18;
+  --v2-surface: rgba(255, 255, 255, 0.035);
+  --v2-surface-2: rgba(255, 255, 255, 0.06);
+  --v2-border: rgba(255, 255, 255, 0.08);
+  --v2-border-strong: rgba(255, 255, 255, 0.16);
+
+  /* type */
+  --v2-ink: #f5f3ff;
+  --v2-ink-2: #b9b4d0;
+  --v2-ink-3: #827c9c;          /* >= 4.5:1 on --v2-bg */
+  --v2-display: "Inter Tight", "Inter", system-ui, sans-serif;
+  --v2-body: "Inter", system-ui, sans-serif;
+  --v2-mono: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, monospace;
+
+  /* brand: violet -> deep purple -> blue -> emerald, used for gradients and the one primary
+     action per screen. The --v2-violet/--v2-fuchsia names are kept from the first
+     palette (fuchsia now holds the blue). Status colours stay semantic and are
+     never decoration: --v2-amber is a warning, not a brand colour. */
+  --v2-violet: #7c3aed;
+  --v2-fuchsia: #2563eb;
+  --v2-cyan: #0891b2;
+  --v2-emerald: #059669;
+  --v2-amber: #f5a623;
+  --v2-green: #35e68a;
+  --v2-red: #f07272;
+  --v2-grad: linear-gradient(120deg, #a855f7 0%, #7c3aed 28%, #2563eb 62%, #059669 100%);
+  --v2-grad-cool: linear-gradient(120deg, #22d3ee 0%, #7c3aed 100%);
+  --v2-glow: 0 0 0 1px rgba(124, 58, 237, 0.35), 0 20px 60px -20px rgba(37, 99, 235, 0.45);
+
+  /* shape and motion */
+  --v2-r-sm: 10px;
+  --v2-r: 18px;
+  --v2-r-lg: 28px;
+  --v2-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --v2-max: 1200px;              /* content width */
+  --v2-gutter: clamp(16px, 4vw, 40px);
+
+  /* retune the original tokens so reused pages match */
+  --ground: var(--v2-bg);
+  --panel: #12101f;
+  --panel-2: #181530;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-2: rgba(255, 255, 255, 0.14);
+  --brand: #7c3aed;
+  --brand-glow: #2563eb;
+
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(37, 99, 235, 0.14), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgba(124, 58, 237, 0.16), transparent 60%),
+    var(--v2-bg);
+  color: var(--v2-ink);
+  font-family: var(--v2-body);
+}
+
+/* Shared primitives every v2 page may use. Page-specific styles live in each
+   page's own css file, prefixed with the page name. */
+.v2 .v2-wrap { max-width: var(--v2-max); margin: 0 auto; padding: 0 var(--v2-gutter); }
+.v2 .v2-eyebrow { font: 600 0.72rem/1 var(--v2-body); letter-spacing: 0.16em; text-transform: uppercase; color: var(--v2-ink-3); }
+.v2 .v2-h1 { font: 800 clamp(2.4rem, 6vw, 4.6rem)/1.02 var(--v2-display); letter-spacing: -0.035em; }
+.v2 .v2-h2 { font: 750 clamp(1.8rem, 3.6vw, 2.8rem)/1.08 var(--v2-display); letter-spacing: -0.03em; }
+.v2 .v2-h3 { font: 700 1.2rem/1.25 var(--v2-display); letter-spacing: -0.01em; }
+.v2 .v2-lede { font-size: clamp(1.02rem, 1.4vw, 1.2rem); line-height: 1.6; color: var(--v2-ink-2); max-width: 62ch; }
+.v2 .v2-grad-text { background: var(--v2-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.v2 .v2-card {
+  background: var(--v2-surface); border: 1px solid var(--v2-border);
+  border-radius: var(--v2-r); padding: clamp(18px, 2.4vw, 28px);
+  transition: border-color 0.3s var(--v2-ease), transform 0.3s var(--v2-ease), background 0.3s;
+}
+.v2 .v2-card.is-link { cursor: pointer; }
+.v2 .v2-card.is-link:hover { border-color: var(--v2-border-strong); background: var(--v2-surface-2); transform: translateY(-2px); }
+.v2 .v2-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem; border: 0; cursor: pointer;
+  font: 650 0.98rem/1 var(--v2-body); padding: 0.95rem 1.4rem; border-radius: 999px;
+  /* darker stops than --v2-grad so white text stays above 4.5:1 at every point */
+  background: linear-gradient(120deg, #7e22ce 0%, #6d28d9 28%, #1d4ed8 62%, #047857 100%); color: #fff; box-shadow: var(--v2-glow);
+  transition: transform 0.2s var(--v2-ease), filter 0.2s;
+}
+.v2 .v2-btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.v2 .v2-btn.ghost { background: transparent; box-shadow: none; color: var(--v2-ink); border: 1px solid var(--v2-border-strong); }
+.v2 .v2-btn.ghost:hover { background: var(--v2-surface-2); }
+.v2 .v2-num { font-family: var(--v2-display); font-variant-numeric: tabular-nums; font-weight: 800; letter-spacing: -0.03em; }
+.v2 .v2-note { font-size: 0.86rem; line-height: 1.55; color: var(--v2-ink-3); }
+.v2 .v2-section { padding: clamp(56px, 9vw, 120px) 0; }
+.v2 :focus-visible { outline: 2px solid var(--v2-fuchsia); outline-offset: 3px; border-radius: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v2 *, .v2 *::before, .v2 *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
