@@ -1,0 +1,110 @@
+/* Windows 10 countdown page. Everything scoped under .v2 .esu-*. */
+.v2 .esu { display: grid; gap: clamp(20px, 3vw, 32px); min-width: 0; }
+.v2 .esu-hero { display: grid; gap: 18px; padding: clamp(8px, 2vw, 24px) 0; }
+.v2 .esu-hero .v2-h1 { max-width: 18ch; }
+.v2 .esu-target { max-width: 70ch; }
+.v2 .esu-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.v2 .esu-skel {
+  height: 320px; border-radius: var(--v2-r-lg); margin-top: 16px;
+  background: linear-gradient(90deg, var(--v2-surface), var(--v2-surface-2), var(--v2-surface));
+  background-size: 200% 100%; animation: esu-shimmer 1.4s linear infinite;
+}
+@keyframes esu-shimmer { to { background-position: -200% 0; } }
+
+/* the clock */
+.v2 .esu-clock {
+  display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: clamp(8px, 1.4vw, 16px);
+  max-width: 980px;
+}
+.v2 .esu-cell {
+  position: relative; display: grid; justify-items: start; gap: 6px; min-width: 0;
+  padding: clamp(14px, 2.2vw, 26px) clamp(12px, 2vw, 24px);
+  border-radius: var(--v2-r-lg); border: 1px solid var(--v2-border);
+  background:
+    linear-gradient(180deg, rgba(124, 58, 237, 0.10), rgba(37, 99, 235, 0.04) 60%, transparent),
+    var(--v2-surface);
+  overflow: hidden;
+}
+.v2 .esu-cell:first-child { box-shadow: var(--v2-glow); border-color: rgba(37, 99, 235, 0.35); }
+.v2 .esu-digit { font-size: clamp(2.6rem, 9vw, 7rem); line-height: 0.95; }
+.v2 .esu-cell:not(:first-child) .esu-digit { font-size: clamp(1.7rem, 6vw, 5rem); color: var(--v2-ink); }
+.v2 .esu-unit { font: 600 0.72rem/1 var(--v2-body); letter-spacing: 0.16em; text-transform: uppercase; color: var(--v2-ink-3); }
+
+/* timeline: horizontal, to scale */
+.v2 .esu-tl-card { display: grid; gap: 12px; overflow: hidden; }
+.v2 .esu-timeline { position: relative; height: 230px; margin: 8px 0; }
+.v2 .esu-track {
+  position: absolute; left: 0; right: 0; top: 50%; height: 6px; transform: translateY(-50%);
+  border-radius: 999px; background: var(--v2-surface-2);
+}
+.v2 .esu-fill {
+  position: absolute; left: 0; top: 0; bottom: 0; width: var(--pos);
+  border-radius: inherit; background: var(--v2-grad);
+}
+.v2 .esu-point { position: absolute; left: var(--pos); top: 50%; }
+.v2 .esu-dot {
+  position: absolute; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%;
+  transform: translate(-50%, -50%); background: var(--v2-bg); border: 3px solid var(--v2-ink-3);
+}
+.v2 .esu-point.is-today .esu-dot { border-color: #fff; box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.12); }
+.v2 .esu-point.is-hot .esu-dot { border-color: var(--v2-fuchsia); box-shadow: 0 0 18px rgba(37, 99, 235, 0.7); }
+.v2 .esu-point.is-cool .esu-dot { border-color: var(--v2-emerald); }
+/* label anchored by its own position: left-aligned at 0 %, centred at 50 %, right-aligned at 100 % */
+.v2 .esu-label {
+  position: absolute; left: 0; width: max-content; max-width: 220px;
+  transform: translateX(calc(-1 * var(--pos)));
+  display: grid; gap: 2px; text-align: left;
+}
+.v2 .esu-point.is-above .esu-label { bottom: 22px; }
+.v2 .esu-point.is-below .esu-label { top: 22px; }
+.v2 .esu-label-date { font: 800 1.05rem/1.2 var(--v2-display); letter-spacing: -0.01em; }
+.v2 .esu-point.is-hot .esu-label-date { color: var(--v2-fuchsia); }
+.v2 .esu-point.is-cool .esu-label-date { color: var(--v2-emerald); }
+.v2 .esu-label-title { font-weight: 600; font-size: 0.92rem; color: var(--v2-ink); }
+.v2 .esu-label-sub { font-size: 0.8rem; color: var(--v2-ink-3); }
+
+/* programme cards */
+.v2 .esu-progs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 24px); }
+.v2 .esu-prog { display: grid; gap: 10px; align-content: start; }
+.v2 .esu-state {
+  justify-self: start; padding: 0.35rem 0.75rem; border-radius: 999px;
+  font: 650 0.8rem/1 var(--v2-body); border: 1px solid var(--v2-border-strong);
+}
+.v2 .esu-state.is-esu { color: var(--v2-amber); border-color: rgba(245, 166, 35, 0.45); background: rgba(245, 166, 35, 0.08); }
+.v2 .esu-state.is-supported { color: var(--v2-green); border-color: rgba(53, 230, 138, 0.45); }
+.v2 .esu-state.is-unsupported { color: var(--v2-red); border-color: rgba(240, 114, 114, 0.45); }
+.v2 .esu-prog-text { color: var(--v2-ink-2); line-height: 1.55; }
+.v2 .esu-facts { display: grid; gap: 12px; margin: 6px 0 0; }
+.v2 .esu-facts div { display: grid; gap: 3px; padding-top: 10px; border-top: 1px solid var(--v2-border); }
+.v2 .esu-facts dt { font: 600 0.72rem/1.2 var(--v2-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--v2-ink-3); }
+.v2 .esu-facts dd { margin: 0; color: var(--v2-ink); line-height: 1.5; overflow-wrap: anywhere; }
+.v2 .esu-link { color: var(--v2-ink); text-decoration: underline; text-decoration-color: var(--v2-fuchsia); text-underline-offset: 3px; }
+
+/* after the date */
+.v2 .esu-after { display: grid; gap: 22px; }
+.v2 .esu-after-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); }
+.v2 .esu-after-grid p { color: var(--v2-ink-2); line-height: 1.6; margin: 8px 0 0; }
+
+@media (max-width: 860px) {
+  .v2 .esu-progs, .v2 .esu-after-grid { grid-template-columns: 1fr; }
+}
+
+/* narrow screens: the timeline becomes a vertical list, still in date order */
+@media (max-width: 640px) {
+  .v2 .esu-clock { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .v2 .esu-cell { padding: 14px 12px; }
+  .v2 .esu-cell:first-child { grid-column: 1 / -1; }
+  .v2 .esu-timeline { height: auto; display: grid; gap: 18px; padding-left: 26px; }
+  .v2 .esu-track { top: 6px; bottom: 6px; left: 7px; right: auto; width: 4px; height: auto; transform: none; }
+  .v2 .esu-fill { display: none; }
+  .v2 .esu-point { position: relative; left: 0; top: 0; }
+  .v2 .esu-dot { left: -19px; top: 10px; }
+  .v2 .esu-label, .v2 .esu-point.is-above .esu-label, .v2 .esu-point.is-below .esu-label {
+    position: static; transform: none; max-width: none; width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2 .esu-skel { animation: none; }
+}

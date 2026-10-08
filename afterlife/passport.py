@@ -9,6 +9,7 @@ not edited after issue. Anyone can forge a *claim*; nobody can forge a
 from __future__ import annotations
 
 import base64
+import hashlib
 import datetime as dt
 import json
 import os
@@ -54,9 +55,13 @@ def _b64(raw: bytes) -> str:
 # ------------------------------------------------------------- device identity
 # A fingerprint of what the browser can see, never a timestamp, so repeat scans
 # of the same browser and machine get the same id.
+# The id is a digest of the whole seed. It used to be the first 10 characters of
+# the seed's base64 -- just its first 7 letters re-spelled -- so every Windows
+# scan ("Windows 11|...") got AFL-V2LUZG93CY. Base32 keeps the AFL- + 10
+# uppercase characters format.
 def scan_device_id(scan: dict[str, Any]) -> str:
     seed = f"{scan.get('os')}|{scan.get('gpu')}|{scan.get('cpu_cores')}|{scan.get('ram_gb')}|{scan.get('architecture')}"
-    return "AFL-" + _b64(seed.encode())[:10].upper()
+    return "AFL-" + base64.b32encode(hashlib.sha256(seed.encode()).digest()).decode()[:10]
 
 
 # --------------------------------------------------------- issuer key pinning

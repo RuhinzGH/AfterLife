@@ -1,0 +1,187 @@
+/* Skin: scoped re-styling of the ORIGINAL pages the new shell reuses
+   (Scanner and the assessment dashboard, Verifier, MyScans, Fleet, Thesis,
+   Findings, Sources). styles.css is shared with the core edition and is never
+   edited; every rule here is under .v2, and the core build never loads this
+   file at all. Purely visual: nothing is hidden and no behaviour changes.
+
+   Contrast, measured against the darkest and lightest card surfaces used here
+   (#07060d .. #1d1838): --muted #948eae >= 5.4:1, --second #b9b4d0 >= 8.4:1,
+   white on every stop of the primary button gradient >= 4.7:1. */
+
+/* ---------------------------------------------------------------- tokens */
+.v2 {
+  /* the original tokens the reused pages read, pulled onto the v2 palette */
+  --ink: var(--v2-ink);
+  --second: var(--v2-ink-2);
+  --muted: #948eae;
+  --sunken: #0a0815;
+  --brand-light: #a78bfa;
+  --font: var(--v2-body);
+  --font-display: var(--v2-display);
+  --ease: var(--v2-ease);
+
+  --glass-tint: rgba(255, 255, 255, 0.035);
+  --glass-tint-strong: rgba(255, 255, 255, 0.06);
+  --glass-rim: rgba(255, 255, 255, 0.09);
+  --glass-bevel: rgba(255, 255, 255, 0.12);
+  --shadow-card: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 18px 40px -22px rgba(0, 0, 0, 0.75);
+  --shadow-card-hover: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 60px -24px rgba(0, 0, 0, 0.8),
+                       0 0 0 1px rgba(124, 58, 237, 0.22);
+  --shadow-lift: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 30px 80px -28px rgba(37, 99, 235, 0.35),
+                 0 0 0 1px rgba(124, 58, 237, 0.22);
+
+  /* primary action: deep purple -> blue -> emerald, each stop dark enough
+     for white text at AA */
+  --v2-cta: linear-gradient(120deg, #7e22ce 0%, #6d28d9 28%, #1d4ed8 62%, #047857 100%);
+
+  /* body::before/::after (styles.css) are fixed, positioned layers that would
+     otherwise paint over this static wrapper's own background -- that is the
+     old teal and green wash. Lifting .v2 into its own layer puts it on top. */
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+}
+/* Overscroll / rubber-band area matches the new ground instead of the old teal. */
+html:has(.v2), body:has(.v2) { background-color: #07060d; }
+
+/* ---------------------------------------------------------------- frame */
+/* Reused pages render a .view as their root; it fills the v2 frame
+   (--v2-max, set by .v2-wrap on <main>) and never assumes a sidebar. */
+.v2 .v2-app .view { gap: 1.75rem; width: 100%; min-width: 0; }
+
+/* ---------------------------------------------------------------- type */
+.v2 .eyebrow { letter-spacing: 0.16em; color: #c4b5fd; }
+.v2 h1.title {
+  font-family: var(--v2-display); font-weight: 800;
+  font-size: clamp(2.1rem, 4.6vw, 3.4rem); line-height: 1.04; letter-spacing: -0.035em;
+  margin: 0.4rem 0 0.8rem;
+}
+.v2 .lede { color: var(--v2-ink-2); font-size: clamp(1rem, 1.3vw, 1.12rem); line-height: 1.6; }
+.v2 .hero-title { font-family: var(--v2-display); font-weight: 800; letter-spacing: -0.04em; }
+.v2 .dash-title, .v2 .research-section-title {
+  font-family: var(--v2-display); font-weight: 750; letter-spacing: -0.025em;
+}
+.v2 .dash-title { font-size: clamp(1.4rem, 2.4vw, 1.8rem); }
+.v2 .card h2 { font-family: var(--v2-display); font-size: 1.12rem; font-weight: 700; letter-spacing: -0.01em; }
+
+/* ---------------------------------------------------------------- surfaces */
+/* :where() keeps these at the same weight as the original .card rule, so the
+   tone variants (.sb-at_risk, .rr.good, .ct.*, .eprel.*) still win with their
+   semantic borders and fills. Colours come from the retuned tokens above
+   (--panel, --line, --glass-*), not from overrides here. */
+.v2 :where(.card, .dash-card, .glass, .dmap-wrap, .atlas-wrap) { border-radius: var(--v2-r); }
+.v2 .card.pad-lg { padding: clamp(1.3rem, 2.6vw, 2rem); }
+.v2 :where(.dash-card) { padding: clamp(1.2rem, 2.2vw, 1.6rem); }
+
+/* the passport is the product: violet foil instead of the old teal */
+.v2 .passport-card {
+  border-radius: var(--v2-r-lg);
+  border-color: rgba(124, 58, 237, 0.3);
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgba(37, 99, 235, 0.16), transparent 55%),
+    linear-gradient(155deg, #1d1838, #110e20 70%);
+}
+.v2 .pc-glow { background: radial-gradient(circle, rgba(5, 150, 105, 0.12), transparent 70%); }
+.v2 .pc-lifecycle, .v2 .pc-foot { border-top-color: var(--v2-border); }
+.v2 .finding-hero { border-radius: var(--v2-r-lg); }
+
+/* scan choice cards (instant / deep) */
+.v2 .tier-choice { gap: 1.25rem; }
+.v2 .tier {
+  border-radius: var(--v2-r-lg); padding: clamp(1.4rem, 2.6vw, 2rem);
+  border-color: var(--v2-border);
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(124, 58, 237, 0.14), transparent 55%),
+    rgba(255, 255, 255, 0.03);
+}
+.v2 .tier.featured {
+  border-color: rgba(37, 99, 235, 0.3);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(37, 99, 235, 0.16), transparent 55%),
+    radial-gradient(90% 80% at 0% 100%, rgba(5, 150, 105, 0.08), transparent 60%),
+    rgba(255, 255, 255, 0.035);
+}
+.v2 .tier::after { border-radius: var(--v2-r-lg);
+  background: linear-gradient(140deg, rgba(168, 85, 247, 0.9), rgba(37, 99, 235, 0.5) 30%, transparent 40%, transparent 62%, rgba(5, 150, 105, 0.6)); }
+.v2 .tier:hover { box-shadow: var(--shadow-card-hover); }
+.v2 .tier-icon { border-radius: 16px; background: linear-gradient(160deg, rgba(124, 58, 237, 0.24), rgba(37, 99, 235, 0.08));
+  border-color: rgba(124, 58, 237, 0.32); }
+.v2 .tier-name { font-family: var(--v2-display); font-size: 1.4rem; font-weight: 750; letter-spacing: -0.02em; }
+.v2 .tier-go { color: #d8b4fe; }
+
+/* proof band and stat numerals take the brand gradient */
+.v2 .proof { border-radius: var(--v2-r); border-color: var(--v2-border); background: var(--v2-border); }
+.v2 .proof-cell { background: #100d1d; }
+.v2 .proof-num { background: linear-gradient(120deg, #f5f3ff 15%, #c4b5fd 45%, #93c5fd 70%, #6ee7b7);
+  -webkit-background-clip: text; background-clip: text; }
+
+/* ---------------------------------------------------------------- buttons */
+.v2 button.cta {
+  background: var(--v2-cta); color: #fff; border-radius: 999px;
+  padding: 0.8rem 1.45rem; font-weight: 650;
+  box-shadow: 0 10px 30px -14px rgba(37, 99, 235, 0.75);
+}
+.v2 button.cta:hover { filter: brightness(1.1); box-shadow: 0 14px 36px -12px rgba(37, 99, 235, 0.85); }
+.v2 button.ghost {
+  border-radius: 999px; border-color: var(--v2-border-strong); color: var(--v2-ink-2);
+  padding: 0.66rem 1.15rem;
+}
+.v2 button.ghost:hover { border-color: rgba(124, 58, 237, 0.7); color: var(--v2-ink); background: rgba(124, 58, 237, 0.1); }
+.v2 button.ghost:disabled:hover { border-color: var(--v2-border-strong); color: var(--v2-ink-2); background: none; }
+.v2 .hero-cta .cta { padding: 0.95rem 1.6rem; }
+.v2 .intent-pill, .v2 .chip, .v2 .depth-toggle { border-color: var(--v2-border-strong); }
+.v2 .seg { border-radius: 999px; background: rgba(255, 255, 255, 0.04); border-color: var(--v2-border); }
+.v2 .seg button { border-radius: 999px; }
+.v2 .seg button.on { background: rgba(124, 58, 237, 0.22); box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.45); }
+.v2 .view-toggle button.on { background: rgba(124, 58, 237, 0.22); }
+
+/* ---------------------------------------------------------------- forms */
+.v2 .field input, .v2 .field select, .v2 .field textarea {
+  border-radius: 12px; border-color: var(--v2-border-strong); background: var(--sunken);
+}
+.v2 .field input:focus, .v2 .field select:focus, .v2 .field textarea:focus {
+  border-color: var(--v2-violet); box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.22);
+}
+.v2 .scan-search { border-radius: 999px; }
+
+/* ---------------------------------------------------------------- layout fit */
+/* The results grid's 1260px breakpoint was derived for main beside a 232px
+   sidebar. In the top-bar frame the content is up to 1120px wide, so the
+   passport column is trimmed a little to give the dashboard more room. */
+.v2 .results-wrap { grid-template-columns: minmax(330px, 420px) minmax(0, 1fr); gap: 1.5rem; }
+@media (max-width: 1100px) { .v2 .results-wrap { grid-template-columns: minmax(0, 1fr); } }
+@media (min-width: 1101px) { .v2 .results-left { position: sticky; top: 84px; } }
+@media (max-width: 1100px) { .v2 .results-left { position: static; } }
+
+/* Sticky elements clear the 64px top bar. */
+.v2 .research-toc { top: 72px; border-radius: 14px; border-color: var(--v2-border);
+  background: rgba(13, 11, 24, 0.85); }
+.v2 .research-section { scroll-margin-top: 8.5rem; }
+.v2 .research-toc-link.on { box-shadow: inset 0 -2px 0 var(--v2-fuchsia); }
+
+/* Device map header: tools wrap below the title instead of pushing the page
+   wider than a phone. */
+.v2 .dmap-head { flex-wrap: wrap; }
+.v2 .dmap-head > :first-child { flex: 1 1 220px; min-width: 0; }
+.v2 .dmap-tools { flex-wrap: wrap; flex-shrink: 1; max-width: 100%; }
+/* aspect-ratio + min-height: 320px transfers a ~490px minimum WIDTH onto the
+   stage, which overflows a 390px phone. Capping the width lets min-height win
+   on narrow screens (a taller stage) instead. */
+.v2 .dmap-stage, .v2 .atlas-stage { max-width: 100%; min-width: 0; }
+.v2 .atlas-head { flex-wrap: wrap; }
+.v2 .atlas-tools { flex-wrap: wrap; flex-shrink: 1; max-width: 100%; }
+
+/* Long codes and URLs wrap rather than widening the page. */
+.v2 .pc-v, .v2 .cmd code, .v2 .source-url, .v2 .collector-code code { overflow-wrap: anywhere; }
+
+@media (max-width: 720px) {
+  .v2 .tier-choice { grid-template-columns: 1fr; }
+  .v2 .passport-card { padding: 1.25rem; }
+  .v2 h1.title { font-size: clamp(1.9rem, 8.4vw, 2.4rem); }
+}
+
+/* Thesis and Sources cap their root at ~80ch, sized for the old main column.
+   In the wider frame the cards grow to ~940px; the prose inside keeps its own
+   62-66ch measure (.thesis-detail, .src-use, .src-method), so line length for
+   reading is unchanged. */
+.v2 .sources-view, .v2 .thesis-view { max-width: min(100%, 940px); }
