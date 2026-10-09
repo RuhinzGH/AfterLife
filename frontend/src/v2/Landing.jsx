@@ -150,7 +150,6 @@ function ProofStrip({ findings }) {
   const stats = [
     { value: f.model?.n_records, label: "repair outcomes the model learned from", src: "Open Repair Alliance" },
     { value: f.security?.total_cves, label: "Windows CVEs classified", src: "NVD · CISA KEV" },
-    { value: f.nvme?.drives, label: "data-centre drives studied", src: "Alibaba NVMe corpus" },
     { value: f.carbon?.embodied_n, label: "manufacturer carbon declarations", src: "Boavizta" },
   ].filter((s) => Number.isFinite(s.value));
   if (stats.length < 2) return null;

@@ -119,11 +119,11 @@ export function HowSteps({ className = "" }) {
 const NODES = {
   instant: { title: "Instant scan", lines: ["In the browser,", "no download"] },
   deep: { title: "Your answers", lines: ["Device type, age and", "any faults you enter"] },
-  hw: { title: "Hardware trust", lines: ["Rule-based, every", "sub-score shown"], tone: "cool" },
+  hw: { title: "Hardware trust", lines: ["A documented baseline", "for a browser scan"], tone: "cool" },
   eol: { title: "End-of-life risk", lines: ["Repair model, or a", "published support date"], tone: "amber" },
   blend: { title: "Blended score", lines: ["Grade and pathways:", "keep · harden · repurpose", "sell · recycle"] },
   pass: { title: "Signed passport", lines: ["Ed25519 · W3C VC", "with a QR code"], tone: "hot" },
-  verify: { title: "Anyone verifies", lines: ["Online, or offline", "with one script"], tone: "green" },
+  verify: { title: "Anyone verifies", lines: ["Verify page, or scan", "the QR code"], tone: "green" },
 };
 
 const WIDE = {
@@ -244,7 +244,7 @@ export default function HowItWorks({ onNavigate }) {
         <Reveal className="hw-stage">
           <div className="hw-stage-n">01</div>
           <div>
-            <h3 className="v2-h3">Scan: two depths, same passport</h3>
+            <h3 className="v2-h3">Scan: what a browser can see, plus your answers</h3>
             <p>
               The <b>instant scan</b> needs no download. It reads what a browser exposes: graphics,
               processor cores, memory and architecture, and turns it into a signed profile in
@@ -253,8 +253,8 @@ export default function HowItWorks({ onNavigate }) {
             </p>
             <p>
               You then <b>complete the picture</b> with what a browser cannot see: the device type,
-              its age, and any faults in your own words. The age and the fault description are
-              what the end-of-life model reads.
+              its age, and any faults in your own words. The device type, age and fault description
+              are what the end-of-life model reads.
             </p>
           </div>
         </Reveal>
@@ -264,9 +264,10 @@ export default function HowItWorks({ onNavigate }) {
           <div>
             <h3 className="v2-h3">Score: trust, then end-of-life risk</h3>
             <p>
-              <b>Hardware trust</b> is deliberately rule-based. Each sub-score has its points, its
-              maximum and a note, and every one is printed on the passport, because a black box would
-              defeat the point of a trust document.
+              <b>Hardware trust</b> is deliberately rule-based. A browser cannot measure hardware
+              condition, so an instant scan starts from a documented baseline of 75, and every
+              adjustment after that is shown on the score, because a black box would defeat the
+              point of a trust document.
             </p>
             <p>
               <b>End-of-life risk</b> comes from one of two places, and the result says which: the
@@ -320,9 +321,9 @@ export default function HowItWorks({ onNavigate }) {
               issue date are covered as well as the device facts.
             </p>
             <p>
-              A later passport for the same device carries the previous one's hash inside its signed
-              payload, so the history forms a chain. The QR code carries the signed passport itself,
-              so scanning it opens a verification of exactly what was signed.
+              Each passport stands on its own: nothing about it is stored on our server. The QR code
+              carries the signed passport itself, so scanning it opens a verification of exactly what
+              was signed.
             </p>
             <p className="v2-note">
               Honest limit: the envelope is shape-compatible with Digital Product Passport work, but
@@ -347,10 +348,13 @@ export default function HowItWorks({ onNavigate }) {
                 </button>
               </div>
               <div className="hw-verify-card">
-                <div className="v2-eyebrow">Offline</div>
-                <p>No network and no dependency on our servers:</p>
-                <pre className="hw-code"><code>python tools/verify_passport.py \{"\n"}  device.passport.json \{"\n"}  --pubkey &lt;issuer_pubkey&gt;</code></pre>
-                <p className="v2-note">Exit 0: verified. Exit 2: valid signature, but not AfterLife's key. Exit 3: tampered or invalid.</p>
+                <div className="v2-eyebrow">Check it yourself</div>
+                <p>
+                  The signing key is public, and the signature is standard Ed25519 over the
+                  passport's canonical JSON, so any Ed25519 library can re-check it against the key
+                  without trusting this website.
+                </p>
+                <pre className="hw-code"><code>GET /api/pubkey</code></pre>
               </div>
             </div>
             <table className="hw-table">
@@ -380,7 +384,7 @@ export default function HowItWorks({ onNavigate }) {
             <div className="hw-cvn-tag">Computed</div>
             <h3 className="v2-h3">In code, or by the trained model</h3>
             <ul>
-              <li>Hardware trust score and every sub-score</li>
+              <li>Hardware trust score (a fixed baseline of 75 for a browser scan)</li>
               <li>End-of-life risk: model probability or support-date horizon</li>
               <li>Blended score and grade</li>
               <li>Pathway fit scores and the recommendation</li>

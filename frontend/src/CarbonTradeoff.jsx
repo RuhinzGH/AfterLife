@@ -33,6 +33,7 @@ export default function CarbonTradeoff({ tradeoff }) {
 
   const worldFallback = grid.basis === "world";
   const declared = embodied_basis === "matched" || embodied_basis === "declared";
+  const classMedian = embodied_basis === "class";
 
   // Under about a decade the replacement argument is at least arguable; beyond
   // it, keeping the device is the clear answer. The boundary is a presentation
@@ -58,7 +59,8 @@ export default function CarbonTradeoff({ tradeoff }) {
                : `${grid.region}, ${grid.year}`} />
         <Row label="Making a replacement"
              value={`${Math.round(embodied_kg)} kg CO₂e`}
-             note={declared ? "declared for this model" : "class default"} />
+             note={declared ? "declared for this model"
+               : classMedian ? "median for this device class" : "default estimate"} />
         {repays && (
           <>
             <Row label="Energy a newer machine saves"
@@ -98,6 +100,7 @@ export default function CarbonTradeoff({ tradeoff }) {
         <p className="note src">
           Grid intensity: {grid.source}
           {declared && <> · Embodied carbon: manufacturer LCA declaration via Boavizta.</>}
+          {classMedian && <> · Embodied carbon: median of manufacturer LCA declarations for this device class, via Boavizta.</>}
         </p>
       </Disclose>
     </div>
