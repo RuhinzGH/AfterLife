@@ -12,12 +12,6 @@ import { markScanned } from "./deviceStore.js";
 const STAGE = { idle: 0, consent: 1, scanning: 2, complete: 3, done: 4 };
 
 const CATEGORIES = ["Laptop", "Desktop computer", "Tablet", "Mobile", "Games console"];
-const PERSONAS = [
-  { value: "general", label: "General use (browsing, docs, streaming)" },
-  { value: "gamer", label: "Gaming" },
-  { value: "coder", label: "Coding & development" },
-  { value: "editor", label: "Video or photo editing" },
-];
 
 export default function Scanner({ onNavigate, freshScan = 0 }) {
   const [stage, setStage] = useState(STAGE.idle);
@@ -31,7 +25,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
   // tablet, laptop/desktop) instead of always "Laptop" -- someone scanning from
   // their phone who forgets to change the dropdown would otherwise have that
   // scan mis-filed under laptop/desktop history.
-  const [extra, setExtra] = useState({ product_category: defaultProductCategory(), device_age: 4, problem: "", persona: "general" });
+  const [extra, setExtra] = useState({ product_category: defaultProductCategory(), device_age: 4, problem: "" });
   const [minting, setMinting] = useState(false);
   const [assessment, setAssessment] = useState(null);
   const timers = useRef([]);
@@ -269,12 +263,6 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
                 <label>Anything wrong? (optional — sharpens the outlook)</label>
                 <textarea value={extra.problem} placeholder="e.g. battery drains fast — or leave blank for a healthy device"
                   onChange={(e) => setExtra({ ...extra, problem: e.target.value })} />
-              </div>
-              <div className="field">
-                <label>What do you mainly use it for? (optional — a browser can't see installed software)</label>
-                <select value={extra.persona} onChange={(e) => setExtra({ ...extra, persona: e.target.value })}>
-                  {PERSONAS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
-                </select>
               </div>
               <button className="cta" onClick={mint} disabled={minting}>
                 {minting ? "Assessing…" : "Assess & mint passport"}
