@@ -1,8 +1,7 @@
 /* Skin: scoped re-styling of the ORIGINAL pages the new shell reuses
-   (Scanner and the assessment dashboard, Verifier, MyScans, Fleet, Thesis,
-   Findings, Sources). styles.css is shared with the core edition and is never
-   edited; every rule here is under .v2, and the core build never loads this
-   file at all. Purely visual: nothing is hidden and no behaviour changes.
+   (Scanner and the assessment dashboard, Verifier, Thesis, Findings, Sources).
+   styles.css is shared with the original shell and is never edited; every rule
+   here is under .v2. Purely visual: nothing is hidden and no behaviour changes.
 
    Contrast, measured against the darkest and lightest card surfaces used here
    (#07060d .. #1d1838): --muted #948eae >= 5.4:1, --second #b9b4d0 >= 8.4:1,

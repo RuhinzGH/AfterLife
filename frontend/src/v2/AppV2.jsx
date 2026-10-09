@@ -1,6 +1,5 @@
-// The redesigned full-edition shell: a story landing page plus a top-nav app.
-// Loaded only by the full edition (see main.jsx); the core edition never ships
-// this file. Pages from the original app are reused as-is inside the new shell.
+// The site shell: a story landing page plus a top-nav app, loaded by main.jsx.
+// Pages from the original app are reused as-is inside the new shell.
 import { lazy, Suspense, useCallback, useEffect, useId, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { api } from "../api.js";

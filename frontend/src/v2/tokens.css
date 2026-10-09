@@ -1,6 +1,6 @@
-/* Design tokens for the redesigned full edition ("Bold product").
+/* Design tokens for the redesigned site ("Bold product").
    Everything in src/v2 is scoped under .v2 so none of it can leak into the
-   original design, which the core (examiner) edition still uses. Old pages that
+   original design (styles.css, used by the old App.jsx shell). Old pages that
    the new shell reuses (Scanner, Verifier, Findings...) keep their own classes
    and the --ground/--panel tokens from styles.css; the overrides below only
    retune those tokens inside .v2 so the reused pages sit in the new palette. */

@@ -8,14 +8,14 @@ Afterlife already answers two questions per CVE:
     exploited    has anyone been seen doing it               (CISA KEV, an observation)
 
 Both are useful and both are blunt at the ends. Severity is an opinion about a
-hypothetical, and 4,843 of the Windows 10 corpus are HIGH or CRITICAL -- a set
+hypothetical, and thousands of the Windows 10 corpus are HIGH or CRITICAL -- a set
 that large cannot prioritise anything. KEV is an observation, so it is
-trustworthy, but only 235 rows are in it, and absence from KEV is not evidence
+trustworthy, but only a small fraction of them are in it, and absence from KEV is not evidence
 of safety, only that no report reached CISA.
 
 EPSS fills the gap between them: a probability, per CVE, that exploitation will
 be observed in the next 30 days, fitted by FIRST on real exploitation telemetry.
-It turns "4,843 serious flaws" into a distribution with a mass and a tail.
+It turns "thousands of serious flaws" into a distribution with a mass and a tail.
 
 WHY IT MATTERS TO *THIS* PRODUCT SPECIFICALLY
 ---------------------------------------------

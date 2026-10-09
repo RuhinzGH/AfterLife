@@ -5,9 +5,9 @@
 already pulled on it, how many of its serious vulnerabilities can be closed
 without buying new hardware -- and what exactly is left to do?
 
-The CVE classification is precomputed (`data/raw/win10_cve_classified.csv`, built
+The CVE classification is precomputed (`app_data/win10_cve_classified.csv`, built
 by running mitigation.classify over an NVD pull) so a scan never waits on the NVD
-API. 1,982 Windows 10 CVEs, already labelled.
+API: every CVE in the pull arrives already labelled.
 
 The output is deliberately shaped as *actions*, not CVEs. "Disable the Print
 Spooler" is one thing a person does; it happens to close 14 CVEs. Listing 14 rows

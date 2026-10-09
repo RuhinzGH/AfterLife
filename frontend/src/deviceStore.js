@@ -1,5 +1,9 @@
 // Small per-browser store for two things the backend genuinely cannot know.
 //
+// In this build only markScanned() is called (by Scanner.jsx, when a passport is
+// issued): it leaves the marker described in (1). The naming and primary-device
+// helpers serve the saved-scans history that comes with accounts, not built yet.
+//
 // 1. WHICH DEVICE YOU ARE ON. A scan report reads identically no matter what you
 //    open it on, so "Scan again" was offered on every card in the history --
 //    including the laptop you sold last year, from your phone. The only way to
