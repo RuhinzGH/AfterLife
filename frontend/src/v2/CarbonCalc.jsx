@@ -309,7 +309,7 @@ export default function CarbonCalc({ onNavigate }) {
       )}
 
       <div className="cc-ctas">
-        <button type="button" className="v2-btn" onClick={() => onNavigate?.("scan")}>Scan your own device</button>
+        <button type="button" className="v2-btn" onClick={() => onNavigate?.("scan", { fresh: true })}>Scan your own device</button>
         <button type="button" className="v2-btn ghost" onClick={() => onNavigate?.("thesis")}>Read the argument</button>
       </div>
     </section>

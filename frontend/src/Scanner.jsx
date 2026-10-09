@@ -31,12 +31,16 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
   const timers = useRef([]);
   const run = useRef(0);   // bumped by reset() so a read still in flight is ignored
 
-  // The "Scan a device" button in the top bar asks for a new scan: drop
-  // whatever is on screen and go straight to the consent step.
-  useEffect(() => {
-    if (!freshScan) return;
+  // A request for a new scan (the "Scan a device" button, a scan button on
+  // another page, or "Start a new scan" below a result): drop whatever is on
+  // screen and go straight to the consent step.
+  function startNew() {
     reset();
     setStage(STAGE.consent);
+  }
+
+  useEffect(() => {
+    if (freshScan) startNew();
   }, [freshScan]);
 
   async function runScan() {
@@ -280,7 +284,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
             <div className="passport-actions">
               <button className="cta" onClick={savePassport}>Save passport (JSON)</button>
               <button className="ghost" onClick={saveQr} disabled={!qr}>{qr ? "Save QR (PNG)" : "QR unavailable"}</button>
-              <button className="ghost" onClick={reset}>Scan again</button>
+              <button className="ghost" onClick={startNew}>Start a new scan</button>
               <span className="note">
                 Scan the QR with any phone camera to open the verifier, or save it and upload it there later.
               </span>

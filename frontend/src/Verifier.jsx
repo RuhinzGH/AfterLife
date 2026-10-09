@@ -160,7 +160,7 @@ export default function Verifier({ onNavigate }) {
           <VerifyVerdict result={result} />
           <PassportCard doc={doc} verified={result?.valid && result?.issued_by_afterlife !== false} />
           <div style={{ display: "flex", gap: "0.7rem", flexWrap: "wrap" }}>
-            <button className="cta" onClick={() => onNavigate?.("scan")}>Scan your own device</button>
+            <button className="cta" onClick={() => onNavigate?.("scan", { fresh: true })}>Scan your own device</button>
             <button className="ghost" onClick={() => { reset(); setFromQrLink(false); }}>Verify a different passport</button>
           </div>
         </div>

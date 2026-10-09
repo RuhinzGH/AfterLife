@@ -73,8 +73,10 @@ export default function AppV2() {
 
 function Shell() {
   const [view, setView] = useState(routeFromLocation);
-  // Counts presses of "Scan a device"; each one tells the Scanner to start over.
-  // The plain "Scan" tab leaves the current result alone.
+  // Counts requests for a new scan; each one tells the Scanner to start over.
+  // The rule: tabs never discard a result, and every button labelled "scan"
+  // starts a scan. So the plain "Scan" tab leaves the current result alone,
+  // while "Scan a device" and the scan buttons on other pages bump this.
   const [freshScan, setFreshScan] = useState(0);
 
   const navigate = useCallback((next) => {
@@ -89,6 +91,13 @@ function Shell() {
     if (reduce || typeof document.startViewTransition !== "function") apply();
     else document.startViewTransition(() => flushSync(apply));
   }, []);
+
+  // What pages get as onNavigate: navigate(next), or navigate("scan", { fresh: true })
+  // from a button that promises a scan.
+  const openPage = useCallback((next, opts) => {
+    if (next === "scan" && opts?.fresh) setFreshScan((n) => n + 1);
+    navigate(next);
+  }, [navigate]);
 
   useEffect(() => {
     const onPop = () => setView(routeFromLocation());
@@ -120,14 +129,14 @@ function Shell() {
         </div>
         <ErrorBoundary key={view}>
           <Suspense fallback={<FindingsSkeleton />}>
-            {view === "home" && <Landing onNavigate={navigate} />}
-            {view === "how" && <HowItWorks onNavigate={navigate} />}
-            {view === "esu" && <EsuCountdown onNavigate={navigate} />}
-            {view === "carbon" && <CarbonCalc onNavigate={navigate} />}
+            {view === "home" && <Landing onNavigate={openPage} />}
+            {view === "how" && <HowItWorks onNavigate={openPage} />}
+            {view === "esu" && <EsuCountdown onNavigate={openPage} />}
+            {view === "carbon" && <CarbonCalc onNavigate={openPage} />}
             {view === "findings" && <Findings />}
-            {view === "verify" && <Verifier onNavigate={navigate} />}
+            {view === "verify" && <Verifier onNavigate={openPage} />}
             {view === "sources" && <Sources />}
-            {view === "thesis" && <Thesis onNavigate={navigate} />}
+            {view === "thesis" && <Thesis onNavigate={openPage} />}
           </Suspense>
         </ErrorBoundary>
       </main>

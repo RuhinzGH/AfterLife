@@ -5,7 +5,7 @@ cryptography            # Ed25519 passport signing
 joblib                  # loads the trained model
 pandas
 numpy
-scikit-learn>=1.9,<1.10 # the model was saved with 1.9; keep the same minor version
+scikit-learn==1.9.0     # the model was saved with 1.9.0; another version prints warnings when loading it
 xgboost                 # one of the compared models
 requests
 

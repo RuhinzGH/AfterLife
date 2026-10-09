@@ -172,7 +172,7 @@ export default function EsuCountdown({ onNavigate }) {
         </p>
         <p className="v2-lede">{c.headline}</p>
         <div className="esu-ctas">
-          <button type="button" className="v2-btn" onClick={() => onNavigate?.("scan")}>Scan a device</button>
+          <button type="button" className="v2-btn" onClick={() => onNavigate?.("scan", { fresh: true })}>Scan a device</button>
           <button type="button" className="v2-btn ghost" onClick={() => onNavigate?.("thesis")}>Read the argument</button>
         </div>
       </header>
@@ -214,7 +214,7 @@ export default function EsuCountdown({ onNavigate }) {
           </div>
         </div>
         <div className="esu-ctas">
-          <button type="button" className="v2-btn" onClick={() => onNavigate?.("scan")}>Scan this device</button>
+          <button type="button" className="v2-btn" onClick={() => onNavigate?.("scan", { fresh: true })}>Scan this device</button>
           <button type="button" className="v2-btn ghost" onClick={() => onNavigate?.("thesis")}>Why replacing rarely pays back</button>
         </div>
       </div>

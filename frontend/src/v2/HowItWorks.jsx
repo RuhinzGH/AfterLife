@@ -412,7 +412,7 @@ export default function HowItWorks({ onNavigate }) {
       <Reveal as="section" className="hw-cta" aria-label="Try it">
         <h2 className="v2-h2">See it on your own device.</h2>
         <div className="hw-cta-row">
-          <button className="v2-btn" onClick={() => onNavigate?.("scan")}>
+          <button className="v2-btn" onClick={() => onNavigate?.("scan", { fresh: true })}>
             Scan this device <span aria-hidden="true">→</span>
           </button>
           <button className="v2-btn ghost" onClick={() => onNavigate?.("thesis")}>See the evidence</button>

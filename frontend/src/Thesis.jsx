@@ -84,7 +84,7 @@ export default function Thesis({ onNavigate }) {
           on your device, with the same data.
         </p>
         <div className="thesis-actions">
-          <button className="cta" onClick={() => onNavigate?.("scan")}>
+          <button className="cta" onClick={() => onNavigate?.("scan", { fresh: true })}>
             Scan your device →
           </button>
           <button className="ghost" onClick={() => onNavigate?.("sources")}>

@@ -127,7 +127,7 @@ function Hero({ onNavigate }) {
             so anyone can check it.
           </p>
           <div className="lp-cta-row">
-            <button className="v2-btn lp-btn-lg" onClick={() => onNavigate("scan")}>
+            <button className="v2-btn lp-btn-lg" onClick={() => onNavigate("scan", { fresh: true })}>
               Scan this device <span aria-hidden="true">→</span>
             </button>
             <button className="v2-btn ghost lp-btn-lg" onClick={() => onNavigate("thesis")}>
@@ -341,7 +341,7 @@ function Closing({ onNavigate }) {
           </h2>
           <p className="v2-lede">Get an answer you can check, for the device in front of you.</p>
           <div className="lp-cta-row is-center">
-            <button className="v2-btn lp-btn-lg" onClick={() => onNavigate("scan")}>
+            <button className="v2-btn lp-btn-lg" onClick={() => onNavigate("scan", { fresh: true })}>
               Scan this device <span aria-hidden="true">→</span>
             </button>
             <button className="v2-btn ghost lp-btn-lg" onClick={() => onNavigate("verify")}>
@@ -357,7 +357,7 @@ function Closing({ onNavigate }) {
 /* ------------------------------------------------------------ page */
 
 export default function Landing({ onNavigate }) {
-  const nav = (id) => onNavigate?.(id);
+  const nav = (id, opts) => onNavigate?.(id, opts);
   const findings = useApi(() => api.findingsOnce());
   const thesis = useApi(() => api.thesis());
   const esu = useApi(() => api.esu());
