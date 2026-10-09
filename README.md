@@ -7,6 +7,8 @@ security and carbon data, and gives a **keep / repair / sell / recycle** verdict
 with the evidence behind it. The result is sealed into a **digitally signed
 passport** with a QR code that anyone can verify later.
 
+**Live:** https://afterlife-ruhin.vercel.app
+
 > Every number on screen is computed from data. Nothing is typed in by hand, and
 > the written summary only explains the numbers. It can never change them.
 
@@ -46,8 +48,9 @@ AfterLife gives people a verdict they can check instead of a guess.
 | **Lifecycle pathways** | Five options (keep, keep with hardening, repurpose, sell, recycle), each scored, with the best fit marked |
 | **Carbon trade-off** | How many years a new machine would need to repay the carbon spent building it, on the user's own electricity grid |
 | **Signed passport + QR** | The result, signed with Ed25519 inside a W3C Verifiable Credential envelope. Can be saved as JSON or as a QR image. |
-| **Passport Verifier** | Upload a passport's QR image or paste its JSON to check it was issued by AfterLife and has not been edited |
-| **Evidence pages** | *The Argument*, *Our Research* and *Data Sources*: the findings and datasets behind every verdict |
+| **Passport Verifier** | Upload a passport's QR image, paste its JSON, or point a camera at the QR, to check it was issued by AfterLife and has not been edited |
+| **Evidence pages** | *How it works*, *The Argument*, *Our Research* and *Data Sources*: the method, findings and datasets behind every verdict |
+| **Tools** | A *carbon calculator* for any country and device class, and a *Windows 10 countdown* to the end of security updates |
 
 ![Assessment result](docs/screenshots/result.png)
 
@@ -66,6 +69,7 @@ AfterLife gives people a verdict they can check instead of a guess.
                                                   checks the Ed25519 signature
   Evidence pages                          ──►  /api/thesis  /api/findings  /api/sources
                                                   read from computed files in app_data/
+  Tools                                   ──►  /api/carbon-calc  /api/grid-countries  /api/esu
 ```
 
 ### The machine-learning model
@@ -95,7 +99,9 @@ own key, so a valid signature alone is never reported as "issued by AfterLife".
 
 ## Getting started
 
-Full step-by-step instructions are in **[docs/SPRINT1_GUIDE.md](docs/SPRINT1_GUIDE.md)**.
+The site is live at https://afterlife-ruhin.vercel.app (frontend on Vercel, API in
+Docker on Render). Full step-by-step instructions for running it yourself are in
+**[docs/SPRINT1_GUIDE.md](docs/SPRINT1_GUIDE.md)**.
 
 Short version (Windows, two Command Prompt windows):
 
@@ -120,16 +126,16 @@ API documentation is generated automatically at http://localhost:8000/docs.
 
 ```bat
 set PYTHONPATH=.
-venv\Scripts\python -m pytest          :: backend: 260 tests
+venv\Scripts\python -m pytest          :: backend: 289 tests
 
 cd frontend
-npm test                               :: frontend: 35 tests
+npm test                               :: frontend: 37 tests
 ```
 
 The backend tests drive the real API through FastAPI's test client. They check
 that the figures on the research pages match the data on disk, that a tampered
 passport fails verification, and that a missing measurement is never reported
-as a healthy one.
+as a healthy one. GitHub Actions runs both suites on every push.
 
 ---
 
@@ -148,7 +154,7 @@ afterlife/      core library
   geo.py            timezone -> country (no IP address is used)
   sources.py        provenance and freshness for every dataset
 api/main.py     FastAPI backend
-frontend/       React + Vite website
+frontend/       React + Vite website (src/v2/ holds the site shell and the newer pages)
 scripts/        data pipeline and model training (produce app_data/ and models/)
 app_data/       computed data files the API reads
 models/         trained model + metrics
@@ -183,6 +189,10 @@ fresh it is.
 - **Precomputed evidence.** Research figures are computed by scripts ahead of
   time and served as small files, instead of being recalculated per visitor.
 - **Small dependency footprint.** The frontend ships five runtime libraries.
+- **No language model.** The written summary is filled in by fixed rules, so an
+  assessment makes no GPU or external API call.
+- **Measured** (local, median of 10 requests): an assessment takes about 3 ms;
+  the main page script is about 76 kB compressed.
 
 ## Known limitations
 
@@ -192,12 +202,16 @@ fresh it is.
   Europe. It is not a sample of all devices.
 - The signature proves a passport was *not edited since issue*. It does not
   prove the browser reported the hardware truthfully.
+- Nothing is stored on the server: there are no accounts or saved scans yet.
+- The free hosting tier sleeps when idle, so the first request after a quiet
+  period is slow.
 
 ## Roadmap
 
 - **Sprint 2:** deep hardware scan (battery, disk health, Windows 11 check),
-  accounts with saved scans, repair-outcome and repair-rights evidence, resale
-  estimate, live deployment
+  accounts with saved scans, usage fit, repair-outcome and repair-rights
+  evidence, resale estimate, side-by-side passport comparison, plain-language
+  explanations. (The live deployment planned here was done early, in Sprint 1.)
 - **Sprint 3:** EU repairability grade (EPREL), PDF passport, plain/technical
   view, measured before-and-after green optimisation, user testing
 

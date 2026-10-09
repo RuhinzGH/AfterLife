@@ -1,13 +1,14 @@
 # Sprint 1 guide: running and demonstrating AfterLife
 
 This guide covers the Sprint-1 build: what is in it, how to run it on a Windows
-laptop, how to demonstrate it, and how to deploy it.
+laptop, how to demonstrate it, and how to deploy it. The live site is
+https://afterlife-ruhin.vercel.app.
 
 ## 1. What Sprint 1 delivers
 
 | User story | Where to see it |
 |---|---|
-| Run an instant scan in the browser after giving consent | *Scan & Assess* → **Scan your device** |
+| Run an instant scan in the browser after giving consent | **Scan a device** (top right) or the **Scan** tab |
 | Add device type, age and any fault the browser cannot see | The **Complete the picture** form |
 | See a combined score and grade with every adjustment explained | **Combined score** card and waterfall |
 | Get an end-of-life risk from a model trained on real repair outcomes | Passport card, **Lifecycle outlook** bars |
@@ -15,8 +16,9 @@ laptop, how to demonstrate it, and how to deploy it.
 | Get a keep / repair / sell / recycle recommendation | **Lifecycle pathways** card |
 | See the carbon cost of buying a replacement on this grid | **Would replacing it be greener?** card |
 | Receive a signed, tamper-proof passport with a QR code | Passport card → **Save passport (JSON)** / **Save QR (PNG)** |
-| Check that a passport is genuine | *Passport Verifier* page |
-| See the evidence and datasets behind every number | *The Argument*, *Our Research*, *Data Sources* |
+| Check that a passport is genuine | **Verify a passport** (upload a QR image, paste, or camera) |
+| See the evidence and datasets behind every number | **Evidence** menu: *How it works*, *The Argument*, *Our Research*, *Data Sources* |
+| Try the carbon maths for any country, or see the Windows 10 deadline | **Tools** menu: *Carbon calculator*, *Windows 10 countdown* |
 
 ## 2. One-time setup
 
@@ -65,9 +67,9 @@ To stop either one, click in its terminal and press **Ctrl+C**.
 
 ## 4. Demo script (about 3 minutes)
 
-1. **Home page.** The headline finding and the three dataset counts underneath
-   are read live from the data, not typed in.
-2. **Scan your device → Allow & scan.** Point out the consent list: no files, no
+1. **Home page.** The dataset counts on it are read live from the data, not
+   typed in.
+2. **Scan a device → Allow & scan.** Point out the consent list: no files, no
    browsing history, no personal data.
 3. **Complete the picture.** Pick the device type, enter an age, optionally type
    a fault (for example "battery drains fast"), then **Assess & mint passport**.
@@ -75,12 +77,15 @@ To stop either one, click in its terminal and press **Ctrl+C**.
    signature, so it cannot be edited either.
 5. **Assessment (right).** Walk through the score waterfall, the years left, the
    pathways, and the carbon card.
-6. **Save QR (PNG)**, open **Passport Verifier** and upload the QR image: it
-   verifies. Then **Save passport (JSON)**, open the file in Notepad, copy its
-   text, change one number, and paste it into the verifier: it is flagged as
-   altered.
-7. **The Argument / Our Research / Data Sources.** Every figure names its
-   dataset, and the sources page shows how fresh each dataset is.
+6. **Save QR (PNG)**, open **Verify a passport** and use **Upload QR**: it
+   verifies. (On the live site, a phone camera pointed at the QR does the same.)
+   Then **Save passport (JSON)**, open the file in Notepad, copy its text, change
+   one number, and paste it under **Paste**: it is flagged as altered.
+7. **Evidence → The Argument / Our Research / Data Sources.** Every figure names
+   its dataset, and the sources page shows how fresh each dataset is.
+
+The **Scan** tab keeps the current result while you look at other pages; the
+**Scan a device** button starts a fresh scan.
 
 **Tip:** do one practice scan before the audience watches. The first
 assessment after starting the backend takes 15–25 seconds while the model
@@ -101,7 +106,7 @@ demo:
    It opens the verifier with the passport already checked.
 
 Trade-off: browsers allow the camera only on `localhost` or `https`, so on the
-Network address the laptop's own **Scan with camera** button won't start.
+Network address the laptop's own **Camera** mode won't start.
 Uploading a QR image or pasting still works. Show the phone scan instead.
 
 ## 5. Running the tests
@@ -123,6 +128,8 @@ npm test
 | A passport made on one machine fails "issued by AfterLife" on another | Expected. Each backend signs with its own key (created in `data/keys/` on first start, never committed). |
 
 ## 7. Deploying
+
+The live site runs the frontend on Vercel and the backend on Render.
 
 **Backend** (any host that runs Docker, e.g. Render or a VPS):
 
