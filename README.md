@@ -126,7 +126,7 @@ API documentation is generated automatically at http://localhost:8000/docs.
 
 ```bat
 set PYTHONPATH=.
-venv\Scripts\python -m pytest          :: backend: 289 tests
+venv\Scripts\python -m pytest          :: backend: 295 tests
 
 cd frontend
 npm test                               :: frontend: 37 tests
