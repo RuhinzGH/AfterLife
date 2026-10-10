@@ -185,10 +185,38 @@ def sign_payload(payload: dict[str, Any]) -> dict[str, Any]:
     return doc
 
 
+def _copies_agree(doc: dict[str, Any]) -> bool:
+    """A saved passport carries the device data twice: `credentialSubject` (the
+    W3C shape) and `payload` (the simple shape the app reads), plus the signature
+    twice (`proof.proofValue` and `signature`). Only one copy of each is checked
+    against the signature, so every other copy present must match it exactly --
+    otherwise someone could edit the copy a reader looks at first and the
+    passport would still verify. A QR link carries only the checked copies, so
+    absent fields are fine; a present-but-different one is tampering."""
+    if "credentialSubject" in doc and _normalize(doc["credentialSubject"]) != _normalize(doc["payload"]):
+        return False
+    if "@context" in doc and doc["@context"] != VC_CONTEXT:
+        return False
+    if "type" in doc and doc["type"] != ["VerifiableCredential", "DigitalProductPassport"]:
+        return False
+    if "proof" in doc:
+        proof = doc["proof"]
+        if not isinstance(proof, dict) or proof.get("proofValue") != doc["signature"]:
+            return False
+        if "verificationMethod" in proof and proof["verificationMethod"] != doc.get("issuer"):
+            return False
+        if "created" in proof and proof["created"] != doc.get("validFrom"):
+            return False
+    return True
+
+
 def verify_payload(doc: dict[str, Any]) -> bool:
     """Re-builds the same VC envelope from the doc's own stored fields and
-    checks it against the stored signature. False if anything was edited."""
+    checks it against the stored signature. False if anything was edited,
+    including a duplicate copy of the data (see _copies_agree)."""
     try:
+        if not _copies_agree(doc):
+            return False
         pub = Ed25519PublicKey.from_public_bytes(base64.urlsafe_b64decode(doc["issuer_pubkey"]))
         sig = base64.urlsafe_b64decode(doc["signature"])
         envelope = _vc_envelope(doc["payload"], doc.get("issuer"), doc.get("validFrom"))

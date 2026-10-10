@@ -19,6 +19,8 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
   const [revealed, setRevealed] = useState(0);
   const [passport, setPassport] = useState(null);
   const [qr, setQr] = useState(null);
+  const [verifyUrl, setVerifyUrl] = useState(null);   // the link the QR holds, for copying as text
+  const [copied, setCopied] = useState(false);
   const [err, setErr] = useState(null);
   const [scanFailed, setScanFailed] = useState(null);   // reason string when an instant scan errored
   // Defaults to the category of the device actually doing the scanning (phone,
@@ -102,6 +104,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
         };
         const data = b64encodeCompressed(signed);
         const url = `${window.location.origin}/?verify=${data}`;
+        setVerifyUrl(url);
         setQr(await (await import("qrcode")).default.toDataURL(url, {
           margin: 4, scale: 6, errorCorrectionLevel: "M",
           color: { dark: "#0e1518", light: "#ffffff" },
@@ -125,7 +128,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
     run.current += 1;
     setStage(STAGE.idle);
     setAssessment(null);
-    setScan(null); setPassport(null); setQr(null); setRevealed(0); setErr(null); setScanFailed(null);
+    setScan(null); setPassport(null); setQr(null); setVerifyUrl(null); setCopied(false); setRevealed(0); setErr(null); setScanFailed(null);
   }
 
   function savePassport() {
@@ -134,6 +137,19 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
     a.href = URL.createObjectURL(blob);
     a.download = `${passport.payload.device_id}.passport.json`;
     a.click();
+  }
+
+  // The same link the QR holds, as text: paste it into the verifier, a message
+  // or an email. Clipboard access needs https or localhost, which both the live
+  // site and the local dev server are.
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(verifyUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setErr("Couldn't copy automatically. Scan the QR instead, or save it as an image.");
+    }
   }
 
   function saveQr() {
@@ -284,6 +300,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
             <div className="passport-actions">
               <button className="cta" onClick={savePassport}>Save passport (JSON)</button>
               <button className="ghost" onClick={saveQr} disabled={!qr}>{qr ? "Save QR (PNG)" : "QR unavailable"}</button>
+              <button className="ghost" onClick={copyLink} disabled={!verifyUrl}>{copied ? "Link copied" : "Copy verify link"}</button>
               <button className="ghost" onClick={startNew}>Start a new scan</button>
               <span className="note">
                 Scan the QR with any phone camera to open the verifier, or save it and upload it there later.
