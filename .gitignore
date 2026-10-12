@@ -29,3 +29,6 @@ Thumbs.db
 _private/
 CLAUDE.md
 *.log
+
+# Local editor settings
+.claude/
