@@ -17,7 +17,7 @@ function scoreColor(s) {
 }
 
 
-export default function AssessmentDashboard({ data }) {
+export default function AssessmentDashboard({ data, payload }) {
   if (!data) return null;
   const { blend, pipeline, narrative, key_points, pathways, pathways_narrative, win11,
           carbon_tradeoff } = data;
@@ -55,7 +55,9 @@ export default function AssessmentDashboard({ data }) {
             </div>
             <div className="split-main">
               <div className="note" style={{ marginBottom: "0.8rem" }}>
-                Baseline hardware trust {blend.hardware_trust}, adjusted by the ML model and measured condition.
+                {payload?.tier === "browser profile"
+                  ? <>A rule-based score, not a measurement. A browser can't measure hardware condition, so it starts from a fixed {blend.hardware_trust}; every adjustment is shown below.</>
+                  : <>A rule-based score. It starts from the measured hardware trust of {blend.hardware_trust}; every adjustment is shown below.</>}
               </div>
               <ScoreWaterfall blend={blend} />
             </div>
@@ -90,14 +92,14 @@ export default function AssessmentDashboard({ data }) {
       {/* Card 2 — remaining life + lifespan position */}
       <Reveal delay={120}>
         <div className="dash-card" id="tour-life">
-          <div className="k-label">Safe service life</div>
+          <div className="k-label">Estimated safe service life</div>
           <div className="split">
             <div className="split-fixed life-metric">
               <div className="metric-big" style={{ color: col }}>
                 {pipeline.estimated_remaining_years}<span>yr left</span>
               </div>
               <div className="life-bar"><i style={{ width: `${(used / total) * 100}%`, background: col }} /></div>
-              <div className="note">{used.toFixed(1)} of ~{total} projected years used</div>
+              <div className="note">{used.toFixed(1)} of ~{total} estimated years used</div>
             </div>
             <MiniGauge value={used} max={total} color={col} />
             <div className="split-main">
@@ -266,7 +268,7 @@ function ScoreWaterfall({ blend }) {
           <div className="wf-arrow">↓</div>
           <div className={`wf-row ${a.delta >= 0 ? "up" : "down"}`}>
             <span className="wf-value">{a.delta > 0 ? `+${a.delta}` : a.delta}</span>
-            <span className="wf-label">{a.factor}</span>
+            <span className="wf-label">{a.factor}{a.detail && <span className="wf-detail"> · {a.detail}</span>}</span>
           </div>
         </div>
       ))}

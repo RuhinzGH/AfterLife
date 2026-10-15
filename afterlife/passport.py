@@ -267,6 +267,8 @@ def build_scan_passport(scan: dict[str, Any]) -> dict[str, Any]:
     age = scan.get("device_age")
     category = scan.get("product_category") or "Laptop"
     problem = scan.get("problem") or ""
+    from .fault_lexicon import fault_themes
+    themes = fault_themes(problem)
     if age not in (None, ""):
         try:
             from .predict import predict_lifecycle
@@ -280,7 +282,10 @@ def build_scan_passport(scan: dict[str, Any]) -> dict[str, Any]:
             profile["lifecycle"] = {
                 "device_age": float(age),
                 "product_category": category,
-                "fault_described": bool(problem.strip()),
+                # Only a recognised fault counts towards the score's fault
+                # adjustment; the model still reads the words either way.
+                "fault_described": bool(themes),
+                "fault_themes": themes,
                 "prediction": pred["prediction"],
                 "eol_risk": pred["eol_risk"],
                 "probabilities": pred["probabilities"],

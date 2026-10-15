@@ -186,3 +186,11 @@ html:has(.v2), body:has(.v2) { background-color: #07060d; }
    it lines up with the source cards above it. */
 .v2 .sources-view, .v2 .thesis-view { max-width: min(100%, 940px); }
 .v2 .src-method { max-width: none; }
+
+/* Passport card: the end-of-life risk leads; the predicted label is secondary. */
+.v2 .pc-life-head { flex-wrap: wrap; gap: 0.3rem 0.8rem; }
+.v2 .pc-risk { font-size: 0.95rem; }
+.v2 .pc-risk b { font-size: 1.5rem; font-weight: 800; margin-right: 0.2rem; }
+.v2 .pc-life-head .life-tag { padding: 0.05rem 0.45rem; font-size: 0.8rem; }
+
+.v2 .wf-detail { color: var(--muted, #948eae); font-weight: 400; }

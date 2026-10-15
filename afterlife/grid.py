@@ -146,7 +146,7 @@ def break_even(
         "annual_saving_kg": round(annual_saving_kg, 1),
         "annual_kwh_saved": round(saved_kwh, 1),
         "headline": (
-            f"{where} ({grid['gco2_kwh']:.0f} gCO₂e/kWh), a replacement would need about "
+            f"{where} ({grid['gco2_kwh']:.0f} gCO₂e/kWh), a replacement would need an estimated "
             f"{years:.1f} years of use to repay the {embodied:.0f} kg of carbon "
             f"spent building it."),
         "assumptions": _assumptions(old_tdp_w, new_tdp_w),

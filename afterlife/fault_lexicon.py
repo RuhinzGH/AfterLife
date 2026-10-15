@@ -136,3 +136,42 @@ def theme_features(X) -> np.ndarray:
 
 def feature_names() -> list[str]:
     return [f"fault:{k}" for k in THEME_KEYS]
+
+
+# ---------------------------------------------------------------- user text
+# The keyword lists above match fragments on purpose: repair records are short,
+# misspelt and multilingual, and every record describes a fault anyway. A
+# person's own "Anything wrong?" text is different -- it may describe a healthy
+# machine ("runs Windows 11, works fine") -- and it decides a 5-point penalty.
+# So for user text a keyword must start at a word boundary (so "port" doesn't
+# match "important"), short keywords must also end there (so "fan" doesn't
+# match "fantastic", though "fans" still counts), and words that also describe
+# a working machine don't count on their own.
+_NOT_A_FAULT_ALONE = {"windows", "linux", "ubuntu", "software", "system", "systeem",
+                      "betriebssystem", "besturingssysteem", "update", "bios"}
+_STEM_MIN = 6   # keywords this long or longer are stems ("aufgebl", "batterie")
+
+
+def _user_pattern(words: list[str]) -> re.Pattern | None:
+    parts = []
+    for w in words:
+        if w in _NOT_A_FAULT_ALONE:
+            continue
+        tail = "" if len(w) >= _STEM_MIN or " " in w else r"(?:s|es)?(?!\w)"
+        parts.append(r"(?<!\w)" + re.escape(w) + tail)
+    return re.compile("|".join(parts), re.IGNORECASE) if parts else None
+
+
+_USER_PATTERNS = {k: _user_pattern(meta["kw"]) for k, meta in THEMES.items()}
+
+
+def fault_themes(text: str | None) -> list[str]:
+    """The fault themes a person's own description names, as display labels.
+
+    Empty for blank text, nonsense ("asdf"), or a description of a healthy
+    machine. This is what decides the reported-fault adjustment on the score;
+    the model separately reads the words whatever they are.
+    """
+    if not text or not text.strip():
+        return []
+    return [THEMES[k]["label"] for k, pat in _USER_PATTERNS.items() if pat and pat.search(text)]

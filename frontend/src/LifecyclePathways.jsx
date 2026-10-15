@@ -17,6 +17,9 @@ export default function LifecyclePathways({ pathways, narrative }) {
       {narrative?.summary && <p className="punchline" style={{ marginTop: "0.5rem" }}>{narrative.summary}</p>}
       {narrative && <AiCaption source={narrative.source} />}
 
+      <p className="note" style={{ marginTop: "0.4rem" }}>
+        Fit scores rank the options for this grade from a fixed table. They are not probabilities.
+      </p>
       <div className="pathways-grid" style={{ marginTop: "0.9rem" }}>
         {pathways.map((p) => (
           <div className={`pathway-card ${p.color} ${p.status}`} key={p.key}>

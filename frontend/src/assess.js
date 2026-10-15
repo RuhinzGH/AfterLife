@@ -16,6 +16,8 @@ export async function fetchAssessment(payload, extra) {
     eol_risk: lc.eol_risk ?? null,
     age_years: lc.device_age ?? (extra ? Number(extra.device_age) : payload.age_years) ?? null,
     fault_described: lc.fault_described ?? false,
+    // The recognised fault theme(s), named on the waterfall instead of "user-described".
+    fault_detail: lc.fault_themes?.length ? lc.fault_themes.join(", ") : null,
     make_model: payload.make_model || payload.os,
     os: payload.os,
     product_category: extra?.product_category || payload.product_category || null,

@@ -92,3 +92,17 @@ describe("country and category", () => {
     expect(sent().product_category).toBe("Tablet");
   });
 });
+
+describe("the recognised fault travels with the request (S2-11)", () => {
+  it("names the fault theme the passport recognised", async () => {
+    await fetchAssessment({ ...SCANNED, lifecycle: { ...SCANNED.lifecycle, fault_described: true, fault_themes: ["Battery", "Screen"] } }, null);
+    expect(sent().fault_described).toBe(true);
+    expect(sent().fault_detail).toBe("Battery, Screen");
+  });
+
+  it("sends no fault detail when no fault was recognised", async () => {
+    await fetchAssessment(SCANNED, null);
+    expect(sent().fault_described).toBe(false);
+    expect(sent().fault_detail).toBeNull();
+  });
+});

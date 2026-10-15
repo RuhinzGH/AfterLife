@@ -108,11 +108,19 @@ export default function PassportCard({ doc, qr, verified, final = null }) {
           <div className="pc-k" style={{ marginBottom: "0.5rem" }}>
             Lifecycle outlook · {p.lifecycle.basis}
           </div>
+          {/* The risk leads, not the predicted label: with "End of life" at about
+              18% of repairs, the single most likely outcome is almost always
+              "Fixed", which hides the number that actually matters. */}
           <div className="pc-life-head">
-            <span className={`life-tag ${{ "End of life": "eol", Repairable: "rep", Fixed: "fix" }[p.lifecycle.prediction]}`}>
-              {p.lifecycle.prediction}
+            <span className="pc-risk">
+              <b>{(p.lifecycle.eol_risk * 100).toFixed(0)}%</b> end-of-life risk
             </span>
-            <span className="note">end-of-life risk {(p.lifecycle.eol_risk * 100).toFixed(0)}%</span>
+            <span className="note">
+              for devices like this one · most likely outcome:{" "}
+              <span className={`life-tag ${{ "End of life": "eol", Repairable: "rep", Fixed: "fix" }[p.lifecycle.prediction]}`}>
+                {p.lifecycle.prediction}
+              </span>
+            </span>
           </div>
           <div style={{ marginTop: "0.6rem" }}>
             {p.lifecycle.probabilities.map((pr) => (

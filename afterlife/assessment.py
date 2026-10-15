@@ -35,7 +35,7 @@ _EOL_FACTOR_UNLABELLED = "End-of-life risk"
 def blend_score(hardware_trust: int, eol_risk: float | None,
                 battery_health: float | None, age_years: float | None,
                 fault_described: bool, eol_source: str | None = None,
-                eol_detail: str | None = None) -> dict[str, Any]:
+                eol_detail: str | None = None, fault_detail: str | None = None) -> dict[str, Any]:
     """Deterministically fold the end-of-life signal + user signals into the hardware score.
 
     Starts from the hardware trust score, then applies bounded adjustments so the result
@@ -78,7 +78,7 @@ def blend_score(hardware_trust: int, eol_risk: float | None,
         score -= 4; adjustments.append({"factor": "age", "detail": f"{age_years:.0f} yr", "delta": -4})
 
     if fault_described:
-        score -= 5; adjustments.append({"factor": "reported fault", "detail": "user-described", "delta": -5})
+        score -= 5; adjustments.append({"factor": "reported fault", "detail": fault_detail or "user-described", "delta": -5})
 
     score = max(0, min(100, round(score)))
     grade = ("A - excellent" if score >= 85 else "B - good" if score >= 70
@@ -125,9 +125,9 @@ def key_points(blend: dict[str, Any], pipeline: dict[str, Any],
     remaining = pipeline.get("estimated_remaining_years")
     if isinstance(remaining, (int, float)):
         if remaining >= 3:
-            strengths.append(f"~{remaining:g} years of projected life left")
+            strengths.append(f"About {remaining:g} years of estimated life left")
         elif remaining > 0:
-            weaknesses.append(f"Only ~{remaining:g} years of projected life left")
+            weaknesses.append(f"Only about {remaining:g} years of estimated life left")
 
     if not strengths:
         strengths.append(f"Hardware trust baseline of {blend.get('hardware_trust')}/100")
