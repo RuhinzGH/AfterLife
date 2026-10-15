@@ -1,0 +1,77 @@
+"""The deep-scan passport (S2-01): a measured trust score instead of the fixed 75.
+
+Guards the parts written for this project rather than carried over: the device
+ID uses the hashed scheme (defect D7 would otherwise come back for every laptop
+of one maker), storage health comes from the drive's own report (no unvalidated
+model), the five sub-scores add up to the score, OS support comes from the
+offline table, and the hand-off tokens can't be trivially guessed.
+"""
+import json
+
+from afterlife.passport import build_deep_passport, deep_device_id, deep_trust_score, verify_payload
+
+
+def test_two_models_from_one_maker_get_different_ids(device):
+    a = device(manufacturer="Dell Inc.", model="Latitude 5490")
+    b = device(manufacturer="Dell Inc.", model="Latitude 7420")
+    assert deep_device_id(a) != deep_device_id(b)
+
+
+def test_the_same_machine_keeps_its_id(device):
+    assert deep_device_id(device()) == deep_device_id(device(collected_at="2026-10-20T09:00:00"))
+
+
+def test_a_perfect_machine_scores_exactly_100(device):
+    d = device(os_caption="Microsoft Windows 11 Home", cpu_name="Intel Core i7-1260P",
+               battery_health_pct=95.0, approx_age_years=1.5,
+               nvme_health=[{"critical_warning": 0, "percentage_used": 3}])
+    score, subs, _, _ = deep_trust_score(d)
+    assert score == sum(s["points"] for s in subs) == 100
+    assert sum(s["max_points"] for s in subs) == 100
+
+
+def test_windows_10_counts_as_extended_support_not_supported(device):
+    _, subs, _, state = deep_trust_score(device())
+    assert state == "esu"
+    assert next(s for s in subs if s["name"] == "OS security support")["points"] == 10
+
+
+def test_storage_uses_the_drives_own_warning(device):
+    _, subs, _, _ = deep_trust_score(device(nvme_health=[{"critical_warning": 1, "percentage_used": 40}]))
+    storage = next(s for s in subs if s["name"] == "Storage health")
+    assert storage["points"] == 4 and "critical warning" in storage["note"]
+
+
+def test_unread_battery_is_never_scored_as_healthy(device):
+    d = device(); d.pop("battery_health_pct")
+    _, subs, _, _ = deep_trust_score(d)
+    battery = next(s for s in subs if s["name"] == "Battery health")
+    assert battery["points"] < battery["max_points"] and "not read" in battery["note"]
+
+
+def test_deep_passport_is_signed_and_covers_every_copy(device):
+    doc = json.loads(json.dumps(build_deep_passport(device())))
+    assert doc["payload"]["tier"] == "full scan"
+    assert verify_payload(doc) is True
+    doc["credentialSubject"]["trust_score"] = 99
+    assert verify_payload(doc) is False
+
+
+def test_short_or_odd_tokens_are_refused(client, device):
+    assert client.post("/api/deep-scan/abc", json=device()).status_code == 400
+    assert client.get("/api/deep-scan/has spaces in it!!").status_code in (400, 404)
+
+
+def test_hand_off_round_trip(client, device):
+    token = "handoff-test-0123456789"
+    assert client.get(f"/api/deep-scan/{token}").json() == {"pending": True}
+    assert client.post(f"/api/deep-scan/{token}", json=device()).json()["ok"] is True
+    doc = client.get(f"/api/deep-scan/{token}").json()
+    assert doc["payload"]["trust_score"] == sum(s["points"] for s in doc["payload"]["sub_scores"])
+    assert doc["verified"] is True
+
+
+def test_collector_is_served_as_readable_text(client):
+    r = client.get("/api/collector.ps1")
+    assert r.status_code == 200 and r.headers["content-type"].startswith("text/plain")
+    assert "Read-only" in r.text

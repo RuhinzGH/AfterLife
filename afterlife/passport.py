@@ -13,6 +13,7 @@ import hashlib
 import datetime as dt
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any
 
@@ -59,9 +60,21 @@ def _b64(raw: bytes) -> str:
 # the seed's base64 -- just its first 7 letters re-spelled -- so every Windows
 # scan ("Windows 11|...") got AFL-V2LUZG93CY. Base32 keeps the AFL- + 10
 # uppercase characters format.
+def _id_from_seed(seed: str) -> str:
+    return "AFL-" + base64.b32encode(hashlib.sha256(seed.encode()).digest()).decode()[:10]
+
+
 def scan_device_id(scan: dict[str, Any]) -> str:
     seed = f"{scan.get('os')}|{scan.get('gpu')}|{scan.get('cpu_cores')}|{scan.get('ram_gb')}|{scan.get('architecture')}"
-    return "AFL-" + base64.b32encode(hashlib.sha256(seed.encode()).digest()).decode()[:10]
+    return _id_from_seed(seed)
+
+
+def deep_device_id(device: dict[str, Any]) -> str:
+    """A deep scan reads real hardware identity, so its ID comes from maker |
+    model | CPU, hashed the same way as scan_device_id (defect D7): a plain
+    prefix of the seed would give every laptop from one maker the same ID."""
+    seed = f"{device.get('manufacturer')}|{device.get('model')}|{device.get('cpu_name')}"
+    return _id_from_seed(seed)
 
 
 # --------------------------------------------------------- issuer key pinning
@@ -295,3 +308,153 @@ def build_scan_passport(scan: dict[str, Any]) -> dict[str, Any]:
             pass  # model unavailable — passport still issues without the outlook
 
     return sign_payload(profile)
+
+
+# ---------------------------------------------------------------- deep scan
+# A deep scan runs the collector (collector/collect_device.ps1) on the machine
+# itself, so it can measure what a browser cannot: Windows 11 readiness (CPU,
+# TPM, Secure Boot), the operating system's support state, disk health, battery
+# wear and age. Those measurements replace the fixed 75 a browser scan starts
+# from. The weights below are chosen by design, not fitted -- they add up to 100
+# and every sub-score is shown on the passport, so the number can be checked.
+UNKNOWN = "UNKNOWN"
+
+DEEP_WEIGHTS = {"Windows 11 ready": 30, "OS security support": 15, "Storage health": 20,
+                "Battery health": 15, "Age": 20}
+
+
+def _sub(name: str, points: int, note: str) -> dict[str, Any]:
+    return {"name": name, "points": points, "max_points": DEEP_WEIGHTS[name], "note": note}
+
+
+def _os_support(device: dict[str, Any]) -> str:
+    """supported | esu | unsupported | unknown, from the same offline
+    endoflife.date table the instant scan uses (no live call per scan)."""
+    from .device_support import lookup
+    horizon = lookup(None, str(device.get("os_caption") or ""))
+    return "unknown" if horizon is None else horizon.support_state
+
+
+def _storage(device: dict[str, Any]) -> tuple[int, str]:
+    """The drive's own report, never a model: the NVMe critical-warning flag and
+    rated write life used when the collector could read them, otherwise
+    Windows' coarse HealthStatus."""
+    nvme = next((d for d in (device.get("nvme_health") or []) if isinstance(d, dict)), None)
+    if nvme and isinstance(nvme.get("critical_warning"), (int, float)):
+        used = nvme.get("percentage_used")
+        if nvme["critical_warning"]:
+            return 4, "the drive is reporting a critical warning"
+        if isinstance(used, (int, float)) and used >= 90:
+            return 10, f"{used:.0f}% of rated write life used"
+        return 20, (f"healthy, {used:.0f}% of rated write life used"
+                    if isinstance(used, (int, float)) else "healthy (drive self-report)")
+    health = str(device.get("disk_health") or "").strip()
+    if health.lower() == "healthy":
+        return 20, "healthy (Windows)"
+    if health:
+        return 8, f"{health} (Windows)"
+    return 10, "not read"
+
+
+def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]], Any, str]:
+    """Measured hardware trust (0-100) as five sub-scores, each shown."""
+    from .win11 import assess as win11_assess
+    elig = win11_assess(device)
+    subs = []
+    if elig.eligible is True:
+        subs.append(_sub("Windows 11 ready", 30, "meets every Windows 11 requirement"))
+    elif elig.eligible is None:
+        subs.append(_sub("Windows 11 ready", 18, "not determined: the TPM could not be read (run as administrator)"))
+    elif elig.permanently_blocked:
+        subs.append(_sub("Windows 11 ready", 4, "blocked by the CPU generation (permanent)"))
+    else:
+        subs.append(_sub("Windows 11 ready", 14, "blocked by a firmware setting that can be switched on"))
+
+    state = _os_support(device)
+    subs.append(_sub("OS security support", {"supported": 15, "esu": 10, "unknown": 8}.get(state, 4),
+                     {"supported": "receiving security updates", "esu": "extended security updates only",
+                      "unsupported": "no longer receiving security updates",
+                      "unknown": "not determined"}.get(state, state)))
+
+    pts, note = _storage(device)
+    subs.append(_sub("Storage health", pts, note))
+
+    bh = device.get("battery_health_pct")
+    if isinstance(bh, (int, float)):
+        # 80% is a real industry bar: Amazon Renewed sells only devices whose
+        # battery holds at least 80% of its original capacity.
+        subs.append(_sub("Battery health", 15 if bh >= 80 else 10 if bh >= 60 else 5,
+                         f"{bh:.0f}% of design capacity"))
+    elif device.get("battery_present") is False:
+        subs.append(_sub("Battery health", 15, "no battery (desktop)"))
+    else:
+        subs.append(_sub("Battery health", 8, "not read (run as administrator)"))
+
+    age = device.get("approx_age_years")
+    if isinstance(age, (int, float)):
+        subs.append(_sub("Age", 20 if age <= 3 else 14 if age <= 5 else 8 if age <= 8 else 3,
+                         f"about {age:.1f} years"))
+    else:
+        subs.append(_sub("Age", 10, "not determined"))
+    return sum(s["points"] for s in subs), subs, elig, state
+
+
+_GENERIC_FAMILY_NAMES = {"", "system product name", "not applicable", "to be filled by o.e.m.",
+                         "default string", "system family", "n/a", "none"}
+_CRYPTIC_PREFIX = re.compile(r"^[0-9A-Za-z]{2,10}_[0-9A-Za-z]{2,10}\s+")
+
+
+def _friendly_name(device: dict[str, Any], make_model: str) -> str:
+    """The retail name (e.g. "HP Victus") rather than a board code like "8A78",
+    when the firmware reports a usable SystemFamily."""
+    family = _CRYPTIC_PREFIX.sub("", (device.get("system_family") or "").strip()).strip()
+    maker = (device.get("manufacturer") or "").strip()
+    if not family or family.lower() in _GENERIC_FAMILY_NAMES or family.lower() == maker.lower():
+        return make_model
+    return f"{maker} {family}" if maker and maker.lower() not in family.lower() else family
+
+
+def build_deep_passport(device: dict[str, Any]) -> dict[str, Any]:
+    """A signed passport from a collector scan: the 'full scan' tier a browser
+    profile can never reach, in the same signed shape, so the same card and the
+    same verifier handle both."""
+    from .scan_coverage import evaluate as evaluate_coverage
+    from .win11 import Blocker
+    from .wipe import check as wipe_check
+    score, subs, elig, state = deep_trust_score(device)
+    coverage = evaluate_coverage(device)
+    make_model = f"{device.get('manufacturer') or '?'} {device.get('model') or '?'}".strip()
+    bh = device.get("battery_health_pct")
+    battery = (f"{bh:.0f}%" if isinstance(bh, (int, float))
+               else "no battery" if device.get("battery_present") is False else UNKNOWN)
+    payload = {
+        "device_id": deep_device_id(device), "tier": "full scan", "issued": dt.date.today().isoformat(),
+        "make_model": make_model, "device_name": _friendly_name(device, make_model),
+        "manufacturer": device.get("manufacturer"),
+        "os": f"{device.get('os_caption') or '?'} {device.get('os_release_id') or ''}".strip(),
+        "os_support": state,
+        "cpu": device.get("cpu_name"), "cpu_cores": device.get("cpu_cores"), "gpu": device.get("gpu_name"),
+        "ram_gb": device.get("ram_gb"),
+        "storage": f"{device.get('sysdrive_total_gb') or '?'} GB {device.get('disk_media_type') or ''}".strip(),
+        "storage_health": next(s["note"] for s in subs if s["name"] == "Storage health"),
+        "battery_health": battery,
+        "win11": {True: "ELIGIBLE", False: "NOT ELIGIBLE", None: "INDETERMINATE"}[elig.eligible],
+        "win11_blockers": [b.value for b in elig.blockers if b is not Blocker.UNKNOWN_TPM],
+        "win11_permanently_blocked": elig.permanently_blocked,
+        "win11_firmware_fixable": elig.firmware_fixable,
+        "trust_score": score, "sub_scores": subs,
+        "age_years": device.get("approx_age_years"),
+        "completeness_pct": coverage["completeness_pct"], "scan_coverage": coverage,
+        # A battery is the measured way to tell a laptop from a desktop; left
+        # absent when the probe could not tell, rather than guessed.
+        "product_category": ("Laptop" if device.get("battery_present") is True
+                             else "Desktop computer" if device.get("battery_present") is False else None),
+        "persona_signals": device.get("persona_signals"),
+    }
+    wipe = wipe_check(device.get("clean_state"))
+    if wipe.get("status") == "clean":
+        # Inside the signature because it is the one field a second-hand buyer
+        # is asked to trust; only a passing check is ever recorded.
+        payload["wipe_verified"] = wipe.get("verified_at")
+        payload["wipe_scope"] = "factory-fresh check, not forensic erasure"
+    return sign_payload(payload)

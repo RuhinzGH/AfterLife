@@ -9,6 +9,7 @@ COPY afterlife/ afterlife/
 COPY api/ api/
 COPY app_data/ app_data/
 COPY models/ models/
+COPY collector/ collector/
 
 EXPOSE 8080
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]

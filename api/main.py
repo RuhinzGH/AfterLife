@@ -8,6 +8,7 @@ verifier, and the research findings the frontend renders. Run:
 from __future__ import annotations
 
 import json
+import re
 import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -18,7 +19,7 @@ sys.path.insert(0, str(ROOT))
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field
 
 from afterlife.passport import build_scan_passport, verify_payload
@@ -511,6 +512,85 @@ def scan_passport(scan: dict) -> dict:
     doc = build_scan_passport(scan)
     doc["verified"] = verify_payload(doc)
     return doc
+
+
+# ---------------------------------------------------------------- deep scan
+# The browser opens a deep scan with a random one-time token, shows the user a
+# one-line command, and polls GET /api/deep-scan/{token}. The command downloads
+# the collector (read-only; collector/collect_device.ps1), which reads the
+# machine and POSTs its findings to /api/deep-scan/{token}. The server signs a
+# full-scan passport and keeps it for an hour under that token, then forgets it.
+# Nothing is linked to a person unless they later choose to save the scan.
+_DEEP_TTL = 3600
+_TOKEN = re.compile(r"^[A-Za-z0-9_-]{16,64}$")
+
+
+def _check_token(token: str) -> None:
+    if not _TOKEN.fullmatch(token):
+        raise HTTPException(400, "malformed scan token")
+
+
+@app.get("/api/collector.ps1")
+def collector_ps1() -> PlainTextResponse:
+    """The Windows collector, served as plain text so a browser shows the source
+    rather than offering to run it."""
+    return PlainTextResponse((ROOT / "collector" / "collect_device.ps1").read_text(encoding="utf-8"))
+
+
+@app.get("/api/collector.sh")
+def collector_sh() -> PlainTextResponse:
+    """The macOS and Linux collector, served the same way."""
+    return PlainTextResponse((ROOT / "collector" / "collect_device.sh").read_text(encoding="utf-8"))
+
+
+@app.post("/api/deep-scan/{token}")
+def deep_scan_ingest(token: str, device: dict) -> dict:
+    """The collector posts here; sign a full-scan passport and keep it for the
+    browser that is polling with the same token."""
+    _check_token(token)
+    if not device:
+        raise HTTPException(400, "empty device payload")
+    from afterlife import kvstore
+    from afterlife.passport import build_deep_passport
+    doc = build_deep_passport(device)
+    doc["verified"] = verify_payload(doc)
+    # The findings below ride beside the passport, not inside its signature:
+    # they are display detail, and keeping them out keeps the QR small. Each is
+    # isolated so one failure can never stop a scan from being delivered.
+    try:
+        from afterlife.hardware_signals import summarize
+        doc["hardware"] = summarize(device)
+    except Exception as exc:  # noqa: BLE001
+        doc["hardware"] = {"findings": [], "clean": None, "unreadable": ["all"],
+                           "summary": f"unavailable: {exc}"}
+    try:
+        from afterlife.hardening import build_report
+        rep = build_report(os_caption=device.get("os_caption"),
+                           mitigation_state=device.get("mitigation_state"),
+                           os_upgradable=doc["payload"].get("win11") == "ELIGIBLE")
+        doc["mitigation"] = rep.as_dict() if rep else {"available": False}
+    except Exception as exc:  # noqa: BLE001
+        doc["mitigation"] = {"available": False, "reason": f"unavailable: {exc}"}
+    try:
+        from afterlife.secure_boot import assess as secure_boot_assess
+        doc["secure_boot"] = secure_boot_assess(device)
+    except Exception as exc:  # noqa: BLE001
+        doc["secure_boot"] = {"status": "unknown", "headline": f"unavailable: {exc}"}
+    try:
+        from afterlife.wipe import check as wipe_check
+        doc["wipe"] = wipe_check(device.get("clean_state"))
+    except Exception as exc:  # noqa: BLE001
+        doc["wipe"] = {"status": "unknown", "checks": [], "failures": [], "note": f"unavailable: {exc}"}
+    kvstore.put(f"deep:{token}", doc, _DEEP_TTL)
+    return {"ok": True, "device_id": doc["payload"]["device_id"]}
+
+
+@app.get("/api/deep-scan/{token}")
+def deep_scan_poll(token: str) -> dict:
+    """The browser polls this until the collector has delivered."""
+    _check_token(token)
+    from afterlife import kvstore
+    return kvstore.get(f"deep:{token}") or {"pending": True}
 
 
 @app.get("/api/findings")
