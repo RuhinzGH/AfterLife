@@ -461,8 +461,11 @@ def build_deep_passport(device: dict[str, Any]) -> dict[str, Any]:
         # absent when the probe could not tell, rather than guessed.
         "product_category": ("Laptop" if device.get("battery_present") is True
                              else "Desktop computer" if device.get("battery_present") is False else None),
-        "persona_signals": device.get("persona_signals"),
     }
+    # persona_signals (which tools from a short fixed list are installed) is kept
+    # OUT of the signed payload on purpose: a passport is handed to buyers, and a
+    # buyer has no need to learn what software the seller runs. It rides beside
+    # the passport for the usage-fit card instead (see api/main.py).
     wipe = wipe_check(device.get("clean_state"))
     if wipe.get("status") == "clean":
         # Inside the signature because it is the one field a second-hand buyer

@@ -171,5 +171,8 @@ class TestUnixFeatureParity:
                                       "editor_matches": [], "steam_game_count": 0,
                                       "wsl_distro_count": 0}}
         client.post("/api/deep-scan/uxp-token-0123456789", json=device)
-        p = client.get("/api/deep-scan/uxp-token-0123456789").json()["payload"]
-        assert p["persona_signals"]["coder_matches"] == ["Docker"]
+        doc = client.get("/api/deep-scan/uxp-token-0123456789").json()
+        # Beside the passport for the usage-fit card, never inside the signed
+        # payload a buyer would receive.
+        assert doc["persona_signals"]["coder_matches"] == ["Docker"]
+        assert "persona_signals" not in doc["payload"]

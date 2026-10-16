@@ -555,6 +555,8 @@ def deep_scan_ingest(token: str, device: dict) -> dict:
     from afterlife.passport import build_deep_passport
     doc = build_deep_passport(device)
     doc["verified"] = verify_payload(doc)
+    # Beside the passport, never inside it: only this browser session needs it.
+    doc["persona_signals"] = device.get("persona_signals")
     # The findings below ride beside the passport, not inside its signature:
     # they are display detail, and keeping them out keeps the QR small. Each is
     # isolated so one failure can never stop a scan from being delivered.
