@@ -215,3 +215,4 @@ html:has(.v2), body:has(.v2) { background-color: #07060d; }
 }
 .auth-card .note a { color: #a78bfa; font-weight: 600; text-decoration: none; }
 .auth-card .note a:hover { text-decoration: underline; }
+.pw-hint { flex-basis: 100%; color: var(--muted); }

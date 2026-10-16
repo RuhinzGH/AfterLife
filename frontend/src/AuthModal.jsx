@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "./AuthContext.jsx";
+import { MAX_LENGTH, MIN_LENGTH, passwordChecks, passwordValid } from "./passwordPolicy.js";
 
 export default function AuthModal({ onAuthed, onNavigate }) {
   const { user, authModalOpen, closeAuthModal } = useAuth();
@@ -24,27 +25,14 @@ export default function AuthModal({ onAuthed, onNavigate }) {
 }
 
 /* ---------------------------------------------------------------- password strength */
-// Minimum bar for "standard" strength: 8+ characters, at least one number, at
-// least one letter. Shown live, only in signup mode -- sign-in just needs
-// whatever password already exists, right or wrong.
-function passwordChecks(pw) {
-  return {
-    length: pw.length >= 8,
-    number: /\d/.test(pw),
-    letter: /[a-zA-Z]/.test(pw),
-  };
-}
-function passwordValid(pw) {
-  const c = passwordChecks(pw);
-  return c.length && c.number && c.letter;
-}
-
-function PasswordChecklist({ password }) {
-  const c = passwordChecks(password);
+// The rules live in passwordPolicy.js (NIST SP 800-63B rev. 4: length over
+// complexity, no forced symbols, no common passwords). Shown live, in sign-up
+// mode only: sign-in accepts whatever password the account already has.
+function PasswordChecklist({ password, email }) {
+  const c = passwordChecks(password, email);
   const items = [
-    [c.length, "8+ characters"],
-    [c.number, "at least one number"],
-    [c.letter, "at least one letter"],
+    [c.length, `${MIN_LENGTH}+ characters`],
+    [c.notCommon, "not a common or guessable password"],
   ];
   return (
     <div className="pw-checklist">
@@ -53,6 +41,8 @@ function PasswordChecklist({ password }) {
           {ok ? "✓" : "○"} {label}
         </span>
       ))}
+      {!c.notTooLong && <span className="pw-check bad">✕ at most {MAX_LENGTH} characters</span>}
+      <span className="pw-check pw-hint">A short phrase works well, e.g. “purple tea before seven”. No symbols needed.</span>
     </div>
   );
 }
@@ -94,7 +84,7 @@ function SignInUp({ onAuthed }) {
     setErr(null); setNotice(null);
 
     if (mode === "signup") {
-      if (!passwordValid(password)) { setErr("Password doesn't meet the requirements below."); return; }
+      if (!passwordValid(password, email)) { setErr("Password doesn't meet the requirements below."); return; }
       if (password !== confirm) { setErr("Passwords don't match."); return; }
     }
 
@@ -159,14 +149,17 @@ function SignInUp({ onAuthed }) {
         </div>
         <div className="field">
           <label>Password</label>
-          <input type="password" required minLength={mode === "signup" ? 8 : 6} value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input type="password" required minLength={mode === "signup" ? MIN_LENGTH : undefined}
+                 maxLength={mode === "signup" ? MAX_LENGTH : undefined}
+                 autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                 value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         {mode === "signup" && (
           <>
-            <PasswordChecklist password={password} />
+            <PasswordChecklist password={password} email={email} />
             <div className="field">
               <label>Confirm password</label>
-              <input type="password" required minLength={8} value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+              <input type="password" required minLength={MIN_LENGTH} autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
             </div>
             {/* Live, like the checklist above: shown once something is typed in Confirm. */}
             {confirm && (
