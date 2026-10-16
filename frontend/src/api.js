@@ -46,6 +46,15 @@ export const api = {
       return r.text();
     }),
   pollDeep: (token) => req(`/deep-scan/${token}`),
+  // Saved scans: the Supabase access token proves who is asking; the server
+  // checks it with Supabase and only ever reads or writes that user's rows.
+  myScans: (authToken) => req("/my-scans", { headers: { Authorization: `Bearer ${authToken}` } }),
+  saveScan: (passport, scanType, authToken, assessment) =>
+    req("/save-scan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${authToken}` },
+      body: JSON.stringify({ passport, scan_type: scanType, assessment }),
+    }),
   assess: (body) => postJson("/assess", body),
   // Redesign endpoints: read-only and computed server-side.
   esu: () => req("/esu"),

@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field
@@ -594,6 +594,57 @@ def deep_scan_poll(token: str) -> dict:
     _check_token(token)
     from afterlife import kvstore
     return kvstore.get(f"deep:{token}") or {"pending": True}
+
+
+# ---------------------------------------------------------------- saved scans
+class SaveScanIn(BaseModel):
+    passport: dict
+    scan_type: str = "instant"
+    assessment: dict | None = None
+
+
+@app.get("/api/account-status")
+def account_status() -> dict:
+    """Whether accounts are switched on here (they need Supabase settings)."""
+    from afterlife import auth
+    return {"accounts": auth.configured()}
+
+
+@app.post("/api/save-scan")
+def save_scan_route(body: SaveScanIn, authorization: str | None = Header(default=None)) -> dict:
+    """Add a finished scan to the signed-in user's history. The browser calls
+    this once the assessment is in, so a saved row is ready to compare.
+
+    Only a genuine, unedited AfterLife passport is saved: the history is a
+    record the user may later show to a buyer, so it must not hold anything the
+    verifier would reject. The assessment rides along for display; it is
+    recomputed from the passport, never trusted for anything."""
+    from afterlife import auth
+    from afterlife.passport import issued_by_afterlife
+    if body.scan_type not in ("instant", "deep"):
+        raise HTTPException(400, "scan_type must be 'instant' or 'deep'")
+    user_id = auth.user_from_token(authorization)
+    if not user_id:
+        raise HTTPException(401, "sign in to save scans")
+    doc = body.passport
+    if not (isinstance(doc, dict) and "payload" in doc and "signature" in doc):
+        raise HTTPException(400, "malformed passport")
+    if not verify_payload(doc) or issued_by_afterlife(doc) is False:
+        raise HTTPException(400, "only a genuine, unedited AfterLife passport can be saved")
+    keep = {k: doc[k] for k in ("payload", "signature", "issuer_pubkey", "issuer", "validFrom") if k in doc}
+    result = auth.save_scan(user_id, doc["payload"].get("device_id"), body.scan_type,
+                            {**keep, "assessment": body.assessment})
+    return {"saved": result in ("inserted", "refreshed"), "result": result}
+
+
+@app.get("/api/my-scans")
+def my_scans(authorization: str | None = Header(default=None)) -> dict:
+    """The signed-in user's saved scans, newest first."""
+    from afterlife import auth
+    user_id = auth.user_from_token(authorization)
+    if not user_id:
+        raise HTTPException(401, "sign in to see your saved scans")
+    return {"scans": auth.list_scans(user_id)}
 
 
 @app.get("/api/findings")

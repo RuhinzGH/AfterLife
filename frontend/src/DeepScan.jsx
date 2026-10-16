@@ -9,6 +9,7 @@ import ScanProgress, { ScanCoverage } from "./ScanProgress.jsx";
 import { b64encodeCompressed } from "./b64.js";
 import { fetchAssessment } from "./assess.js";
 import { markScanned } from "./deviceStore.js";
+import { useAuth } from "./AuthContext.jsx";
 import { PLATFORM, allCommands, deepScanCommand, detectPlatform } from "./platform.js";
 
 // The one-time code that pairs this page with the collector's upload. The
@@ -21,6 +22,10 @@ function makeToken() {
 
 export default function DeepScan({ onBack }) {
   const [token] = useState(makeToken);
+  const { session } = useAuth() || {};
+  const sessionRef = useRef(session);
+  useEffect(() => { sessionRef.current = session; }, [session]);
+  const savedRef = useRef(false);       // never save the same completed scan twice
   const [passport, setPassport] = useState(null);
   const [qr, setQr] = useState(null);
   const [assessment, setAssessment] = useState(null);
@@ -156,7 +161,14 @@ export default function DeepScan({ onBack }) {
           }
           // Save to history only once the assessment (score/grade) is in hand,
           // so a saved row is always comparison-ready instead of bare specs.
-          fetchAssessment(res.payload, null, res).then(setAssessment).catch(() => {});
+          fetchAssessment(res.payload, null, res).then((result) => {
+            setAssessment(result);
+            const tokenNow = sessionRef.current?.access_token;
+            if (tokenNow && !savedRef.current) {
+              savedRef.current = true;
+              api.saveScan(res, "deep", tokenNow, result).catch(() => {});
+            }
+          }).catch(() => {});
         }
       } catch { /* keep polling */ }
     }, 1500);

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { api } from "./api.js";
 import { scanDevice, SCAN_STEPS } from "./scan.js";
 import PassportCard from "./PassportCard.jsx";
@@ -8,7 +8,9 @@ import { useCountUp } from "./useCountUp.js";
 import { fetchAssessment } from "./assess.js";
 import { defaultProductCategory } from "./deviceCategory.js";
 import { markScanned } from "./deviceStore.js";
-import DeepScan from "./DeepScan.jsx";
+// Loaded only when someone chooses the deep scan, so the first page stays small.
+const DeepScan = lazy(() => import("./DeepScan.jsx"));
+import { useAuth } from "./AuthContext.jsx";
 
 const STAGE = { idle: 0, consent: 1, scanning: 2, complete: 3, done: 4 };
 
@@ -16,7 +18,10 @@ const CATEGORIES = ["Laptop", "Desktop computer", "Tablet", "Mobile", "Games con
 
 export default function Scanner({ onNavigate, freshScan = 0 }) {
   const [stage, setStage] = useState(STAGE.idle);
-  const [deep, setDeep] = useState(false);   // the deep-scan pane, shown in place of the tier cards
+  const [deep, setDeep] = useState(false);
+  const { session } = useAuth() || {};
+  const sessionRef = useRef(session);   // read at save time, so a session that settles mid-scan is used
+  useEffect(() => { sessionRef.current = session; }, [session]);   // the deep-scan pane, shown in place of the tier cards
   const [scan, setScan] = useState(null);
   const [revealed, setRevealed] = useState(0);
   const [passport, setPassport] = useState(null);
@@ -116,7 +121,12 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
       }
       setStage(STAGE.done);
       setAssessment(null);
-      fetchAssessment(doc.payload, extra).then(setAssessment).catch(() => {});
+      fetchAssessment(doc.payload, extra).then((result) => {
+        setAssessment(result);
+        // Signed in: add it to My Scans, now that the score is known. Signed out: nothing is stored.
+        const tokenNow = sessionRef.current?.access_token;
+        if (tokenNow) api.saveScan(doc, "instant", tokenNow, result).catch(() => {});
+      }).catch(() => {});
     } catch (e) {
       setErr("Backend unreachable: " + e.message);
     } finally {
@@ -218,7 +228,11 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
         </div>
       )}
 
-      {stage === STAGE.idle && deep && <DeepScan onBack={reset} />}
+      {stage === STAGE.idle && deep && (
+        <Suspense fallback={<div className="center"><span className="spinner" /> loading the deep scan…</div>}>
+          <DeepScan onBack={reset} />
+        </Suspense>
+      )}
 
       {idleHero && <ProofBand />}
 

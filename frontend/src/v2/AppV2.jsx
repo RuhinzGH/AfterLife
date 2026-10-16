@@ -6,6 +6,8 @@ import { api } from "../api.js";
 import Scanner from "../Scanner.jsx";
 import FindingsSkeleton from "../FindingsSkeleton.jsx";
 import ErrorBoundary from "../ErrorBoundary.jsx";
+import { AuthProvider, useAuth } from "../AuthContext.jsx";
+import AccountButton from "../AccountButton.jsx";
 import "./tokens.css";
 import "./shell.css";
 import "./skin.css";
@@ -36,6 +38,15 @@ const Findings = lazyWithReload(() => import("../Findings.jsx"));
 const Verifier = lazyWithReload(() => import("../Verifier.jsx"));
 const Sources = lazyWithReload(() => import("../Sources.jsx"));
 const Thesis = lazyWithReload(() => import("../Thesis.jsx"));
+const MyScans = lazyWithReload(() => import("../MyScans.jsx"));
+const AuthModal = lazyWithReload(() => import("../AuthModal.jsx"));
+
+// The sign-in window is fetched the first time someone opens it, not with every page.
+function AuthModalSlot({ onNavigate }) {
+  const { authModalOpen } = useAuth();
+  if (!authModalOpen) return null;
+  return <Suspense fallback={null}><AuthModal onNavigate={onNavigate} /></Suspense>;
+}
 
 //: Every route. `app: true` pages render inside the app frame (padded, with a
 //: page width); the landing page owns the full bleed.
@@ -49,6 +60,8 @@ export const ROUTES = {
   thesis: { label: "The Argument", app: true },
   findings: { label: "Our Research", app: true },
   sources: { label: "Data Sources", app: true },
+  // Reached from the account menu, not the top bar: it only means something once signed in.
+  scans: { label: "My Scans", app: true },
 };
 
 //: The top bar. Groups open as menus; single items are plain links.
@@ -67,7 +80,9 @@ function routeFromLocation() {
 
 export default function AppV2() {
   return (
-    <Shell />
+    <AuthProvider>
+      <Shell />
+    </AuthProvider>
   );
 }
 
@@ -137,10 +152,12 @@ function Shell() {
             {view === "verify" && <Verifier onNavigate={openPage} />}
             {view === "sources" && <Sources />}
             {view === "thesis" && <Thesis onNavigate={openPage} />}
+            {view === "scans" && <MyScans onNavigate={openPage} />}
           </Suspense>
         </ErrorBoundary>
       </main>
       <Footer view={view} navigate={navigate} />
+      <AuthModalSlot onNavigate={openPage} />
     </div>
   );
 }
@@ -230,6 +247,7 @@ function TopNav({ view, navigate, newScan }) {
         </nav>
         <div className="v2-nav-end">
           <button type="button" className="v2-btn v2-nav-cta" onClick={scanFresh}>Scan a device</button>
+          <AccountButton />
           <button ref={burgerRef} type="button" className={`v2-burger${mobile ? " is-open" : ""}`}
                   aria-label={mobile ? "Close menu" : "Open menu"} aria-expanded={mobile}
                   aria-controls="v2-mpanel" onClick={() => { setOpen(null); setMobile(!mobile); }}>
