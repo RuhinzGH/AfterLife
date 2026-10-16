@@ -317,10 +317,15 @@ def build_scan_passport(scan: dict[str, Any]) -> dict[str, Any]:
 # wear and age. Those measurements replace the fixed 75 a browser scan starts
 # from. The weights below are chosen by design, not fitted -- they add up to 100
 # and every sub-score is shown on the passport, so the number can be checked.
+#
+# Each fact is counted once. The trust score is hardware condition only; the
+# operating system's support date is applied once, by the combined score
+# (blend_score's support-horizon adjustment, which carries the real dates), and
+# blend_score skips its own battery and age penalties when the trust score was
+# measured, because both are already inside it.
 UNKNOWN = "UNKNOWN"
 
-DEEP_WEIGHTS = {"Windows 11 ready": 30, "OS security support": 15, "Storage health": 20,
-                "Battery health": 15, "Age": 20}
+DEEP_WEIGHTS = {"Windows 11 ready": 35, "Storage health": 25, "Battery health": 20, "Age": 20}
 
 
 def _sub(name: str, points: int, note: str) -> dict[str, Any]:
@@ -343,17 +348,17 @@ def _storage(device: dict[str, Any]) -> tuple[int, str]:
     if nvme and isinstance(nvme.get("critical_warning"), (int, float)):
         used = nvme.get("percentage_used")
         if nvme["critical_warning"]:
-            return 4, "the drive is reporting a critical warning"
+            return 5, "the drive is reporting a critical warning"
         if isinstance(used, (int, float)) and used >= 90:
-            return 10, f"{used:.0f}% of rated write life used"
-        return 20, (f"healthy, {used:.0f}% of rated write life used"
+            return 12, f"{used:.0f}% of rated write life used"
+        return 25, (f"healthy, {used:.0f}% of rated write life used"
                     if isinstance(used, (int, float)) else "healthy (drive self-report)")
     health = str(device.get("disk_health") or "").strip()
     if health.lower() == "healthy":
-        return 20, "healthy (Windows)"
+        return 25, "healthy (Windows)"
     if health:
-        return 8, f"{health} (Windows)"
-    return 10, "not read"
+        return 10, f"{health} (Windows)"
+    return 12, "not read"
 
 
 def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]], Any, str]:
@@ -362,19 +367,17 @@ def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]],
     elig = win11_assess(device)
     subs = []
     if elig.eligible is True:
-        subs.append(_sub("Windows 11 ready", 30, "meets every Windows 11 requirement"))
+        subs.append(_sub("Windows 11 ready", 35, "meets every Windows 11 requirement"))
     elif elig.eligible is None:
-        subs.append(_sub("Windows 11 ready", 18, "not determined: the TPM could not be read (run as administrator)"))
+        subs.append(_sub("Windows 11 ready", 21, "not determined: the TPM could not be read (run as administrator)"))
     elif elig.permanently_blocked:
-        subs.append(_sub("Windows 11 ready", 4, "blocked by the CPU generation (permanent)"))
+        subs.append(_sub("Windows 11 ready", 5, "blocked by the CPU generation (permanent)"))
     else:
-        subs.append(_sub("Windows 11 ready", 14, "blocked by a firmware setting that can be switched on"))
+        subs.append(_sub("Windows 11 ready", 16, "blocked by a firmware setting that can be switched on"))
 
+    # Recorded on the passport as a fact, but not scored here: the combined
+    # score applies the support date once (see the note above DEEP_WEIGHTS).
     state = _os_support(device)
-    subs.append(_sub("OS security support", {"supported": 15, "esu": 10, "unknown": 8}.get(state, 4),
-                     {"supported": "receiving security updates", "esu": "extended security updates only",
-                      "unsupported": "no longer receiving security updates",
-                      "unknown": "not determined"}.get(state, state)))
 
     pts, note = _storage(device)
     subs.append(_sub("Storage health", pts, note))
@@ -383,12 +386,12 @@ def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]],
     if isinstance(bh, (int, float)):
         # 80% is a real industry bar: Amazon Renewed sells only devices whose
         # battery holds at least 80% of its original capacity.
-        subs.append(_sub("Battery health", 15 if bh >= 80 else 10 if bh >= 60 else 5,
+        subs.append(_sub("Battery health", 20 if bh >= 80 else 13 if bh >= 60 else 7,
                          f"{bh:.0f}% of design capacity"))
     elif device.get("battery_present") is False:
-        subs.append(_sub("Battery health", 15, "no battery (desktop)"))
+        subs.append(_sub("Battery health", 20, "no battery (desktop)"))
     else:
-        subs.append(_sub("Battery health", 8, "not read (run as administrator)"))
+        subs.append(_sub("Battery health", 10, "not read (run as administrator)"))
 
     age = device.get("approx_age_years")
     if isinstance(age, (int, float)):
@@ -397,6 +400,12 @@ def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]],
     else:
         subs.append(_sub("Age", 10, "not determined"))
     return sum(s["points"] for s in subs), subs, elig, state
+
+
+def deep_grade(score: int) -> str:
+    """The same cut-offs as the blended score's grades, so one scale reads the same everywhere."""
+    return ("A - excellent" if score >= 85 else "B - good" if score >= 70
+            else "C - serviceable" if score >= 55 else "D - limited")
 
 
 _GENERIC_FAMILY_NAMES = {"", "system product name", "not applicable", "to be filled by o.e.m.",
@@ -440,9 +449,12 @@ def build_deep_passport(device: dict[str, Any]) -> dict[str, Any]:
         "battery_health": battery,
         "win11": {True: "ELIGIBLE", False: "NOT ELIGIBLE", None: "INDETERMINATE"}[elig.eligible],
         "win11_blockers": [b.value for b in elig.blockers if b is not Blocker.UNKNOWN_TPM],
+        "win11_note": (", ".join(b.value.replace("_", " ") for b in elig.blockers if b is not Blocker.UNKNOWN_TPM)
+                       or ("the TPM could not be read (run as administrator)" if elig.eligible is None
+                           else "meets every requirement")),
         "win11_permanently_blocked": elig.permanently_blocked,
         "win11_firmware_fixable": elig.firmware_fixable,
-        "trust_score": score, "sub_scores": subs,
+        "trust_score": score, "grade": deep_grade(score), "sub_scores": subs,
         "age_years": device.get("approx_age_years"),
         "completeness_pct": coverage["completeness_pct"], "scan_coverage": coverage,
         # A battery is the measured way to tell a laptop from a desktop; left

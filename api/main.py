@@ -349,6 +349,7 @@ class AssessIn(BaseModel):
     age_years: float | None = None
     fault_described: bool = False
     fault_detail: str | None = None   # which fault theme was recognised, e.g. "Battery"
+    trust_measured: bool = False      # deep scan: battery and age are already inside hardware_trust
     make_model: str | None = None
     manufacturer: str | None = None
     cpu: str | None = None
@@ -428,7 +429,7 @@ def assess(body: AssessIn) -> dict:
     blend = blend_score(body.hardware_trust, eol_risk, body.battery_health,
                         body.age_years, body.fault_described,
                         eol_source=eol_source, eol_detail=eol_detail,
-                        fault_detail=body.fault_detail)
+                        fault_detail=body.fault_detail, trust_measured=body.trust_measured)
     years = estimate_years(blend["combined_score"], body.age_years, body.battery_health)
     context = {**blend, **years,
                "make_model": body.make_model, "cpu": body.cpu, "os": body.os,

@@ -30,16 +30,29 @@ def test_a_perfect_machine_scores_exactly_100(device):
     assert sum(s["max_points"] for s in subs) == 100
 
 
-def test_windows_10_counts_as_extended_support_not_supported(device):
+def test_os_support_is_recorded_once_not_scored_twice(device):
+    """The support date is applied once, by the combined score; the hardware
+    trust score must not contain it as well."""
     _, subs, _, state = deep_trust_score(device())
     assert state == "esu"
-    assert next(s for s in subs if s["name"] == "OS security support")["points"] == 10
+    assert not [s for s in subs if "support" in s["name"].lower()]
+    assert build_deep_passport(device())["payload"]["os_support"] == "esu"
+
+
+def test_a_measured_trust_score_is_not_docked_again_for_battery_or_age(client):
+    body = {"hardware_trust": 81, "battery_health": 71, "age_years": 6.5, "os": "Microsoft Windows 10 Pro",
+            "product_category": "Laptop", "trust_measured": True}
+    factors = [a["factor"] for a in client.post("/api/assess", json=body).json()["blend"]["adjustments"]]
+    assert "battery wear" not in factors and "age" not in factors
+    body["trust_measured"] = False   # a browser scan still gets both, as before
+    factors = [a["factor"] for a in client.post("/api/assess", json=body).json()["blend"]["adjustments"]]
+    assert "battery wear" in factors and "age" in factors
 
 
 def test_storage_uses_the_drives_own_warning(device):
     _, subs, _, _ = deep_trust_score(device(nvme_health=[{"critical_warning": 1, "percentage_used": 40}]))
     storage = next(s for s in subs if s["name"] == "Storage health")
-    assert storage["points"] == 4 and "critical warning" in storage["note"]
+    assert storage["points"] == 5 and "critical warning" in storage["note"]
 
 
 def test_unread_battery_is_never_scored_as_healthy(device):

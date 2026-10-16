@@ -35,7 +35,8 @@ _EOL_FACTOR_UNLABELLED = "End-of-life risk"
 def blend_score(hardware_trust: int, eol_risk: float | None,
                 battery_health: float | None, age_years: float | None,
                 fault_described: bool, eol_source: str | None = None,
-                eol_detail: str | None = None, fault_detail: str | None = None) -> dict[str, Any]:
+                eol_detail: str | None = None, fault_detail: str | None = None,
+                trust_measured: bool = False) -> dict[str, Any]:
     """Deterministically fold the end-of-life signal + user signals into the hardware score.
 
     Starts from the hardware trust score, then applies bounded adjustments so the result
@@ -68,13 +69,15 @@ def blend_score(hardware_trust: int, eol_risk: float | None,
     # battery-health bar for its standard refurb grade (≥90% for Premium), so
     # a device clearing it meets a real, named industry threshold. A browser
     # scan cannot read battery health, so this only applies when it is supplied.
-    if battery_health is not None and battery_health < 80:
+    # A measured (deep-scan) trust score already contains battery wear and age,
+    # so they are not subtracted a second time here.
+    if battery_health is not None and battery_health < 80 and not trust_measured:
         delta = -6 if battery_health < 60 else -3
         score += delta
         adjustments.append({"factor": "battery wear", "detail": f"{battery_health:.0f}%",
                             "delta": delta})
 
-    if age_years is not None and age_years > 6:
+    if age_years is not None and age_years > 6 and not trust_measured:
         score -= 4; adjustments.append({"factor": "age", "detail": f"{age_years:.0f} yr", "delta": -4})
 
     if fault_described:
