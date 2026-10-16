@@ -8,6 +8,7 @@ import { useCountUp } from "./useCountUp.js";
 import { fetchAssessment } from "./assess.js";
 import { defaultProductCategory } from "./deviceCategory.js";
 import { markScanned } from "./deviceStore.js";
+import DeepScan from "./DeepScan.jsx";
 
 const STAGE = { idle: 0, consent: 1, scanning: 2, complete: 3, done: 4 };
 
@@ -15,6 +16,7 @@ const CATEGORIES = ["Laptop", "Desktop computer", "Tablet", "Mobile", "Games con
 
 export default function Scanner({ onNavigate, freshScan = 0 }) {
   const [stage, setStage] = useState(STAGE.idle);
+  const [deep, setDeep] = useState(false);   // the deep-scan pane, shown in place of the tier cards
   const [scan, setScan] = useState(null);
   const [revealed, setRevealed] = useState(0);
   const [passport, setPassport] = useState(null);
@@ -123,6 +125,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
   }
 
   function reset() {
+    setDeep(false);
     timers.current.forEach(clearTimeout);
     timers.current = [];
     run.current += 1;
@@ -159,7 +162,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
     a.click();
   }
 
-  const idleHero = stage === STAGE.idle && !scanFailed;
+  const idleHero = stage === STAGE.idle && !scanFailed && !deep;
 
   return (
     <div className="view">
@@ -194,7 +197,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
         </div>
       )}
 
-      {stage === STAGE.idle && !scanFailed && (
+      {stage === STAGE.idle && !scanFailed && !deep && (
         <div className="tier-choice">
           <button className="tier" onClick={() => setStage(STAGE.consent)}>
             <div className="tier-icon">⚡</div>
@@ -204,8 +207,18 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
             <div className="pill muted">browser · profile tier</div>
             <div className="tier-go">Scan now <span aria-hidden="true">→</span></div>
           </button>
+          <button className="tier" onClick={() => setDeep(true)}>
+            <div className="tier-icon">🔬</div>
+            <div className="tier-name">Deep scan</div>
+            <div className="tier-desc">Runs a small read-only script on this computer to measure what a
+              browser can't: Windows 11 readiness, disk health, battery wear, age.</div>
+            <div className="pill amber">full scan · measured</div>
+            <div className="tier-go">Set it up <span aria-hidden="true">→</span></div>
+          </button>
         </div>
       )}
+
+      {stage === STAGE.idle && deep && <DeepScan onBack={reset} />}
 
       {idleHero && <ProofBand />}
 

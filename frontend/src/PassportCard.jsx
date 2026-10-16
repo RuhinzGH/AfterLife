@@ -69,10 +69,25 @@ export default function PassportCard({ doc, qr, verified, final = null }) {
               <span className="note" style={{ marginLeft: "0.5rem" }}>{p.win11_note}</span>
             </span>
           </div>
-          <Field k="Recommended use" v={p.recommended_use} wide />
-          <Field k="Est. safe service life" v={p.est_safe_years} />
           {p.repairability && (
             <Field k="Brand repairability" v={`${p.repairability.grade} · ${p.repairability.source}`} wide />
+          )}
+          {/* The measured hardware trust, part by part: every point is shown, so
+              the number on the card can be checked rather than taken on trust. */}
+          {p.sub_scores?.length > 0 && (
+            <div className="pc-field wide">
+              <span className="pc-k">Hardware trust, part by part</span>
+              <div className="pc-subs">
+                {p.sub_scores.map((s) => (
+                  <div className="rowbar" key={s.name} style={{ gridTemplateColumns: "9.5rem 1fr 3.4rem" }}>
+                    <span className="lbl">{s.name}</span>
+                    <span className="meter"><i style={{ width: `${(s.points / s.max_points) * 100}%` }} /></span>
+                    <span className="num">{s.points}/{s.max_points}</span>
+                    <span className="note pc-sub-note">{s.note}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       ) : (

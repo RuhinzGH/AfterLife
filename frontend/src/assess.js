@@ -6,8 +6,37 @@ import { api } from "./api.js";
 // A browser cannot read battery health, disk health or Windows 11 eligibility,
 // so those are simply not sent -- the server treats a missing value as "not
 // measured", never as healthy.
-export async function fetchAssessment(payload, extra) {
+function num(v) {
+  const m = String(v ?? "").match(/[\d.]+/);
+  return m ? Number(m[0]) : null;
+}
+
+// A deep scan carries a measured trust score and real battery, Windows 11 and
+// support facts; a browser scan carries none of them, and must never send them.
+export async function fetchAssessment(payload, extra, doc) {
   const lc = payload.lifecycle || {};
+  if (payload.trust_score != null) {
+    return api.assess({
+      hardware_trust: payload.trust_score,
+      trust_measured: true,                  // battery and age are inside the trust score: counted once
+      eol_risk: null,                        // no repair-model run on a deep scan: the support date decides
+      battery_health: num(payload.battery_health),
+      age_years: payload.age_years ?? null,
+      fault_described: false,
+      make_model: payload.make_model || null,
+      manufacturer: payload.manufacturer || null,
+      cpu: payload.cpu || null,
+      os: payload.os || null,
+      win11: payload.win11 || null,
+      win11_blockers: payload.win11_blockers || null,
+      win11_permanently_blocked: payload.win11_permanently_blocked ?? null,
+      win11_firmware_fixable: payload.win11_firmware_fixable ?? null,
+      storage: payload.storage || null,
+      product_category: payload.product_category || null,
+      timezone: timezone(),
+      country: extra?.country || null,
+    });
+  }
   return api.assess({
     // A browser scan has no measured hardware score, so it starts from the
     // documented default and the adjustments explain every point from there.

@@ -38,6 +38,14 @@ export const api = {
   },
   verify: (passport) => postJson("/verify", { passport }),
   scanPassport: (scan) => postJson("/scan-passport", scan),
+  // Deep scan: the exact collector script the command runs, as text, so the
+  // page can show it and hash it; and the poll for the collector's upload.
+  collectorSource: (file) =>
+    fetch(`${BASE}/${file}`).then((r) => {
+      if (!r.ok) throw new Error(r.statusText || "could not load script");
+      return r.text();
+    }),
+  pollDeep: (token) => req(`/deep-scan/${token}`),
   assess: (body) => postJson("/assess", body),
   // Redesign endpoints: read-only and computed server-side.
   esu: () => req("/esu"),

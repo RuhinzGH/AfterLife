@@ -194,3 +194,7 @@ html:has(.v2), body:has(.v2) { background-color: #07060d; }
 .v2 .pc-life-head .life-tag { padding: 0.05rem 0.45rem; font-size: 0.8rem; }
 
 .v2 .wf-detail { color: var(--muted, #948eae); font-weight: 400; }
+
+.v2 .pc-subs { margin-top: 0.35rem; display: grid; gap: 0.35rem; }
+.v2 .pc-subs .rowbar { row-gap: 0.1rem; }
+.v2 .pc-sub-note { grid-column: 1 / -1; font-size: 0.78rem; margin: 0 0 0.2rem; }
