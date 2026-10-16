@@ -31,9 +31,13 @@ import datetime as dt
 from typing import Any
 
 #: Certificate retirement dates Microsoft has published.
-KEK_2011_EXPIRY = dt.date(2026, 6, 30)
-UEFI_CA_2011_EXPIRY = dt.date(2026, 6, 30)
-PCA_2011_EXPIRY = dt.date(2026, 10, 31)
+# Exact expiry dates (checked 16 Oct 2026 against the University of Wisconsin KB 159935
+# and a summary of Microsoft's KB5025885 guidance; Microsoft states the months).
+# Expiry does not stop a PC from booting: it stops boot-level protections from
+# being updated until the 2023 certificates are installed.
+KEK_2011_EXPIRY = dt.date(2026, 6, 24)
+UEFI_CA_2011_EXPIRY = dt.date(2026, 6, 27)
+PCA_2011_EXPIRY = dt.date(2026, 10, 19)
 
 STATUS_OK = "ok"
 STATUS_ACTION_NEEDED = "action_needed"
