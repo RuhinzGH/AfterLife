@@ -168,6 +168,12 @@ function SignInUp({ onAuthed }) {
               <label>Confirm password</label>
               <input type="password" required minLength={8} value={confirm} onChange={(e) => setConfirm(e.target.value)} />
             </div>
+            {/* Live, like the checklist above: shown once something is typed in Confirm. */}
+            {confirm && (
+              <span className={`pw-check pw-match ${confirm === password ? "ok" : "bad"}`} role="status">
+                {confirm === password ? "✓ Passwords match" : "✕ Passwords do not match"}
+              </span>
+            )}
           </>
         )}
         {err && (

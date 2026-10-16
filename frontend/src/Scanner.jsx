@@ -42,10 +42,9 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
 
   // A request for a new scan (the "Scan a device" button, a scan button on
   // another page, or "Start a new scan" below a result): drop whatever is on
-  // screen and go straight to the consent step.
+  // screen and show the choice of scan, Instant or Deep.
   function startNew() {
-    reset();
-    setStage(STAGE.consent);
+    reset();   // back to the choice of scan: Instant or Deep
   }
 
   useEffect(() => {

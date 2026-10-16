@@ -198,3 +198,20 @@ html:has(.v2), body:has(.v2) { background-color: #07060d; }
 .v2 .pc-subs { margin-top: 0.35rem; display: grid; gap: 0.35rem; }
 .v2 .pc-subs .rowbar { row-gap: 0.1rem; }
 .v2 .pc-sub-note { grid-column: 1 / -1; font-size: 0.78rem; margin: 0 0 0.2rem; }
+
+/* Sign-in window: the "passwords match" line, and inputs that stay on theme.
+   Chrome paints autofilled fields light blue/white; an inset shadow covers that
+   with the panel colour, and the text colour is forced back to the theme's. */
+.v2 .pw-match { display: block; margin-top: -0.4rem; }
+.pw-check.bad { color: var(--red); }
+.auth-card input:-webkit-autofill,
+.auth-card input:-webkit-autofill:hover,
+.auth-card input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ink);
+  caret-color: var(--ink);
+  -webkit-box-shadow: 0 0 0 1000px var(--sunken) inset;
+  box-shadow: 0 0 0 1000px var(--sunken) inset;
+  transition: background-color 9999s ease-out 0s;
+}
+.auth-card .note a { color: #a78bfa; font-weight: 600; text-decoration: none; }
+.auth-card .note a:hover { text-decoration: underline; }

@@ -25,7 +25,7 @@ export default function DeepScan({ onBack }) {
   const { session } = useAuth() || {};
   const sessionRef = useRef(session);
   useEffect(() => { sessionRef.current = session; }, [session]);
-  const savedRef = useRef(false);       // never save the same completed scan twice
+  const savedRef = useRef(null);        // signature of the last reading saved: never save one twice
   const [passport, setPassport] = useState(null);
   const [qr, setQr] = useState(null);
   const [assessment, setAssessment] = useState(null);
@@ -100,6 +100,7 @@ export default function DeepScan({ onBack }) {
       "",
       "echo.",
       "echo Done -- return to your browser; your verified passport appears there automatically.",
+      "echo If the page does not change, this file belongs to an older page: download a new one there.",
       "pause",
     ].filter((l) => l !== false && l != null);
     return lines.join("\r\n") + "\r\n";
@@ -120,60 +121,69 @@ export default function DeepScan({ onBack }) {
     return () => clearInterval(t);
   }, [waiting]);
 
+  // Listen for the collector's upload. Quickly until the first reading lands,
+  // then gently (every 5 s) for another 10 minutes: running the same file again,
+  // for example as administrator for the TPM and Secure Boot checks, replaces
+  // the reading under this page's code, and the page should show the newer one.
+  // After that it stops, rather than asking the server forever.
+  const lastSig = useRef(null);
+  const [updatedAt, setUpdatedAt] = useState(null);
   useEffect(() => {
-    poll.current = setInterval(async () => {
+    let stopped = false;
+    let firstAt = null;
+    async function tick() {
+      if (stopped) return;
       try {
         const res = await api.pollDeep(token);
-        if (res && !res.pending) {
-          clearInterval(poll.current);
-          setWaiting(false);
-          setPassport(res);
-          // Leave the marker now, while we know for a fact the collector just ran
-          // on the machine in front of us -- that is the only moment this is
-          // knowable. See deviceStore.js.
-          markScanned(res.payload?.device_id);
-          // QR generation is a nice-to-have, not load-bearing -- isolated so a
-          // failure here only means "no QR," never silently skips
-          // fetchAssessment() below too (that used to be the same try/catch,
-          // and left the results pane stuck loading forever with no error).
-          // Gzip-compressing the JSON before base64 shrinks a deep-scan
-          // passport (win11 blockers, repairability, sub_scores,
-          // persona_signals...) by roughly half, keeping every field intact
-          // instead of dropping any of them to fit -- see b64.js.
-          try {
-            // issuer/validFrom are load-bearing, not decoration -- the passport is
-            // signed over the whole W3C VC envelope (see passport.py's
-            // _vc_envelope), not just `payload` alone, so leaving these two out
-            // makes verify_payload() check the signature against the wrong bytes
-            // and every legitimately-signed passport comes back "invalid."
-            const signed = {
-              payload: res.payload, signature: res.signature, issuer_pubkey: res.issuer_pubkey,
-              issuer: res.issuer, validFrom: res.validFrom,
-            };
-            const data = b64encodeCompressed(signed);
-            const url = `${window.location.origin}/?verify=${data}`;
-            setQr(await (await import("qrcode")).default.toDataURL(url, {
-              margin: 4, scale: 6, errorCorrectionLevel: "M",
-              color: { dark: "#0e1518", light: "#ffffff" },
-            }));
-          } catch (qrErr) {
-            console.warn("QR generation failed (passport still valid):", qrErr);
-          }
-          // Save to history only once the assessment (score/grade) is in hand,
-          // so a saved row is always comparison-ready instead of bare specs.
-          fetchAssessment(res.payload, null, res).then((result) => {
-            setAssessment(result);
-            const tokenNow = sessionRef.current?.access_token;
-            if (tokenNow && !savedRef.current) {
-              savedRef.current = true;
-              api.saveScan(res, "deep", tokenNow, result).catch(() => {});
-            }
-          }).catch(() => {});
+        if (res && !res.pending && res.signature !== lastSig.current) {
+          const isUpdate = lastSig.current !== null;
+          lastSig.current = res.signature;
+          firstAt ??= Date.now();
+          await showReading(res, isUpdate);
         }
-      } catch { /* keep polling */ }
-    }, 1500);
-    return () => clearInterval(poll.current);
+      } catch { /* keep listening */ }
+      if (firstAt && Date.now() - firstAt > 10 * 60 * 1000) return;   // done listening
+      poll.current = setTimeout(tick, firstAt ? 5000 : 1500);
+    }
+    tick();
+    return () => { stopped = true; clearTimeout(poll.current); };
   }, [token]);
+
+  async function showReading(res, isUpdate) {
+    setWaiting(false);
+    setPassport(res);
+    setAssessment(null);
+    if (isUpdate) setUpdatedAt(new Date());
+    // Leave the marker now, while we know for a fact the collector just ran
+    // on the machine in front of us. See deviceStore.js.
+    markScanned(res.payload?.device_id);
+    // The QR is a nice-to-have: a failure here only means "no QR", never a
+    // missing assessment.
+    try {
+      // issuer and validFrom are part of what was signed, so the QR must carry them.
+      const signed = {
+        payload: res.payload, signature: res.signature, issuer_pubkey: res.issuer_pubkey,
+        issuer: res.issuer, validFrom: res.validFrom,
+      };
+      const url = `${window.location.origin}/?verify=${b64encodeCompressed(signed)}`;
+      setQr(await (await import("qrcode")).default.toDataURL(url, {
+        margin: 4, scale: 6, errorCorrectionLevel: "M",
+        color: { dark: "#0e1518", light: "#ffffff" },
+      }));
+    } catch (qrErr) {
+      console.warn("QR generation failed (passport still valid):", qrErr);
+    }
+    // Saved once the score is known; a newer reading is saved too (the server
+    // refreshes the entry instead of duplicating it when nothing changed).
+    fetchAssessment(res.payload, null, res).then((result) => {
+      setAssessment(result);
+      const tokenNow = sessionRef.current?.access_token;
+      if (tokenNow && savedRef.current !== res.signature) {
+        savedRef.current = res.signature;
+        api.saveScan(res, "deep", tokenNow, result).catch(() => {});
+      }
+    }).catch(() => {});
+  }
 
   function copy() {
     navigator.clipboard.writeText(command);
@@ -208,6 +218,12 @@ export default function DeepScan({ onBack }) {
             <button className="ghost" onClick={onBack}>Start a new scan</button>
             <span className="note">
               Scan the QR with any phone camera to open the verifier, or save it and upload it there later.
+            </span>
+            <span className="note">
+              {updatedAt
+                ? <>Updated with a newer reading at {updatedAt.toLocaleTimeString()}.</>
+                : <>Ran it without administrator rights? Right-click the same file → <b>Run as administrator</b> within
+                  10 minutes, and this page updates with the fuller reading (TPM and Secure Boot).</>}
             </span>
           </div>
         </div>
@@ -260,6 +276,10 @@ export default function DeepScan({ onBack }) {
                 <button className="cta" onClick={downloadBat} disabled={!collectorHash}>
                   {collectorHash ? "⬇ Download Afterlife Deep Scan.bat" : "preparing…"}
                 </button>
+                <p className="note">
+                  <b>This file is paired with this page.</b> If you reload the page or start another deep scan,
+                  download a new file: an older one sends its reading to the old page.
+                </p>
                 <p className="note">
                   A file you can open and read before running — no shell, no pasting an{" "}
                   <code>irm | iex</code> command. It downloads the collector and{" "}
