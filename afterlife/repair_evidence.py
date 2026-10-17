@@ -18,7 +18,6 @@ Two ways in:
 from __future__ import annotations
 
 import json
-import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -45,34 +44,14 @@ def _by_key() -> dict[str, dict[str, Any]]:
     return {t["key"]: t for t in load().get("themes", [])}
 
 
-#: What the *user* might type, in the four languages the source data is written
-#: in, mapped to a theme. Deliberately separate from the build script's keyword
-#: sets: those exist to mine historical records at high recall, these exist to
-#: read one sentence someone typed just now, where a false match is visible and
-#: embarrassing rather than statistically absorbed.
-_TEXT_HINTS: dict[str, tuple[str, ...]] = {
-    "battery": ("battery", "akku", "batterij", "charge", "charging", "swollen", "drains"),
-    "power": ("won't turn on", "wont turn on", "no power", "dead", "charger",
-              "adapter", "won't start", "wont start", "doesn't boot"),
-    "storage": ("hard drive", "harddrive", "disk", "ssd", "hdd", "storage", "space"),
-    "screen": ("screen", "display", "cracked", "flicker", "backlight", "dim"),
-    "overheating": ("hot", "overheat", "fan", "loud", "noisy", "thermal"),
-    "keyboard": ("keyboard", "key ", "keys", "trackpad", "touchpad", "mouse"),
-    "software": ("slow", "windows", "update", "virus", "boot", "software",
-                 "freezes", "crashes", "lag"),
-    "physical": ("hinge", "lid", "case", "broken", "crack"),
-    "ports": ("usb", "port", "hdmi", "socket", "jack", "connector"),
-}
-
-
 def themes_for_text(problem: str | None) -> list[dict[str, Any]]:
     """Themes matching a free-text fault description, best-supported first."""
-    if not problem or not problem.strip():
-        return []
-    low = problem.lower()
-    hits = [k for k, words in _TEXT_HINTS.items() if any(w in low for w in words)]
+    # Read with the fault lexicon's whole-word, multilingual patterns: the same
+    # reading that decides the reported-fault adjustment on the score.
+    from .fault_lexicon import fault_theme_keys
+
     table = _by_key()
-    return [table[k] for k in hits if k in table]
+    return [table[k] for k in fault_theme_keys(problem) if k in table]
 
 
 def themes_for_device(

@@ -4,6 +4,11 @@ import AiCaption from "./AiCaption.jsx";
 import Reveal from "./Reveal.jsx";
 import CarbonTradeoff from "./CarbonTradeoff.jsx";
 import Disclose from "./Disclose.jsx";
+import UsageFit from "./UsageFit.jsx";
+import RepairOutlook from "./RepairOutlook.jsx";
+import RepairRights from "./RepairRights.jsx";
+import PriceEstimate from "./PriceEstimate.jsx";
+import SellChecklist from "./SellChecklist.jsx";
 
 // Lifecycle result dashboard. A vertical stack of equal-width full-width cards —
 // nothing sits beside anything of a different height, so the layout stays
@@ -17,10 +22,11 @@ function scoreColor(s) {
 }
 
 
-export default function AssessmentDashboard({ data, payload }) {
+export default function AssessmentDashboard({ data, payload, wipe }) {
   if (!data) return null;
   const { blend, pipeline, narrative, key_points, pathways, pathways_narrative, win11,
-          carbon_tradeoff } = data;
+          carbon_tradeoff, usage_fit, uplift, repair_evidence, repair_rights, geo } = data;
+  const ageYears = payload?.age_years ?? payload?.lifecycle?.device_age ?? null;
 
   const col = scoreColor(blend.combined_score);
   const total = pipeline.projected_total_life || 1;
@@ -150,6 +156,11 @@ export default function AssessmentDashboard({ data, payload }) {
       </Reveal>
 
 
+      {/* Card 4d -- is it up to the work its owner does on it (S2-07) */}
+      <Reveal delay={60}>
+        <UsageFit fit={usage_fit} lifecycleYears={pipeline.estimated_remaining_years} />
+      </Reveal>
+
       {/* Card 4e -- the carbon half of the keep-or-replace decision, on the grid
           this device is actually plugged into rather than the single global
           figure the research page quotes. */}
@@ -164,6 +175,19 @@ export default function AssessmentDashboard({ data, payload }) {
         </div>
       </Reveal>
 
+
+      {/* What fixing it buys and how often such repairs work (S2-05), what the
+          law entitles the owner to (S2-06), and, if it is going, what it is worth
+          and how to hand it over cleanly (S2-07). */}
+      <Reveal delay={60}>
+        <RepairOutlook uplift={uplift} evidence={repair_evidence} />
+      </Reveal>
+      <Reveal delay={60}>
+        <RepairRights rights={repair_rights} />
+      </Reveal>
+      <PriceEstimate grade={blend.grade} ageYears={ageYears}
+        productCategory={payload?.product_category} currency={geo?.currency} />
+      <SellChecklist wipe={wipe} />
 
       <div className="dash-foot">
         <Disclose label="How this score was calculated">

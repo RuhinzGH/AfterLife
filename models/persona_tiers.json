@@ -1,0 +1,3853 @@
+{
+  "source": "Blender Open Data (opendata.blender.org), blender_version 5.1.1",
+  "gpu_tier_cutoffs": {
+    "t1": 492.9,
+    "t2": 2137.9,
+    "t3": 4773.1
+  },
+  "cpu_tier_cutoffs": {
+    "t1": 77.9,
+    "t2": 205.5,
+    "t3": 482.1
+  },
+  "gpu_lookup": {
+    "amd radeon 5": {
+      "score": 236.5,
+      "tier": 0
+    },
+    "amd radeon 610m": {
+      "score": 58.3,
+      "tier": 0
+    },
+    "amd radeon 7": {
+      "score": 398.7,
+      "tier": 0
+    },
+    "amd radeon 740m graphics": {
+      "score": 112.5,
+      "tier": 0
+    },
+    "amd radeon 760m": {
+      "score": 205.6,
+      "tier": 0
+    },
+    "amd radeon 780m": {
+      "score": 293.1,
+      "tier": 0
+    },
+    "amd radeon 780m graphics": {
+      "score": 260.7,
+      "tier": 0
+    },
+    "amd radeon 8060s graphics": {
+      "score": 1501.3,
+      "tier": 1
+    },
+    "amd radeon 860m graphics": {
+      "score": 220.0,
+      "tier": 0
+    },
+    "amd radeon 880m graphics": {
+      "score": 305.2,
+      "tier": 0
+    },
+    "amd radeon 890m graphics": {
+      "score": 257.5,
+      "tier": 0
+    },
+    "amd radeon ai pro r9700": {
+      "score": 3325.1,
+      "tier": 2
+    },
+    "amd radeon graphics": {
+      "score": 68.4,
+      "tier": 0
+    },
+    "amd radeon pro v620": {
+      "score": 2640.0,
+      "tier": 2
+    },
+    "amd radeon pro w5500": {
+      "score": 468.9,
+      "tier": 0
+    },
+    "amd radeon pro w7800": {
+      "score": 3060.4,
+      "tier": 2
+    },
+    "amd radeon pro w7900": {
+      "score": 4486.4,
+      "tier": 2
+    },
+    "amd radeon rx 5500": {
+      "score": 364.3,
+      "tier": 0
+    },
+    "amd radeon rx 5500m": {
+      "score": 319.8,
+      "tier": 0
+    },
+    "amd radeon rx 5700": {
+      "score": 693.8,
+      "tier": 1
+    },
+    "amd radeon rx 5700 xt": {
+      "score": 805.6,
+      "tier": 1
+    },
+    "amd radeon rx 6500 xt": {
+      "score": 441.0,
+      "tier": 0
+    },
+    "amd radeon rx 6600": {
+      "score": 785.7,
+      "tier": 1
+    },
+    "amd radeon rx 6600m": {
+      "score": 559.7,
+      "tier": 1
+    },
+    "amd radeon rx 6600 xt": {
+      "score": 958.0,
+      "tier": 1
+    },
+    "amd radeon rx 6600 [zluda]": {
+      "score": 951.1,
+      "tier": 1
+    },
+    "amd radeon rx 6650 xt": {
+      "score": 931.1,
+      "tier": 1
+    },
+    "amd radeon rx 6700": {
+      "score": 1127.5,
+      "tier": 1
+    },
+    "amd radeon rx 6700m": {
+      "score": 806.9,
+      "tier": 1
+    },
+    "amd radeon rx 6700 xt": {
+      "score": 1750.1,
+      "tier": 1
+    },
+    "amd radeon rx 6750 gre 12gb": {
+      "score": 1747.0,
+      "tier": 1
+    },
+    "amd radeon rx 6750 xt": {
+      "score": 1268.6,
+      "tier": 1
+    },
+    "amd radeon rx 6800": {
+      "score": 1665.8,
+      "tier": 1
+    },
+    "amd radeon rx 6800m": {
+      "score": 1658.0,
+      "tier": 1
+    },
+    "amd radeon rx 6800 xt": {
+      "score": 2859.3,
+      "tier": 2
+    },
+    "amd radeon rx 6900 xt": {
+      "score": 3127.1,
+      "tier": 2
+    },
+    "amd radeon rx 6950 xt": {
+      "score": 3126.3,
+      "tier": 2
+    },
+    "amd radeon rx 7600": {
+      "score": 931.2,
+      "tier": 1
+    },
+    "amd radeon rx 7600m xt": {
+      "score": 746.3,
+      "tier": 1
+    },
+    "amd radeon rx 7600s": {
+      "score": 767.6,
+      "tier": 1
+    },
+    "amd radeon rx 7600 xt": {
+      "score": 1016.9,
+      "tier": 1
+    },
+    "amd radeon rx 7700s": {
+      "score": 757.5,
+      "tier": 1
+    },
+    "amd radeon rx 7700 xt": {
+      "score": 2275.0,
+      "tier": 2
+    },
+    "amd  radeon rx 7800 xt": {
+      "score": 2979.8,
+      "tier": 2
+    },
+    "amd radeon rx 7800 xt": {
+      "score": 2871.8,
+      "tier": 2
+    },
+    "amd radeon rx 7900 gre": {
+      "score": 3139.8,
+      "tier": 2
+    },
+    "amd radeon rx 7900 xt": {
+      "score": 3748.3,
+      "tier": 2
+    },
+    "amd radeon rx 7900 xtx": {
+      "score": 4910.2,
+      "tier": 3
+    },
+    "amd radeon rx 7900 xtx [zluda]": {
+      "score": 3566.3,
+      "tier": 2
+    },
+    "amd radeon rx 9060": {
+      "score": 1371.4,
+      "tier": 1
+    },
+    "amd radeon rx 9060 xt": {
+      "score": 1826.3,
+      "tier": 1
+    },
+    "amd radeon rx 9070": {
+      "score": 3139.2,
+      "tier": 2
+    },
+    "amd radeon rx 9070 gre": {
+      "score": 2539.3,
+      "tier": 2
+    },
+    "amd radeon rx 9070 xt": {
+      "score": 3558.3,
+      "tier": 2
+    },
+    "amd radeon rx vega [zluda]": {
+      "score": 626.7,
+      "tier": 1
+    },
+    "apple a18 pro (gpu - 5 cores)": {
+      "score": 600.5,
+      "tier": 1
+    },
+    "apple m1 (gpu - 7 cores)": {
+      "score": 252.3,
+      "tier": 0
+    },
+    "apple m1 (gpu - 8 cores)": {
+      "score": 286.2,
+      "tier": 0
+    },
+    "apple m1 max (gpu - 24 cores)": {
+      "score": 831.6,
+      "tier": 1
+    },
+    "apple m1 max (gpu - 32 cores)": {
+      "score": 1001.3,
+      "tier": 1
+    },
+    "apple m1 pro (gpu - 14 cores)": {
+      "score": 464.7,
+      "tier": 0
+    },
+    "apple m1 pro (gpu - 16 cores)": {
+      "score": 510.5,
+      "tier": 1
+    },
+    "apple m1 ultra (gpu - 48 cores)": {
+      "score": 1486.5,
+      "tier": 1
+    },
+    "apple m1 ultra (gpu - 64 cores)": {
+      "score": 1778.8,
+      "tier": 1
+    },
+    "apple m2 (gpu - 10 cores)": {
+      "score": 388.0,
+      "tier": 0
+    },
+    "apple m2 (gpu - 8 cores)": {
+      "score": 310.9,
+      "tier": 0
+    },
+    "apple m2 max (gpu - 30 cores)": {
+      "score": 1400.5,
+      "tier": 1
+    },
+    "apple m2 max (gpu - 38 cores)": {
+      "score": 1769.4,
+      "tier": 1
+    },
+    "apple m2 pro (gpu - 16 cores)": {
+      "score": 711.1,
+      "tier": 1
+    },
+    "apple m2 pro (gpu - 19 cores)": {
+      "score": 886.6,
+      "tier": 1
+    },
+    "apple m2 ultra (gpu - 60 cores)": {
+      "score": 2782.7,
+      "tier": 2
+    },
+    "apple m2 ultra (gpu - 76 cores)": {
+      "score": 3387.1,
+      "tier": 2
+    },
+    "apple m3 (gpu - 10 cores)": {
+      "score": 1026.1,
+      "tier": 1
+    },
+    "apple m3 max (gpu - 30 cores)": {
+      "score": 3726.3,
+      "tier": 2
+    },
+    "apple m3 max (gpu - 40 cores)": {
+      "score": 4658.4,
+      "tier": 2
+    },
+    "apple m3 pro (gpu - 14 cores)": {
+      "score": 1799.4,
+      "tier": 1
+    },
+    "apple m3 pro (gpu - 18 cores)": {
+      "score": 1952.0,
+      "tier": 1
+    },
+    "apple m3 ultra (gpu - 60 cores)": {
+      "score": 7305.8,
+      "tier": 3
+    },
+    "apple m3 ultra (gpu - 80 cores)": {
+      "score": 8829.6,
+      "tier": 3
+    },
+    "apple m4 (gpu - 10 cores)": {
+      "score": 1359.3,
+      "tier": 1
+    },
+    "apple m4 (gpu - 8 cores)": {
+      "score": 1253.6,
+      "tier": 1
+    },
+    "apple m4 max (gpu - 32 cores)": {
+      "score": 4859.5,
+      "tier": 3
+    },
+    "apple m4 max (gpu - 40 cores)": {
+      "score": 5908.9,
+      "tier": 3
+    },
+    "apple m4 pro (gpu - 16 cores)": {
+      "score": 2603.8,
+      "tier": 2
+    },
+    "apple m4 pro (gpu - 20 cores)": {
+      "score": 2980.4,
+      "tier": 2
+    },
+    "apple m5 (gpu - 10 cores)": {
+      "score": 2084.4,
+      "tier": 1
+    },
+    "apple m5 (gpu - 8 cores)": {
+      "score": 1872.4,
+      "tier": 1
+    },
+    "apple m5 max (gpu - 32 cores)": {
+      "score": 6506.1,
+      "tier": 3
+    },
+    "apple m5 max (gpu - 40 cores)": {
+      "score": 8261.9,
+      "tier": 3
+    },
+    "apple m5 pro (gpu - 16 cores)": {
+      "score": 3775.6,
+      "tier": 2
+    },
+    "apple m5 pro (gpu - 20 cores)": {
+      "score": 4351.1,
+      "tier": 2
+    },
+    "intel arc 130t gpu (8gb)": {
+      "score": 550.3,
+      "tier": 1
+    },
+    "intel arc 130v gpu (16gb)": {
+      "score": 531.7,
+      "tier": 1
+    },
+    "intel arc 130v gpu (8gb)": {
+      "score": 571.5,
+      "tier": 1
+    },
+    "intel arc 140t gpu (16gb)": {
+      "score": 744.5,
+      "tier": 1
+    },
+    "intel arc 140v gpu (16gb)": {
+      "score": 717.2,
+      "tier": 1
+    },
+    "intel arc 140v gpu (8gb)": {
+      "score": 623.5,
+      "tier": 1
+    },
+    "intel arc a310 graphics": {
+      "score": 538.3,
+      "tier": 1
+    },
+    "intel arc a380 graphics": {
+      "score": 546.3,
+      "tier": 1
+    },
+    "intel arc a580 graphics": {
+      "score": 1860.2,
+      "tier": 1
+    },
+    "intel arc a750 graphics": {
+      "score": 2599.3,
+      "tier": 2
+    },
+    "intel arc a770 graphics": {
+      "score": 2567.3,
+      "tier": 2
+    },
+    "intel arc b370 gpu": {
+      "score": 1182.8,
+      "tier": 1
+    },
+    "intel arc b390 gpu": {
+      "score": 1295.2,
+      "tier": 1
+    },
+    "intel arc b570 graphics": {
+      "score": 2206.3,
+      "tier": 2
+    },
+    "intel arc b580 graphics": {
+      "score": 2741.4,
+      "tier": 2
+    },
+    "intel arc graphics": {
+      "score": 499.2,
+      "tier": 1
+    },
+    "intel arc pro b50 graphics": {
+      "score": 1711.8,
+      "tier": 1
+    },
+    "intel arc pro b60 graphics": {
+      "score": 2488.1,
+      "tier": 2
+    },
+    "intel arc pro b70 graphics": {
+      "score": 3824.6,
+      "tier": 2
+    },
+    "intel graphics": {
+      "score": 523.1,
+      "tier": 1
+    },
+    "nvidia a100-sxm4-80gb": {
+      "score": 3292.0,
+      "tier": 2
+    },
+    "nvidia b300 sxm6 ac": {
+      "score": 6469.4,
+      "tier": 3
+    },
+    "nvidia cmp 40hx": {
+      "score": 1244.3,
+      "tier": 1
+    },
+    "nvidia geforce gt 1030": {
+      "score": 52.9,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1050": {
+      "score": 121.9,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1050 ti": {
+      "score": 182.3,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1050 ti with max-q design": {
+      "score": 226.1,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1060": {
+      "score": 289.0,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1060 3gb": {
+      "score": 263.2,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1060 6gb": {
+      "score": 283.7,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1070": {
+      "score": 449.5,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1070 ti": {
+      "score": 492.9,
+      "tier": 1
+    },
+    "nvidia geforce gtx 1080": {
+      "score": 476.2,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1080 ti": {
+      "score": 685.3,
+      "tier": 1
+    },
+    "nvidia geforce gtx 1650": {
+      "score": 392.8,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1650 super": {
+      "score": 478.2,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1650 ti": {
+      "score": 445.2,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1650 ti with max-q design": {
+      "score": 370.1,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1650 with max-q design": {
+      "score": 311.7,
+      "tier": 0
+    },
+    "nvidia geforce gtx 1660": {
+      "score": 573.4,
+      "tier": 1
+    },
+    "nvidia geforce gtx 1660 super": {
+      "score": 698.8,
+      "tier": 1
+    },
+    "nvidia geforce gtx 1660 ti": {
+      "score": 697.9,
+      "tier": 1
+    },
+    "nvidia geforce gtx 1660 ti with max-q design": {
+      "score": 622.3,
+      "tier": 1
+    },
+    "nvidia geforce gtx 750 ti": {
+      "score": 98.0,
+      "tier": 0
+    },
+    "nvidia geforce gtx 860m": {
+      "score": 134.1,
+      "tier": 0
+    },
+    "nvidia geforce gtx 950m": {
+      "score": 88.7,
+      "tier": 0
+    },
+    "nvidia geforce gtx 960": {
+      "score": 144.8,
+      "tier": 0
+    },
+    "nvidia geforce gtx 960m": {
+      "score": 93.5,
+      "tier": 0
+    },
+    "nvidia geforce gtx 965m": {
+      "score": 91.8,
+      "tier": 0
+    },
+    "nvidia geforce gtx 970": {
+      "score": 229.9,
+      "tier": 0
+    },
+    "nvidia geforce gtx 980 ti": {
+      "score": 397.7,
+      "tier": 0
+    },
+    "nvidia geforce gtx titan x": {
+      "score": 402.2,
+      "tier": 0
+    },
+    "nvidia geforce mx110": {
+      "score": 36.2,
+      "tier": 0
+    },
+    "nvidia geforce mx150": {
+      "score": 56.8,
+      "tier": 0
+    },
+    "nvidia geforce mx250": {
+      "score": 79.8,
+      "tier": 0
+    },
+    "nvidia geforce mx330": {
+      "score": 62.9,
+      "tier": 0
+    },
+    "nvidia geforce mx550": {
+      "score": 195.5,
+      "tier": 0
+    },
+    "nvidia geforce rtx 2050": {
+      "score": 821.4,
+      "tier": 1
+    },
+    "nvidia geforce rtx 2060": {
+      "score": 1522.3,
+      "tier": 1
+    },
+    "nvidia geforce rtx 2060 super": {
+      "score": 1989.9,
+      "tier": 1
+    },
+    "nvidia geforce rtx 2060 with max-q design": {
+      "score": 1291.8,
+      "tier": 1
+    },
+    "nvidia geforce rtx 2070": {
+      "score": 1829.1,
+      "tier": 1
+    },
+    "nvidia geforce rtx 2070 super": {
+      "score": 2137.9,
+      "tier": 2
+    },
+    "nvidia geforce rtx 2070 with max-q design": {
+      "score": 1575.2,
+      "tier": 1
+    },
+    "nvidia geforce rtx 2080": {
+      "score": 1987.6,
+      "tier": 1
+    },
+    "nvidia geforce rtx 2080 super": {
+      "score": 2171.8,
+      "tier": 2
+    },
+    "nvidia geforce rtx 2080 ti": {
+      "score": 2832.0,
+      "tier": 2
+    },
+    "nvidia geforce rtx 3050": {
+      "score": 1204.0,
+      "tier": 1
+    },
+    "nvidia geforce rtx 3050 4gb laptop gpu": {
+      "score": 732.9,
+      "tier": 1
+    },
+    "nvidia geforce rtx 3050 6gb laptop gpu": {
+      "score": 1130.9,
+      "tier": 1
+    },
+    "nvidia geforce rtx 3050 laptop gpu": {
+      "score": 1114.7,
+      "tier": 1
+    },
+    "nvidia geforce rtx 3050 ti laptop gpu": {
+      "score": 1258.7,
+      "tier": 1
+    },
+    "nvidia geforce rtx 3060": {
+      "score": 1988.3,
+      "tier": 1
+    },
+    "nvidia geforce rtx 3060 laptop gpu": {
+      "score": 2120.8,
+      "tier": 1
+    },
+    "nvidia geforce rtx 3060 ti": {
+      "score": 2641.5,
+      "tier": 2
+    },
+    "nvidia geforce rtx 3070": {
+      "score": 3082.3,
+      "tier": 2
+    },
+    "nvidia geforce rtx 3070 laptop gpu": {
+      "score": 2684.7,
+      "tier": 2
+    },
+    "nvidia geforce rtx 3070 ti": {
+      "score": 3282.1,
+      "tier": 2
+    },
+    "nvidia geforce rtx 3070 ti laptop gpu": {
+      "score": 2526.3,
+      "tier": 2
+    },
+    "nvidia geforce rtx 3080": {
+      "score": 4379.1,
+      "tier": 2
+    },
+    "nvidia geforce rtx 3080 laptop gpu": {
+      "score": 2749.2,
+      "tier": 2
+    },
+    "nvidia geforce rtx 3080 ti": {
+      "score": 5070.1,
+      "tier": 3
+    },
+    "nvidia geforce rtx 3080 ti laptop gpu": {
+      "score": 3252.2,
+      "tier": 2
+    },
+    "nvidia geforce rtx 3090": {
+      "score": 5237.0,
+      "tier": 3
+    },
+    "nvidia geforce rtx 3090 ti": {
+      "score": 5485.0,
+      "tier": 3
+    },
+    "nvidia geforce rtx 4050 laptop gpu": {
+      "score": 2384.2,
+      "tier": 2
+    },
+    "nvidia geforce rtx 4060": {
+      "score": 3062.9,
+      "tier": 2
+    },
+    "nvidia geforce rtx 4060 laptop gpu": {
+      "score": 3012.6,
+      "tier": 2
+    },
+    "nvidia geforce rtx 4060 ti": {
+      "score": 3839.7,
+      "tier": 2
+    },
+    "nvidia geforce rtx 4070": {
+      "score": 5251.2,
+      "tier": 3
+    },
+    "nvidia geforce rtx 4070 laptop gpu": {
+      "score": 3603.2,
+      "tier": 2
+    },
+    "nvidia geforce rtx 4070 super": {
+      "score": 6194.9,
+      "tier": 3
+    },
+    "nvidia geforce rtx 4070 ti": {
+      "score": 6530.6,
+      "tier": 3
+    },
+    "nvidia geforce rtx 4070 ti super": {
+      "score": 7068.3,
+      "tier": 3
+    },
+    "nvidia geforce rtx 4080": {
+      "score": 8472.2,
+      "tier": 3
+    },
+    "nvidia geforce rtx 4080 laptop gpu": {
+      "score": 4773.1,
+      "tier": 3
+    },
+    "nvidia geforce rtx 4080 super": {
+      "score": 8344.9,
+      "tier": 3
+    },
+    "nvidia geforce rtx 4090": {
+      "score": 11663.5,
+      "tier": 3
+    },
+    "nvidia geforce rtx 4090 laptop gpu": {
+      "score": 7024.7,
+      "tier": 3
+    },
+    "nvidia geforce rtx 5050": {
+      "score": 2799.2,
+      "tier": 2
+    },
+    "nvidia geforce rtx 5050 laptop gpu": {
+      "score": 2726.6,
+      "tier": 2
+    },
+    "nvidia geforce rtx 5060": {
+      "score": 3728.7,
+      "tier": 2
+    },
+    "nvidia geforce rtx 5060 laptop gpu": {
+      "score": 3302.5,
+      "tier": 2
+    },
+    "nvidia geforce rtx 5060 ti": {
+      "score": 4274.3,
+      "tier": 2
+    },
+    "nvidia geforce rtx 5070": {
+      "score": 5945.2,
+      "tier": 3
+    },
+    "nvidia geforce rtx 5070 laptop gpu": {
+      "score": 4023.1,
+      "tier": 2
+    },
+    "nvidia geforce rtx 5070 ti": {
+      "score": 7694.6,
+      "tier": 3
+    },
+    "nvidia geforce rtx 5070 ti laptop gpu": {
+      "score": 4997.0,
+      "tier": 3
+    },
+    "nvidia geforce rtx 5080": {
+      "score": 9275.7,
+      "tier": 3
+    },
+    "nvidia geforce rtx 5080 laptop gpu": {
+      "score": 6542.0,
+      "tier": 3
+    },
+    "nvidia geforce rtx 5090": {
+      "score": 16311.7,
+      "tier": 3
+    },
+    "nvidia geforce rtx 5090 d v2": {
+      "score": 15602.8,
+      "tier": 3
+    },
+    "nvidia geforce rtx 5090 laptop gpu": {
+      "score": 8302.0,
+      "tier": 3
+    },
+    "nvidia h100 nvl": {
+      "score": 4675.6,
+      "tier": 2
+    },
+    "nvidia h200 nvl": {
+      "score": 5021.7,
+      "tier": 3
+    },
+    "nvidia l4": {
+      "score": 3709.3,
+      "tier": 2
+    },
+    "nvidia l40s": {
+      "score": 10971.3,
+      "tier": 3
+    },
+    "nvidia p104-100": {
+      "score": 488.8,
+      "tier": 0
+    },
+    "nvidia p106-100": {
+      "score": 317.9,
+      "tier": 0
+    },
+    "nvidia quadro m1000m": {
+      "score": 59.8,
+      "tier": 0
+    },
+    "nvidia quadro m1200": {
+      "score": 124.0,
+      "tier": 0
+    },
+    "nvidia quadro m2200": {
+      "score": 148.7,
+      "tier": 0
+    },
+    "nvidia quadro m3000m": {
+      "score": 150.3,
+      "tier": 0
+    },
+    "nvidia quadro m4000": {
+      "score": 183.8,
+      "tier": 0
+    },
+    "nvidia quadro p1000": {
+      "score": 118.9,
+      "tier": 0
+    },
+    "nvidia quadro p2000": {
+      "score": 232.0,
+      "tier": 0
+    },
+    "nvidia quadro p2200": {
+      "score": 262.0,
+      "tier": 0
+    },
+    "nvidia quadro p400": {
+      "score": 36.9,
+      "tier": 0
+    },
+    "nvidia quadro p4000": {
+      "score": 396.2,
+      "tier": 0
+    },
+    "nvidia quadro p5000": {
+      "score": 425.1,
+      "tier": 0
+    },
+    "nvidia quadro p620": {
+      "score": 76.4,
+      "tier": 0
+    },
+    "nvidia quadro rtx 3000": {
+      "score": 1089.6,
+      "tier": 1
+    },
+    "nvidia quadro rtx 4000 with max-q design": {
+      "score": 1891.2,
+      "tier": 1
+    },
+    "nvidia quadro rtx 5000": {
+      "score": 2091.6,
+      "tier": 1
+    },
+    "nvidia quadro rtx 5000 with max-q design": {
+      "score": 1467.4,
+      "tier": 1
+    },
+    "nvidia quadro rtx 6000": {
+      "score": 2941.6,
+      "tier": 2
+    },
+    "nvidia quadro t1000": {
+      "score": 336.2,
+      "tier": 0
+    },
+    "nvidia quadro t1000 with max-q design": {
+      "score": 358.0,
+      "tier": 0
+    },
+    "nvidia quadro t2000": {
+      "score": 378.4,
+      "tier": 0
+    },
+    "nvidia quadro t2000 with max-q design": {
+      "score": 406.7,
+      "tier": 0
+    },
+    "nvidia rtx 1000 ada generation laptop gpu": {
+      "score": 1992.4,
+      "tier": 1
+    },
+    "nvidia rtx 2000 ada generation": {
+      "score": 2602.2,
+      "tier": 2
+    },
+    "nvidia rtx 2000 ada generation laptop gpu": {
+      "score": 1040.9,
+      "tier": 1
+    },
+    "nvidia rtx 3500 ada generation laptop gpu": {
+      "score": 3944.1,
+      "tier": 2
+    },
+    "nvidia rtx 4000 ada generation": {
+      "score": 4343.7,
+      "tier": 2
+    },
+    "nvidia rtx 4000 sff ada generation": {
+      "score": 3789.3,
+      "tier": 2
+    },
+    "nvidia rtx 4500 ada generation": {
+      "score": 5820.5,
+      "tier": 3
+    },
+    "nvidia rtx 5000 ada generation laptop gpu": {
+      "score": 5531.0,
+      "tier": 3
+    },
+    "nvidia rtx 500 ada generation laptop gpu": {
+      "score": 1434.4,
+      "tier": 1
+    },
+    "nvidia rtx6000-ada-48q": {
+      "score": 8033.4,
+      "tier": 3
+    },
+    "nvidia rtx 6000 ada generation": {
+      "score": 12075.4,
+      "tier": 3
+    },
+    "nvidia rtx a1000": {
+      "score": 1288.4,
+      "tier": 1
+    },
+    "nvidia rtx a1000 laptop gpu": {
+      "score": 966.8,
+      "tier": 1
+    },
+    "nvidia rtx a2000": {
+      "score": 1553.7,
+      "tier": 1
+    },
+    "nvidia rtx a2000 12gb": {
+      "score": 1720.0,
+      "tier": 1
+    },
+    "nvidia rtx a2000 8gb laptop gpu": {
+      "score": 1111.1,
+      "tier": 1
+    },
+    "nvidia rtx a2000 laptop gpu": {
+      "score": 1135.2,
+      "tier": 1
+    },
+    "nvidia rtx a3000 12gb laptop gpu": {
+      "score": 2204.6,
+      "tier": 2
+    },
+    "nvidia rtx a3000 laptop gpu": {
+      "score": 1851.6,
+      "tier": 1
+    },
+    "nvidia rtx a400": {
+      "score": 505.3,
+      "tier": 1
+    },
+    "nvidia rtx a4000": {
+      "score": 2726.5,
+      "tier": 2
+    },
+    "nvidia rtx a4500": {
+      "score": 3469.2,
+      "tier": 2
+    },
+    "nvidia rtx a5000": {
+      "score": 3708.9,
+      "tier": 2
+    },
+    "nvidia rtx a5000 laptop gpu": {
+      "score": 2619.3,
+      "tier": 2
+    },
+    "nvidia rtx a500 laptop gpu": {
+      "score": 642.9,
+      "tier": 1
+    },
+    "nvidia rtx a5500 laptop gpu": {
+      "score": 2843.0,
+      "tier": 2
+    },
+    "nvidia rtx a6000": {
+      "score": 4716.1,
+      "tier": 2
+    },
+    "nvidia rtx pro 1000 blackwell generation laptop gpu": {
+      "score": 1973.2,
+      "tier": 1
+    },
+    "nvidia rtx pro 2000 blackwell": {
+      "score": 3894.4,
+      "tier": 2
+    },
+    "nvidia rtx pro 2000 blackwell generation laptop gpu": {
+      "score": 3028.4,
+      "tier": 2
+    },
+    "nvidia rtx pro 3000 blackwell generation laptop gpu": {
+      "score": 4700.9,
+      "tier": 2
+    },
+    "nvidia rtx pro 4000 blackwell": {
+      "score": 7086.3,
+      "tier": 3
+    },
+    "nvidia rtx pro 4000 blackwell generation laptop gpu": {
+      "score": 5469.4,
+      "tier": 3
+    },
+    "nvidia rtx pro 4000 blackwell sff edition": {
+      "score": 5066.0,
+      "tier": 3
+    },
+    "nvidia rtx pro 4500 blackwell": {
+      "score": 9044.5,
+      "tier": 3
+    },
+    "nvidia rtx pro 5000 blackwell": {
+      "score": 12238.8,
+      "tier": 3
+    },
+    "nvidia rtx pro 500 blackwell generation laptop gpu": {
+      "score": 1842.7,
+      "tier": 1
+    },
+    "nvidia rtx pro 6000 blackwell max-q workstation edition": {
+      "score": 15362.7,
+      "tier": 3
+    },
+    "nvidia rtx pro 6000 blackwell server edition": {
+      "score": 15821.9,
+      "tier": 3
+    },
+    "nvidia rtx pro 6000 blackwell server edition mig 1g.24gb": {
+      "score": 4463.7,
+      "tier": 2
+    },
+    "nvidia rtx pro 6000 blackwell server edition mig 2g.48gb": {
+      "score": 8809.2,
+      "tier": 3
+    },
+    "nvidia rtx pro 6000 blackwell workstation edition": {
+      "score": 18571.3,
+      "tier": 3
+    },
+    "nvidia t1000": {
+      "score": 344.0,
+      "tier": 0
+    },
+    "nvidia t1200 laptop gpu": {
+      "score": 382.0,
+      "tier": 0
+    },
+    "nvidia t550 laptop gpu": {
+      "score": 223.4,
+      "tier": 0
+    },
+    "nvidia t600 laptop gpu": {
+      "score": 335.6,
+      "tier": 0
+    },
+    "nvidia tesla m40": {
+      "score": 377.5,
+      "tier": 0
+    },
+    "nvidia tesla p100-pcie-16gb": {
+      "score": 986.6,
+      "tier": 1
+    },
+    "nvidia tesla p40": {
+      "score": 657.2,
+      "tier": 1
+    },
+    "nvidia tesla t4": {
+      "score": 1448.5,
+      "tier": 1
+    },
+    "nvidia tesla v100-sxm2-16gb": {
+      "score": 1848.8,
+      "tier": 1
+    },
+    "nvidia titan v": {
+      "score": 1689.2,
+      "tier": 1
+    },
+    "nvidia titan xp": {
+      "score": 770.1,
+      "tier": 1
+    }
+  },
+  "cpu_lookup": {
+    "10x apple silicon": {
+      "score": 153.0,
+      "tier": 1
+    },
+    "13th gen intel core i3-1315u": {
+      "score": 49.8,
+      "tier": 0
+    },
+    "13th gen intel core i5-1335u": {
+      "score": 108.8,
+      "tier": 1
+    },
+    "13th gen intel core i5-13400f": {
+      "score": 199.4,
+      "tier": 1
+    },
+    "13th gen intel core i5-1340p": {
+      "score": 183.0,
+      "tier": 1
+    },
+    "13th gen intel core i5-13420h": {
+      "score": 136.7,
+      "tier": 1
+    },
+    "13th gen intel core i5-13450hx": {
+      "score": 190.0,
+      "tier": 1
+    },
+    "13th gen intel core i5-13500": {
+      "score": 248.9,
+      "tier": 2
+    },
+    "13th gen intel core i5-13500h": {
+      "score": 173.0,
+      "tier": 1
+    },
+    "13th gen intel core i5-13500hx": {
+      "score": 187.3,
+      "tier": 1
+    },
+    "13th gen intel core i5-13600": {
+      "score": 295.8,
+      "tier": 2
+    },
+    "13th gen intel core i5-13600k": {
+      "score": 316.6,
+      "tier": 2
+    },
+    "13th gen intel core i5-13600kf": {
+      "score": 333.6,
+      "tier": 2
+    },
+    "13th gen intel core i7-1355u": {
+      "score": 42.7,
+      "tier": 0
+    },
+    "13th gen intel core i7-1360p": {
+      "score": 89.5,
+      "tier": 1
+    },
+    "13th gen intel core i7-13620h": {
+      "score": 191.8,
+      "tier": 1
+    },
+    "13th gen intel core i7-13650hx": {
+      "score": 233.7,
+      "tier": 2
+    },
+    "13th gen intel core i7-13700": {
+      "score": 345.5,
+      "tier": 2
+    },
+    "13th gen intel core i7-13700f": {
+      "score": 257.9,
+      "tier": 2
+    },
+    "13th gen intel core i7-13700h": {
+      "score": 189.2,
+      "tier": 1
+    },
+    "13th gen intel core i7-13700hx": {
+      "score": 250.0,
+      "tier": 2
+    },
+    "13th gen intel core i7-13700k": {
+      "score": 399.0,
+      "tier": 2
+    },
+    "13th gen intel core i7-13700kf": {
+      "score": 420.4,
+      "tier": 2
+    },
+    "13th gen intel core i7-13700t": {
+      "score": 180.8,
+      "tier": 1
+    },
+    "13th gen intel core i7-13850hx": {
+      "score": 327.5,
+      "tier": 2
+    },
+    "13th gen intel core i9-13900h": {
+      "score": 192.6,
+      "tier": 1
+    },
+    "13th gen intel core i9-13900hx": {
+      "score": 381.9,
+      "tier": 2
+    },
+    "13th gen intel core i9-13900k": {
+      "score": 534.1,
+      "tier": 3
+    },
+    "13th gen intel core i9-13900kf": {
+      "score": 509.2,
+      "tier": 3
+    },
+    "13th gen intel core i9-13900ks": {
+      "score": 522.1,
+      "tier": 3
+    },
+    "13th gen intel core i9-13950hx": {
+      "score": 367.3,
+      "tier": 2
+    },
+    "13th gen intel core i9-13980hx": {
+      "score": 332.4,
+      "tier": 2
+    },
+    "2x amd epyc 7543 32-core processor": {
+      "score": 1224.6,
+      "tier": 3
+    },
+    "2x amd epyc 7551 32-core processor": {
+      "score": 664.1,
+      "tier": 3
+    },
+    "2x amd epyc 9224 24-core processor": {
+      "score": 1033.5,
+      "tier": 3
+    },
+    "2x amd epyc 9335 32-core processor": {
+      "score": 1945.2,
+      "tier": 3
+    },
+    "2x amd epyc 9355 32-core processor": {
+      "score": 2359.0,
+      "tier": 3
+    },
+    "2x amd epyc 9575f 64-core processor": {
+      "score": 3799.9,
+      "tier": 3
+    },
+    "2x amd epyc 9634 84-core processor": {
+      "score": 2690.5,
+      "tier": 3
+    },
+    "2x amd epyc 9654 96-core processor": {
+      "score": 3593.5,
+      "tier": 3
+    },
+    "2x amd epyc 9655 96-core processor": {
+      "score": 5192.2,
+      "tier": 3
+    },
+    "2x amd epyc 9684x 96-core processor": {
+      "score": 3847.6,
+      "tier": 3
+    },
+    "2x amd epyc 9754 128-core processor": {
+      "score": 4505.4,
+      "tier": 3
+    },
+    "2x amd epyc-genoa processor": {
+      "score": 2976.6,
+      "tier": 3
+    },
+    "2x genuine intel cpu $0000%@": {
+      "score": 1099.3,
+      "tier": 3
+    },
+    "2x intel xeon 6517p": {
+      "score": 267.9,
+      "tier": 2
+    },
+    "2x intel xeon cpu e5-2623 v3 @ 3.00ghz": {
+      "score": 115.7,
+      "tier": 1
+    },
+    "2x intel xeon cpu e5-2650l v3 @ 1.80ghz": {
+      "score": 107.6,
+      "tier": 1
+    },
+    "2x intel xeon cpu e5-2673 v4 @ 2.30ghz": {
+      "score": 504.8,
+      "tier": 3
+    },
+    "2x intel xeon cpu e5-2680 v3 @ 2.50ghz": {
+      "score": 351.1,
+      "tier": 2
+    },
+    "2x intel xeon cpu e5-2686 v4 @ 2.30ghz": {
+      "score": 569.0,
+      "tier": 3
+    },
+    "2x intel xeon cpu e5-2687w v2 @ 3.40ghz": {
+      "score": 148.8,
+      "tier": 1
+    },
+    "2x intel xeon cpu e5-2687w v4 @ 3.00ghz": {
+      "score": 387.0,
+      "tier": 2
+    },
+    "2x intel xeon cpu e5-2690 v2 @ 3.00ghz": {
+      "score": 217.4,
+      "tier": 2
+    },
+    "2x intel xeon cpu e5-2690 v4 @ 2.60ghz": {
+      "score": 443.1,
+      "tier": 2
+    },
+    "2x intel xeon cpu e5-2695 v4 @ 2.10ghz": {
+      "score": 482.1,
+      "tier": 3
+    },
+    "2x intel xeon cpu e5-2696 v4 @ 2.20ghz": {
+      "score": 608.0,
+      "tier": 3
+    },
+    "2x intel xeon cpu e5-2697a v4 @ 2.60ghz": {
+      "score": 474.4,
+      "tier": 2
+    },
+    "2x intel xeon cpu e5-2697 v2 @ 2.70ghz": {
+      "score": 271.6,
+      "tier": 2
+    },
+    "2x intel xeon cpu e5-2697 v4 @ 2.30ghz": {
+      "score": 596.0,
+      "tier": 3
+    },
+    "2x intel xeon cpu e5-2698 v4 @ 2.20ghz": {
+      "score": 641.1,
+      "tier": 3
+    },
+    "2x intel xeon cpu e5-2699 v4 @ 2.20ghz": {
+      "score": 658.9,
+      "tier": 3
+    },
+    "2x intel xeon cpu           x5670  @ 2.93ghz": {
+      "score": 118.6,
+      "tier": 1
+    },
+    "2x intel xeon gold 5520+": {
+      "score": 1184.8,
+      "tier": 3
+    },
+    "2x intel xeon gold 6148 cpu @ 2.40ghz": {
+      "score": 565.2,
+      "tier": 3
+    },
+    "2x intel xeon gold 6152 cpu @ 2.10ghz": {
+      "score": 601.8,
+      "tier": 3
+    },
+    "2x intel xeon gold 6242 cpu @ 2.80ghz": {
+      "score": 527.7,
+      "tier": 3
+    },
+    "2x intel xeon gold 6254 cpu @ 3.10ghz": {
+      "score": 571.0,
+      "tier": 3
+    },
+    "2x intel xeon gold 6438n": {
+      "score": 1271.6,
+      "tier": 3
+    },
+    "2x intel xeon platinum 8164 cpu @ 2.00ghz": {
+      "score": 586.5,
+      "tier": 3
+    },
+    "2x intel xeon silver 4214r cpu @ 2.40ghz": {
+      "score": 354.7,
+      "tier": 2
+    },
+    "2x intel xeon silver 4216 cpu @ 2.10ghz": {
+      "score": 422.2,
+      "tier": 2
+    },
+    "2x intel xeon silver 4314 cpu @ 2.40ghz": {
+      "score": 611.9,
+      "tier": 3
+    },
+    "amd 3015e": {
+      "score": 9.4,
+      "tier": 0
+    },
+    "amd a10-5800k apu": {
+      "score": 21.4,
+      "tier": 0
+    },
+    "amd a10-7800 radeon r7, 12 compute cores 4c+8g": {
+      "score": 22.0,
+      "tier": 0
+    },
+    "amd a12-9720p radeon r7, 12 compute cores 4c+8g": {
+      "score": 18.9,
+      "tier": 0
+    },
+    "amd a8-5500b apu": {
+      "score": 12.6,
+      "tier": 0
+    },
+    "amd athlon 300u": {
+      "score": 21.1,
+      "tier": 0
+    },
+    "amd athlon(tm) x4 860k quad core processor": {
+      "score": 25.4,
+      "tier": 0
+    },
+    "amd bc-250": {
+      "score": 111.1,
+      "tier": 1
+    },
+    "amd custom apu 0932": {
+      "score": 69.0,
+      "tier": 0
+    },
+    "amd custom cpu 1772": {
+      "score": 150.8,
+      "tier": 1
+    },
+    "amd eng sample: 100-000000897-03": {
+      "score": 830.6,
+      "tier": 3
+    },
+    "amd eng sample: 100-000001458-01": {
+      "score": 3823.2,
+      "tier": 3
+    },
+    "amd eng sample: 100-000001593-40": {
+      "score": 2686.6,
+      "tier": 3
+    },
+    "amd epyc 4345p 8-core processor": {
+      "score": 339.3,
+      "tier": 2
+    },
+    "amd epyc 7282 16-core processor": {
+      "score": 279.0,
+      "tier": 2
+    },
+    "amd epyc 7402 24-core processor": {
+      "score": 412.8,
+      "tier": 2
+    },
+    "amd epyc 7532 32-core processor": {
+      "score": 550.0,
+      "tier": 3
+    },
+    "amd epyc 7551p 32-core processor": {
+      "score": 134.8,
+      "tier": 1
+    },
+    "amd epyc 7773x 64-core processor": {
+      "score": 1304.0,
+      "tier": 3
+    },
+    "amd epyc 9115 16-core processor": {
+      "score": 476.6,
+      "tier": 2
+    },
+    "amd epyc 9124 16-core processor": {
+      "score": 433.7,
+      "tier": 2
+    },
+    "amd epyc 9135 16-core processor": {
+      "score": 568.4,
+      "tier": 3
+    },
+    "amd epyc 9255 24-core processor": {
+      "score": 793.5,
+      "tier": 3
+    },
+    "amd epyc 9354 32-core processor": {
+      "score": 207.9,
+      "tier": 2
+    },
+    "amd epyc 9355p 32-core processor": {
+      "score": 1119.4,
+      "tier": 3
+    },
+    "amd epyc 9454p 48-core processor": {
+      "score": 1332.9,
+      "tier": 3
+    },
+    "amd epyc 9455p 48-core processor": {
+      "score": 1572.9,
+      "tier": 3
+    },
+    "amd epyc 9554 64-core processor": {
+      "score": 1620.3,
+      "tier": 3
+    },
+    "amd epyc 9575f 64-core processor": {
+      "score": 2130.5,
+      "tier": 3
+    },
+    "amd epyc 9655 96-core processor": {
+      "score": 2750.8,
+      "tier": 3
+    },
+    "amd epyc 9754 128-core processor": {
+      "score": 2436.1,
+      "tier": 3
+    },
+    "amd epyc 9845 160-core processor": {
+      "score": 3458.4,
+      "tier": 3
+    },
+    "amd fx(tm)-4350 quad-core processor": {
+      "score": 28.5,
+      "tier": 0
+    },
+    "amd fx(tm)-6350 six-core processor": {
+      "score": 35.3,
+      "tier": 0
+    },
+    "amd fx(tm)-8350 eight-core processor": {
+      "score": 53.2,
+      "tier": 0
+    },
+    "amd ryzen 3 2200g": {
+      "score": 49.3,
+      "tier": 0
+    },
+    "amd ryzen 3 3200g": {
+      "score": 48.9,
+      "tier": 0
+    },
+    "amd ryzen 3 3250u": {
+      "score": 19.8,
+      "tier": 0
+    },
+    "amd ryzen 3 4300u": {
+      "score": 48.6,
+      "tier": 0
+    },
+    "amd ryzen 3 5300g": {
+      "score": 99.5,
+      "tier": 1
+    },
+    "amd ryzen 3 5300ge": {
+      "score": 93.2,
+      "tier": 1
+    },
+    "amd ryzen 3 5300u": {
+      "score": 51.1,
+      "tier": 0
+    },
+    "amd ryzen 3 5425u": {
+      "score": 89.6,
+      "tier": 1
+    },
+    "amd ryzen 3 7320u": {
+      "score": 47.2,
+      "tier": 0
+    },
+    "amd ryzen 3 pro 4450u": {
+      "score": 67.8,
+      "tier": 0
+    },
+    "amd ryzen 5 1400 quad-core processor": {
+      "score": 53.4,
+      "tier": 0
+    },
+    "amd ryzen 5 1600 six-core processor": {
+      "score": 100.5,
+      "tier": 1
+    },
+    "amd ryzen 5 2400g": {
+      "score": 77.9,
+      "tier": 1
+    },
+    "amd ryzen 5 2500u": {
+      "score": 43.6,
+      "tier": 0
+    },
+    "amd ryzen 5 2600 six-core processor": {
+      "score": 111.7,
+      "tier": 1
+    },
+    "amd ryzen 5 2600x six-core processor": {
+      "score": 121.2,
+      "tier": 1
+    },
+    "amd ryzen 5 3350g": {
+      "score": 72.4,
+      "tier": 0
+    },
+    "amd ryzen 5 3400g": {
+      "score": 52.4,
+      "tier": 0
+    },
+    "amd ryzen 5 3500 6-core processor": {
+      "score": 104.5,
+      "tier": 1
+    },
+    "amd ryzen 5 3500u": {
+      "score": 38.6,
+      "tier": 0
+    },
+    "amd ryzen 5 3500x 6-core processor": {
+      "score": 90.9,
+      "tier": 1
+    },
+    "amd ryzen 5 3550h": {
+      "score": 56.9,
+      "tier": 0
+    },
+    "amd ryzen 5 3600 6-core processor": {
+      "score": 140.5,
+      "tier": 1
+    },
+    "amd ryzen 5 3600x 6-core processor": {
+      "score": 137.0,
+      "tier": 1
+    },
+    "amd ryzen 5 3600xt 6-core processor": {
+      "score": 139.4,
+      "tier": 1
+    },
+    "amd ryzen 5 4500 6-core processor": {
+      "score": 107.7,
+      "tier": 1
+    },
+    "amd ryzen 5 4500u": {
+      "score": 79.7,
+      "tier": 1
+    },
+    "amd ryzen 5 4600g": {
+      "score": 122.9,
+      "tier": 1
+    },
+    "amd ryzen 5 4600h": {
+      "score": 117.5,
+      "tier": 1
+    },
+    "amd ryzen 5 5500": {
+      "score": 152.7,
+      "tier": 1
+    },
+    "amd ryzen 5 5500u": {
+      "score": 83.9,
+      "tier": 1
+    },
+    "amd ryzen 5 5500x3d 6-core processor": {
+      "score": 162.8,
+      "tier": 1
+    },
+    "amd ryzen 5 5600 6-core processor": {
+      "score": 159.4,
+      "tier": 1
+    },
+    "amd ryzen 5 5600g": {
+      "score": 148.6,
+      "tier": 1
+    },
+    "amd ryzen 5 5600gt": {
+      "score": 154.6,
+      "tier": 1
+    },
+    "amd ryzen 5 5600h": {
+      "score": 103.9,
+      "tier": 1
+    },
+    "amd ryzen 5 5600u": {
+      "score": 75.4,
+      "tier": 0
+    },
+    "amd ryzen 5 5600x3d 6-core processor": {
+      "score": 187.9,
+      "tier": 1
+    },
+    "amd ryzen 5 5600x 6-core processor": {
+      "score": 161.1,
+      "tier": 1
+    },
+    "amd ryzen 5 5625u": {
+      "score": 58.6,
+      "tier": 0
+    },
+    "amd ryzen 5 6600h": {
+      "score": 139.7,
+      "tier": 1
+    },
+    "amd ryzen 5 7235hs": {
+      "score": 57.8,
+      "tier": 0
+    },
+    "amd ryzen 5 7430u": {
+      "score": 110.3,
+      "tier": 1
+    },
+    "amd ryzen 5 7500f 6-core processor": {
+      "score": 211.7,
+      "tier": 2
+    },
+    "amd ryzen 5 7500x3d 6-core processor": {
+      "score": 212.1,
+      "tier": 2
+    },
+    "amd ryzen 5 7520u": {
+      "score": 41.2,
+      "tier": 0
+    },
+    "amd ryzen 5 7530u": {
+      "score": 102.9,
+      "tier": 1
+    },
+    "amd ryzen 5 7535hs": {
+      "score": 102.8,
+      "tier": 1
+    },
+    "amd ryzen 5 7600 6-core processor": {
+      "score": 224.0,
+      "tier": 2
+    },
+    "amd ryzen 5 7600x3d 6-core processor": {
+      "score": 238.7,
+      "tier": 2
+    },
+    "amd ryzen 5 7600x 6-core processor": {
+      "score": 232.5,
+      "tier": 2
+    },
+    "amd ryzen 5 7640hs": {
+      "score": 177.0,
+      "tier": 1
+    },
+    "amd ryzen 5 7640u": {
+      "score": 150.1,
+      "tier": 1
+    },
+    "amd ryzen 5 8400f 6-core processor": {
+      "score": 186.5,
+      "tier": 1
+    },
+    "amd ryzen 5 8500g": {
+      "score": 156.1,
+      "tier": 1
+    },
+    "amd ryzen 5 8600g": {
+      "score": 205.1,
+      "tier": 1
+    },
+    "amd ryzen 5 8645hs": {
+      "score": 194.6,
+      "tier": 1
+    },
+    "amd ryzen 5 9600 6-core processor": {
+      "score": 249.4,
+      "tier": 2
+    },
+    "amd ryzen 5 9600x 6-core processor": {
+      "score": 276.6,
+      "tier": 2
+    },
+    "amd ryzen 5 pro 230": {
+      "score": 153.3,
+      "tier": 1
+    },
+    "amd ryzen 5 pro 2400g": {
+      "score": 66.3,
+      "tier": 0
+    },
+    "amd ryzen 5 pro 3400ge": {
+      "score": 75.9,
+      "tier": 0
+    },
+    "amd ryzen 5 pro 3500u": {
+      "score": 41.6,
+      "tier": 0
+    },
+    "amd ryzen 5 pro 4650u": {
+      "score": 79.1,
+      "tier": 1
+    },
+    "amd ryzen 5 pro 5650u": {
+      "score": 99.5,
+      "tier": 1
+    },
+    "amd ryzen 5 pro 5655g": {
+      "score": 108.4,
+      "tier": 1
+    },
+    "amd ryzen 5 pro 7545u": {
+      "score": 122.1,
+      "tier": 1
+    },
+    "amd ryzen 5 pro 8640hs": {
+      "score": 183.3,
+      "tier": 1
+    },
+    "amd ryzen 7 170": {
+      "score": 186.2,
+      "tier": 1
+    },
+    "amd ryzen 7 1700 eight-core processor": {
+      "score": 130.5,
+      "tier": 1
+    },
+    "amd ryzen 7 1700x eight-core processor": {
+      "score": 155.8,
+      "tier": 1
+    },
+    "amd ryzen 7 1800x eight-core processor": {
+      "score": 109.9,
+      "tier": 1
+    },
+    "amd ryzen 7 250": {
+      "score": 221.3,
+      "tier": 2
+    },
+    "amd ryzen 7 255": {
+      "score": 229.7,
+      "tier": 2
+    },
+    "amd ryzen 7 260": {
+      "score": 252.3,
+      "tier": 2
+    },
+    "amd ryzen 7 2700 eight-core processor": {
+      "score": 141.0,
+      "tier": 1
+    },
+    "amd ryzen 7 2700x eight-core processor": {
+      "score": 164.8,
+      "tier": 1
+    },
+    "amd ryzen 7 3700u": {
+      "score": 63.2,
+      "tier": 0
+    },
+    "amd ryzen 7 3700x 8-core processor": {
+      "score": 184.9,
+      "tier": 1
+    },
+    "amd ryzen 7 3800x 8-core processor": {
+      "score": 194.8,
+      "tier": 1
+    },
+    "amd ryzen 7 4800h": {
+      "score": 155.3,
+      "tier": 1
+    },
+    "amd ryzen 7 4800hs": {
+      "score": 153.3,
+      "tier": 1
+    },
+    "amd ryzen 7 4800u": {
+      "score": 146.9,
+      "tier": 1
+    },
+    "amd ryzen 7 5700": {
+      "score": 199.9,
+      "tier": 1
+    },
+    "amd ryzen 7 5700g": {
+      "score": 197.0,
+      "tier": 1
+    },
+    "amd ryzen 7 5700u": {
+      "score": 120.0,
+      "tier": 1
+    },
+    "amd ryzen 7 5700x3d 8-core processor": {
+      "score": 202.6,
+      "tier": 1
+    },
+    "amd ryzen 7 5700x 8-core processor": {
+      "score": 218.3,
+      "tier": 2
+    },
+    "amd ryzen 7 5800 8-core processor": {
+      "score": 203.2,
+      "tier": 1
+    },
+    "amd ryzen 7 5800h": {
+      "score": 163.2,
+      "tier": 1
+    },
+    "amd ryzen 7 5800hs": {
+      "score": 122.9,
+      "tier": 1
+    },
+    "amd ryzen 7 5800x3d 8-core processor": {
+      "score": 226.2,
+      "tier": 2
+    },
+    "amd ryzen 7 5800x 8-core processor": {
+      "score": 225.9,
+      "tier": 2
+    },
+    "amd ryzen 7 5800xt 8-core processor": {
+      "score": 222.1,
+      "tier": 2
+    },
+    "amd ryzen 7 5825u": {
+      "score": 127.2,
+      "tier": 1
+    },
+    "amd ryzen 7 6800h": {
+      "score": 184.3,
+      "tier": 1
+    },
+    "amd ryzen 7 6800hs": {
+      "score": 158.4,
+      "tier": 1
+    },
+    "amd ryzen 7 6800hs creator edition": {
+      "score": 188.5,
+      "tier": 1
+    },
+    "amd ryzen 7 6800u": {
+      "score": 157.7,
+      "tier": 1
+    },
+    "amd ryzen 7 7435hs": {
+      "score": 161.1,
+      "tier": 1
+    },
+    "amd ryzen 7 7445hs": {
+      "score": 115.3,
+      "tier": 1
+    },
+    "amd ryzen 7 7700 8-core processor": {
+      "score": 284.0,
+      "tier": 2
+    },
+    "amd ryzen 7 7700x3d 8-core processor": {
+      "score": 266.4,
+      "tier": 2
+    },
+    "amd ryzen 7 7700x 8-core processor": {
+      "score": 304.3,
+      "tier": 2
+    },
+    "amd ryzen 7 7730u": {
+      "score": 127.2,
+      "tier": 1
+    },
+    "amd ryzen 7 7735hs": {
+      "score": 193.3,
+      "tier": 1
+    },
+    "amd ryzen 7 7735u": {
+      "score": 120.2,
+      "tier": 1
+    },
+    "amd ryzen 7 7745hx": {
+      "score": 292.5,
+      "tier": 2
+    },
+    "amd ryzen 7 7800x3d 8-core processor": {
+      "score": 295.9,
+      "tier": 2
+    },
+    "amd ryzen 7 7840hs": {
+      "score": 238.1,
+      "tier": 2
+    },
+    "amd ryzen 7 7840u": {
+      "score": 195.4,
+      "tier": 1
+    },
+    "amd ryzen 7 8700f 8-core processor": {
+      "score": 254.3,
+      "tier": 2
+    },
+    "amd ryzen 7 8700g": {
+      "score": 279.1,
+      "tier": 2
+    },
+    "amd ryzen 7 8745hs": {
+      "score": 253.2,
+      "tier": 2
+    },
+    "amd ryzen 7 8840u": {
+      "score": 188.1,
+      "tier": 1
+    },
+    "amd ryzen 7 8845hs": {
+      "score": 226.6,
+      "tier": 2
+    },
+    "amd ryzen 7 9700x 8-core processor": {
+      "score": 333.3,
+      "tier": 2
+    },
+    "amd ryzen 7 9800x3d 8-core processor": {
+      "score": 372.3,
+      "tier": 2
+    },
+    "amd ryzen 7 9850x3d 8-core processor": {
+      "score": 373.8,
+      "tier": 2
+    },
+    "amd ryzen 7 h 255": {
+      "score": 244.8,
+      "tier": 2
+    },
+    "amd ryzen 7 pro 4750u": {
+      "score": 89.6,
+      "tier": 1
+    },
+    "amd ryzen 7 pro 5750ge": {
+      "score": 169.7,
+      "tier": 1
+    },
+    "amd ryzen 7 pro 5850u": {
+      "score": 87.1,
+      "tier": 1
+    },
+    "amd ryzen 7 pro 6850u": {
+      "score": 109.0,
+      "tier": 1
+    },
+    "amd ryzen 7 pro 8845hs": {
+      "score": 131.1,
+      "tier": 1
+    },
+    "amd ryzen 9 270": {
+      "score": 229.0,
+      "tier": 2
+    },
+    "amd ryzen 9 3900 12-core processor": {
+      "score": 309.9,
+      "tier": 2
+    },
+    "amd ryzen 9 3900x 12-core processor": {
+      "score": 278.9,
+      "tier": 2
+    },
+    "amd ryzen 9 3900xt 12-core processor": {
+      "score": 275.9,
+      "tier": 2
+    },
+    "amd ryzen 9 3950x 16-core processor": {
+      "score": 362.4,
+      "tier": 2
+    },
+    "amd ryzen 9 5900hs": {
+      "score": 100.6,
+      "tier": 1
+    },
+    "amd ryzen 9 5900hx": {
+      "score": 163.4,
+      "tier": 1
+    },
+    "amd ryzen 9 5900x 12-core processor": {
+      "score": 323.6,
+      "tier": 2
+    },
+    "amd ryzen 9 5900xt 16-core processor": {
+      "score": 397.9,
+      "tier": 2
+    },
+    "amd ryzen 9 5950x 16-core processor": {
+      "score": 412.6,
+      "tier": 2
+    },
+    "amd ryzen 9 5980hx": {
+      "score": 188.5,
+      "tier": 1
+    },
+    "amd ryzen 9 6900hs": {
+      "score": 187.0,
+      "tier": 1
+    },
+    "amd ryzen 9 6900hx": {
+      "score": 186.0,
+      "tier": 1
+    },
+    "amd ryzen 9 7845hx": {
+      "score": 340.0,
+      "tier": 2
+    },
+    "amd ryzen 9 7900 12-core processor": {
+      "score": 410.2,
+      "tier": 2
+    },
+    "amd ryzen 9 7900x 12-core processor": {
+      "score": 408.7,
+      "tier": 2
+    },
+    "amd ryzen 9 7900x3d 12-core processor": {
+      "score": 462.5,
+      "tier": 2
+    },
+    "amd ryzen 9 7940hs": {
+      "score": 245.4,
+      "tier": 2
+    },
+    "amd ryzen 9 7945hx": {
+      "score": 521.7,
+      "tier": 3
+    },
+    "amd ryzen 9 7945hx3d": {
+      "score": 293.7,
+      "tier": 2
+    },
+    "amd ryzen 9 7950x 16-core processor": {
+      "score": 581.4,
+      "tier": 3
+    },
+    "amd ryzen 9 7950x3d 16-core processor": {
+      "score": 599.1,
+      "tier": 3
+    },
+    "amd ryzen 9 8940hx": {
+      "score": 467.1,
+      "tier": 2
+    },
+    "amd ryzen 9 8945hs": {
+      "score": 221.4,
+      "tier": 2
+    },
+    "amd ryzen 9 8945hx": {
+      "score": 537.1,
+      "tier": 3
+    },
+    "amd ryzen 9 9900x 12-core processor": {
+      "score": 518.2,
+      "tier": 3
+    },
+    "amd ryzen 9 9900x3d 12-core processor": {
+      "score": 540.1,
+      "tier": 3
+    },
+    "amd ryzen 9 9950x 16-core processor": {
+      "score": 676.0,
+      "tier": 3
+    },
+    "amd ryzen 9 9950x3d 16-core processor": {
+      "score": 712.7,
+      "tier": 3
+    },
+    "amd ryzen 9 9950x3d2 16-core processor": {
+      "score": 739.2,
+      "tier": 3
+    },
+    "amd ryzen 9 9955hx 16-core processor": {
+      "score": 553.9,
+      "tier": 3
+    },
+    "amd ryzen 9 9955hx3d 16-core processor": {
+      "score": 625.4,
+      "tier": 3
+    },
+    "amd ryzen 9 pro 7945 12-core processor": {
+      "score": 405.3,
+      "tier": 2
+    },
+    "amd ryzen ai 5 340": {
+      "score": 140.3,
+      "tier": 1
+    },
+    "amd ryzen ai 5 430": {
+      "score": 102.9,
+      "tier": 1
+    },
+    "amd ryzen ai 7 350": {
+      "score": 205.6,
+      "tier": 2
+    },
+    "amd ryzen ai 7 445": {
+      "score": 114.6,
+      "tier": 1
+    },
+    "amd ryzen ai 7 450": {
+      "score": 230.2,
+      "tier": 2
+    },
+    "amd ryzen ai 7 pro 350": {
+      "score": 205.5,
+      "tier": 2
+    },
+    "amd ryzen ai 9 365": {
+      "score": 246.6,
+      "tier": 2
+    },
+    "amd ryzen ai 9 465": {
+      "score": 290.0,
+      "tier": 2
+    },
+    "amd ryzen ai 9 h 465": {
+      "score": 275.7,
+      "tier": 2
+    },
+    "amd ryzen ai 9 hx 370": {
+      "score": 324.4,
+      "tier": 2
+    },
+    "amd ryzen ai 9 hx 470": {
+      "score": 324.2,
+      "tier": 2
+    },
+    "amd ryzen ai 9 hx pro 375": {
+      "score": 299.1,
+      "tier": 2
+    },
+    "amd ryzen ai max+ 392": {
+      "score": 401.8,
+      "tier": 2
+    },
+    "amd ryzen ai max+ 395": {
+      "score": 446.7,
+      "tier": 2
+    },
+    "amd ryzen ai max+ pro 395": {
+      "score": 607.5,
+      "tier": 3
+    },
+    "amd ryzen embedded r2544": {
+      "score": 58.0,
+      "tier": 0
+    },
+    "amd ryzen threadripper 1950x 16-core processor": {
+      "score": 286.5,
+      "tier": 2
+    },
+    "amd ryzen threadripper 2920x 12-core processor": {
+      "score": 283.9,
+      "tier": 2
+    },
+    "amd ryzen threadripper 2950x 16-core processor": {
+      "score": 228.2,
+      "tier": 2
+    },
+    "amd ryzen threadripper 2990wx 32-core processor": {
+      "score": 454.2,
+      "tier": 2
+    },
+    "amd ryzen threadripper 3970x 32-core processor": {
+      "score": 723.8,
+      "tier": 3
+    },
+    "amd ryzen threadripper 3990x 64-core processor": {
+      "score": 1134.7,
+      "tier": 3
+    },
+    "amd ryzen threadripper 7960x 24-cores": {
+      "score": 835.2,
+      "tier": 3
+    },
+    "amd ryzen threadripper 7980x 64-cores": {
+      "score": 1892.1,
+      "tier": 3
+    },
+    "amd ryzen threadripper 9960x 24-cores": {
+      "score": 965.5,
+      "tier": 3
+    },
+    "amd ryzen threadripper 9970x 32-cores": {
+      "score": 1422.8,
+      "tier": 3
+    },
+    "amd ryzen threadripper 9980x 64-cores": {
+      "score": 2169.5,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 3975wx 32-cores": {
+      "score": 741.2,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 3995wx 64-cores": {
+      "score": 1062.4,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 5945wx 12-cores": {
+      "score": 263.6,
+      "tier": 2
+    },
+    "amd ryzen threadripper pro 5955wx 16-cores": {
+      "score": 366.7,
+      "tier": 2
+    },
+    "amd ryzen threadripper pro 5965wx 24-cores": {
+      "score": 598.9,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 5975wx 32-cores": {
+      "score": 775.6,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 5995wx 64-cores": {
+      "score": 1340.8,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 7975wx 32-cores": {
+      "score": 1070.0,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 7985wx 64-cores": {
+      "score": 1838.7,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 7995wx 96-cores": {
+      "score": 2881.1,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 9955wx 16-cores": {
+      "score": 628.8,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 9965wx 24-cores": {
+      "score": 1008.6,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 9975wx 32-cores": {
+      "score": 1277.3,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 9985wx 64-cores": {
+      "score": 2268.0,
+      "tier": 3
+    },
+    "amd ryzen threadripper pro 9995wx 96-cores": {
+      "score": 2872.0,
+      "tier": 3
+    },
+    "amd ryzen z1": {
+      "score": 120.8,
+      "tier": 1
+    },
+    "amd ryzen z1 extreme": {
+      "score": 188.3,
+      "tier": 1
+    },
+    "amd ryzen z2 extreme": {
+      "score": 188.3,
+      "tier": 1
+    },
+    "apple a18 pro": {
+      "score": 70.8,
+      "tier": 0
+    },
+    "apple m1": {
+      "score": 90.7,
+      "tier": 1
+    },
+    "apple m1 max": {
+      "score": 202.9,
+      "tier": 1
+    },
+    "apple m1 pro": {
+      "score": 182.3,
+      "tier": 1
+    },
+    "apple m1 ultra": {
+      "score": 415.2,
+      "tier": 2
+    },
+    "apple m2": {
+      "score": 104.4,
+      "tier": 1
+    },
+    "apple m2 max": {
+      "score": 251.1,
+      "tier": 2
+    },
+    "apple m2 pro": {
+      "score": 240.7,
+      "tier": 2
+    },
+    "apple m2 ultra": {
+      "score": 509.8,
+      "tier": 3
+    },
+    "apple m3": {
+      "score": 148.5,
+      "tier": 1
+    },
+    "apple m3 max": {
+      "score": 350.7,
+      "tier": 2
+    },
+    "apple m3 pro": {
+      "score": 219.5,
+      "tier": 2
+    },
+    "apple m3 ultra": {
+      "score": 809.1,
+      "tier": 3
+    },
+    "apple m4": {
+      "score": 209.3,
+      "tier": 2
+    },
+    "apple m4 max": {
+      "score": 467.3,
+      "tier": 2
+    },
+    "apple m4 pro": {
+      "score": 371.0,
+      "tier": 2
+    },
+    "apple m5": {
+      "score": 249.6,
+      "tier": 2
+    },
+    "apple m5 max": {
+      "score": 565.9,
+      "tier": 3
+    },
+    "apple m5 pro": {
+      "score": 519.8,
+      "tier": 3
+    },
+    "genuine intel 0000": {
+      "score": 235.8,
+      "tier": 2
+    },
+    "hygon c86-4g (opn:3490)": {
+      "score": 263.7,
+      "tier": 2
+    },
+    "intel cc150 cpu @ 3.50ghz": {
+      "score": 147.3,
+      "tier": 1
+    },
+    "intel celeron cpu  n3150  @ 1.60ghz": {
+      "score": 5.2,
+      "tier": 0
+    },
+    "intel celeron cpu n3450 @ 1.10ghz": {
+      "score": 4.9,
+      "tier": 0
+    },
+    "intel celeron n5095a @ 2.00ghz": {
+      "score": 24.7,
+      "tier": 0
+    },
+    "intel core 5 120u": {
+      "score": 81.4,
+      "tier": 1
+    },
+    "intel core 5 210h": {
+      "score": 151.4,
+      "tier": 1
+    },
+    "intel core 7 150u": {
+      "score": 44.8,
+      "tier": 0
+    },
+    "intel core 7 240h": {
+      "score": 206.1,
+      "tier": 2
+    },
+    "intel core i3-1005g1 cpu @ 1.20ghz": {
+      "score": 28.7,
+      "tier": 0
+    },
+    "intel core i3-10100 cpu @ 3.60ghz": {
+      "score": 75.9,
+      "tier": 0
+    },
+    "intel core i3-10100f cpu @ 3.60ghz": {
+      "score": 79.3,
+      "tier": 1
+    },
+    "intel core i3-10105t cpu @ 3.00ghz": {
+      "score": 78.1,
+      "tier": 1
+    },
+    "intel core i3-1115g4 @ 3.00ghz": {
+      "score": 20.3,
+      "tier": 0
+    },
+    "intel core i3-12100": {
+      "score": 113.9,
+      "tier": 1
+    },
+    "intel core i3-12100f": {
+      "score": 109.7,
+      "tier": 1
+    },
+    "intel core i3-1215u": {
+      "score": 45.1,
+      "tier": 0
+    },
+    "intel core i3-14100": {
+      "score": 119.9,
+      "tier": 1
+    },
+    "intel core i3-2100 cpu @ 3.10ghz": {
+      "score": 18.4,
+      "tier": 0
+    },
+    "intel core i3-3110m cpu @ 2.40ghz": {
+      "score": 8.9,
+      "tier": 0
+    },
+    "intel core i3-7100 cpu @ 3.90ghz": {
+      "score": 36.3,
+      "tier": 0
+    },
+    "intel core i3-7100u cpu @ 2.40ghz": {
+      "score": 21.3,
+      "tier": 0
+    },
+    "intel core i3-8100 cpu @ 3.60ghz": {
+      "score": 50.4,
+      "tier": 0
+    },
+    "intel core i3-9100f cpu @ 3.60ghz": {
+      "score": 42.8,
+      "tier": 0
+    },
+    "intel core i5-10210u cpu @ 1.60ghz": {
+      "score": 36.8,
+      "tier": 0
+    },
+    "intel core i5-10300h cpu @ 2.50ghz": {
+      "score": 79.8,
+      "tier": 1
+    },
+    "intel core i5-1030ng7 cpu @ 1.10ghz": {
+      "score": 34.1,
+      "tier": 0
+    },
+    "intel core i5-10310u cpu @ 1.70ghz": {
+      "score": 43.3,
+      "tier": 0
+    },
+    "intel core i5-1035g1 cpu @ 1.00ghz": {
+      "score": 48.1,
+      "tier": 0
+    },
+    "intel core i5-1035g4 cpu @ 1.10ghz": {
+      "score": 23.5,
+      "tier": 0
+    },
+    "intel core i5-10400 cpu @ 2.90ghz": {
+      "score": 120.2,
+      "tier": 1
+    },
+    "intel core i5-10400f cpu @ 2.90ghz": {
+      "score": 120.5,
+      "tier": 1
+    },
+    "intel core i5-10500 cpu @ 3.10ghz": {
+      "score": 133.2,
+      "tier": 1
+    },
+    "intel core i5-10600 cpu @ 3.30ghz": {
+      "score": 118.3,
+      "tier": 1
+    },
+    "intel core i5-10600k cpu @ 4.10ghz": {
+      "score": 67.4,
+      "tier": 0
+    },
+    "intel core i5-10600kf cpu @ 4.10ghz": {
+      "score": 128.3,
+      "tier": 1
+    },
+    "intel core i5-11300h @ 3.10ghz": {
+      "score": 94.0,
+      "tier": 1
+    },
+    "intel core i5-1135g7 @ 2.40ghz": {
+      "score": 44.7,
+      "tier": 0
+    },
+    "intel core i5-11400 @ 2.60ghz": {
+      "score": 148.0,
+      "tier": 1
+    },
+    "intel core i5-11400f @ 2.60ghz": {
+      "score": 134.5,
+      "tier": 1
+    },
+    "intel core i5-11400h @ 2.70ghz": {
+      "score": 104.4,
+      "tier": 1
+    },
+    "intel core i5-1145g7 @ 2.60ghz": {
+      "score": 63.0,
+      "tier": 0
+    },
+    "intel core i5-1145g7e @ 2.60ghz": {
+      "score": 61.5,
+      "tier": 0
+    },
+    "intel core i5-1155g7 @ 2.50ghz": {
+      "score": 33.3,
+      "tier": 0
+    },
+    "intel core i5-11600k @ 3.90ghz": {
+      "score": 156.8,
+      "tier": 1
+    },
+    "intel core i5-1235u": {
+      "score": 76.4,
+      "tier": 0
+    },
+    "intel core i5-12400": {
+      "score": 161.0,
+      "tier": 1
+    },
+    "intel core i5-12400f": {
+      "score": 169.7,
+      "tier": 1
+    },
+    "intel core i5-1240p": {
+      "score": 62.2,
+      "tier": 0
+    },
+    "intel core i5-12450h": {
+      "score": 121.2,
+      "tier": 1
+    },
+    "intel core i5-12450hx": {
+      "score": 138.4,
+      "tier": 1
+    },
+    "intel core i5-1245u": {
+      "score": 102.8,
+      "tier": 1
+    },
+    "intel core i5-12490f": {
+      "score": 167.0,
+      "tier": 1
+    },
+    "intel core i5-12500h": {
+      "score": 115.6,
+      "tier": 1
+    },
+    "intel core i5-12600k": {
+      "score": 172.0,
+      "tier": 1
+    },
+    "intel core i5-12600kf": {
+      "score": 234.4,
+      "tier": 2
+    },
+    "intel core i5-14400": {
+      "score": 57.8,
+      "tier": 0
+    },
+    "intel core i5-14400f": {
+      "score": 203.0,
+      "tier": 1
+    },
+    "intel core i5-14450hx": {
+      "score": 207.3,
+      "tier": 2
+    },
+    "intel core i5-14500hx": {
+      "score": 218.6,
+      "tier": 2
+    },
+    "intel core i5-14600": {
+      "score": 299.9,
+      "tier": 2
+    },
+    "intel core i5-14600k": {
+      "score": 327.0,
+      "tier": 2
+    },
+    "intel core i5-14600kf": {
+      "score": 337.2,
+      "tier": 2
+    },
+    "intel core i5-2400 cpu @ 3.10ghz": {
+      "score": 30.7,
+      "tier": 0
+    },
+    "intel core i5-2410m cpu @ 2.30ghz": {
+      "score": 16.1,
+      "tier": 0
+    },
+    "intel core i5-2430m cpu @ 2.40ghz": {
+      "score": 14.6,
+      "tier": 0
+    },
+    "intel core i5-2500 cpu @ 3.30ghz": {
+      "score": 34.0,
+      "tier": 0
+    },
+    "intel core i5-2500k cpu @ 3.30ghz": {
+      "score": 31.1,
+      "tier": 0
+    },
+    "intel core i5-3210m cpu @ 2.50ghz": {
+      "score": 12.0,
+      "tier": 0
+    },
+    "intel core i5-3230m cpu @ 2.60ghz": {
+      "score": 15.6,
+      "tier": 0
+    },
+    "intel core i5-3320m cpu @ 2.60ghz": {
+      "score": 17.8,
+      "tier": 0
+    },
+    "intel core i5-3570k cpu @ 3.40ghz": {
+      "score": 38.6,
+      "tier": 0
+    },
+    "intel core i5-4210u cpu @ 1.70ghz": {
+      "score": 14.6,
+      "tier": 0
+    },
+    "intel core i5-4300u cpu @ 1.90ghz": {
+      "score": 19.1,
+      "tier": 0
+    },
+    "intel core i5-4310u cpu @ 2.00ghz": {
+      "score": 25.1,
+      "tier": 0
+    },
+    "intel core i5-4440 cpu @ 3.10ghz": {
+      "score": 42.5,
+      "tier": 0
+    },
+    "intel core i5-4460  cpu @ 3.20ghz": {
+      "score": 37.8,
+      "tier": 0
+    },
+    "intel core i5-4590 cpu @ 3.30ghz": {
+      "score": 39.5,
+      "tier": 0
+    },
+    "intel core i5-4690 cpu @ 3.50ghz": {
+      "score": 37.3,
+      "tier": 0
+    },
+    "intel core i5-5200u cpu @ 2.20ghz": {
+      "score": 16.0,
+      "tier": 0
+    },
+    "intel core i5-5300u cpu @ 2.30ghz": {
+      "score": 16.5,
+      "tier": 0
+    },
+    "intel core i5-5350u cpu @ 1.80ghz": {
+      "score": 27.2,
+      "tier": 0
+    },
+    "intel core i5-6300u cpu @ 2.40ghz": {
+      "score": 22.1,
+      "tier": 0
+    },
+    "intel core i5-6500 cpu @ 3.20ghz": {
+      "score": 36.7,
+      "tier": 0
+    },
+    "intel core i5-7200u cpu @ 2.50ghz": {
+      "score": 24.8,
+      "tier": 0
+    },
+    "intel core i5-7300hq cpu @ 2.50ghz": {
+      "score": 50.7,
+      "tier": 0
+    },
+    "intel core i5-7300u cpu @ 2.60ghz": {
+      "score": 20.2,
+      "tier": 0
+    },
+    "intel core i5-7400 cpu @ 3.00ghz": {
+      "score": 42.6,
+      "tier": 0
+    },
+    "intel core i5-7500 cpu @ 3.40ghz": {
+      "score": 60.3,
+      "tier": 0
+    },
+    "intel core i5-7600k cpu @ 3.80ghz": {
+      "score": 67.3,
+      "tier": 0
+    },
+    "intel core i5-8250u cpu @ 1.60ghz": {
+      "score": 38.7,
+      "tier": 0
+    },
+    "intel core i5-8265u cpu @ 1.60ghz": {
+      "score": 41.3,
+      "tier": 0
+    },
+    "intel core i5-8300h cpu @ 2.30ghz": {
+      "score": 47.0,
+      "tier": 0
+    },
+    "intel core i5-8350u cpu @ 1.70ghz": {
+      "score": 48.8,
+      "tier": 0
+    },
+    "intel core i5-8365u cpu @ 1.60ghz": {
+      "score": 44.7,
+      "tier": 0
+    },
+    "intel core i5-8400 cpu @ 2.80ghz": {
+      "score": 83.2,
+      "tier": 1
+    },
+    "intel core i5-8500 cpu @ 3.00ghz": {
+      "score": 82.3,
+      "tier": 1
+    },
+    "intel core i5-8500t cpu @ 2.10ghz": {
+      "score": 53.2,
+      "tier": 0
+    },
+    "intel core i5-8600k cpu @ 3.60ghz": {
+      "score": 97.2,
+      "tier": 1
+    },
+    "intel core i5-9300h cpu @ 2.40ghz": {
+      "score": 30.5,
+      "tier": 0
+    },
+    "intel core i5-9400 cpu @ 2.90ghz": {
+      "score": 84.5,
+      "tier": 1
+    },
+    "intel core i5-9400f cpu @ 2.90ghz": {
+      "score": 86.8,
+      "tier": 1
+    },
+    "intel core i5-9400h cpu @ 2.50ghz": {
+      "score": 68.2,
+      "tier": 0
+    },
+    "intel core i5-9600k cpu @ 3.70ghz": {
+      "score": 91.7,
+      "tier": 1
+    },
+    "intel core i5-9600kf cpu @ 3.70ghz": {
+      "score": 119.0,
+      "tier": 1
+    },
+    "intel core i7-10510u cpu @ 1.80ghz": {
+      "score": 52.5,
+      "tier": 0
+    },
+    "intel core i7-10610u cpu @ 1.80ghz": {
+      "score": 44.7,
+      "tier": 0
+    },
+    "intel core i7-1065g7 cpu @ 1.30ghz": {
+      "score": 43.4,
+      "tier": 0
+    },
+    "intel core i7-10700 cpu @ 2.90ghz": {
+      "score": 150.3,
+      "tier": 1
+    },
+    "intel core i7-10700f cpu @ 2.90ghz": {
+      "score": 185.3,
+      "tier": 1
+    },
+    "intel core i7-10700k cpu @ 3.80ghz": {
+      "score": 176.5,
+      "tier": 1
+    },
+    "intel core i7-10750h cpu @ 2.60ghz": {
+      "score": 82.3,
+      "tier": 1
+    },
+    "intel core i7-10850h cpu @ 2.70ghz": {
+      "score": 95.3,
+      "tier": 1
+    },
+    "intel core i7-10870h cpu @ 2.20ghz": {
+      "score": 160.3,
+      "tier": 1
+    },
+    "intel core i7-10875h cpu @ 2.30ghz": {
+      "score": 115.4,
+      "tier": 1
+    },
+    "intel core i7-1165g7 @ 2.80ghz": {
+      "score": 52.0,
+      "tier": 0
+    },
+    "intel core i7-11700 @ 2.50ghz": {
+      "score": 117.1,
+      "tier": 1
+    },
+    "intel core i7-11700f @ 2.50ghz": {
+      "score": 160.3,
+      "tier": 1
+    },
+    "intel core i7-11700k @ 3.60ghz": {
+      "score": 208.2,
+      "tier": 2
+    },
+    "intel core i7-11800h @ 2.30ghz": {
+      "score": 148.0,
+      "tier": 1
+    },
+    "intel core i7-1180g7 @ 1.30ghz": {
+      "score": 50.3,
+      "tier": 0
+    },
+    "intel core i7-11850h @ 2.50ghz": {
+      "score": 143.8,
+      "tier": 1
+    },
+    "intel core i7-1185g7 @ 3.00ghz": {
+      "score": 55.1,
+      "tier": 0
+    },
+    "intel core i7-1195g7 @ 2.90ghz": {
+      "score": 65.8,
+      "tier": 0
+    },
+    "intel core i7-1255u": {
+      "score": 93.2,
+      "tier": 1
+    },
+    "intel core i7-1260p": {
+      "score": 94.6,
+      "tier": 1
+    },
+    "intel core i7-12650h": {
+      "score": 183.5,
+      "tier": 1
+    },
+    "intel core i7-12650hx": {
+      "score": 169.7,
+      "tier": 1
+    },
+    "intel core i7-1265u": {
+      "score": 78.9,
+      "tier": 1
+    },
+    "intel core i7-12700": {
+      "score": 236.4,
+      "tier": 2
+    },
+    "intel core i7-12700f": {
+      "score": 290.6,
+      "tier": 2
+    },
+    "intel core i7-12700h": {
+      "score": 199.9,
+      "tier": 1
+    },
+    "intel core i7-12700k": {
+      "score": 313.0,
+      "tier": 2
+    },
+    "intel core i7-12700kf": {
+      "score": 278.4,
+      "tier": 2
+    },
+    "intel core i7-12800h": {
+      "score": 189.3,
+      "tier": 1
+    },
+    "intel core i7-12800hx": {
+      "score": 210.1,
+      "tier": 2
+    },
+    "intel core i7-12850hx": {
+      "score": 257.1,
+      "tier": 2
+    },
+    "intel core i7-14650hx": {
+      "score": 299.1,
+      "tier": 2
+    },
+    "intel core i7-14700": {
+      "score": 331.3,
+      "tier": 2
+    },
+    "intel core i7-14700f": {
+      "score": 465.8,
+      "tier": 2
+    },
+    "intel core i7-14700hx": {
+      "score": 335.8,
+      "tier": 2
+    },
+    "intel core i7-14700k": {
+      "score": 423.7,
+      "tier": 2
+    },
+    "intel core i7-14700kf": {
+      "score": 441.4,
+      "tier": 2
+    },
+    "intel core i7-2600 cpu @ 3.40ghz": {
+      "score": 48.4,
+      "tier": 0
+    },
+    "intel core i7-2600k cpu @ 3.40ghz": {
+      "score": 31.5,
+      "tier": 0
+    },
+    "intel core i7-2600s cpu @ 2.80ghz": {
+      "score": 43.6,
+      "tier": 0
+    },
+    "intel core i7-3610qm cpu @ 2.30ghz": {
+      "score": 35.6,
+      "tier": 0
+    },
+    "intel core i7-3667u cpu @ 2.00ghz": {
+      "score": 18.3,
+      "tier": 0
+    },
+    "intel core i7-3770 cpu @ 3.40ghz": {
+      "score": 44.5,
+      "tier": 0
+    },
+    "intel core i7-3940xm cpu @ 3.00ghz": {
+      "score": 56.2,
+      "tier": 0
+    },
+    "intel core i7-4700mq cpu @ 2.40ghz": {
+      "score": 54.2,
+      "tier": 0
+    },
+    "intel core i7-4720hq cpu @ 2.60ghz": {
+      "score": 53.3,
+      "tier": 0
+    },
+    "intel core i7-4750hq cpu @ 2.00ghz": {
+      "score": 52.5,
+      "tier": 0
+    },
+    "intel core i7-4770 cpu @ 3.40ghz": {
+      "score": 63.2,
+      "tier": 0
+    },
+    "intel core i7-4770k cpu @ 3.50ghz": {
+      "score": 63.2,
+      "tier": 0
+    },
+    "intel core i7-4785t cpu @ 2.20ghz": {
+      "score": 52.0,
+      "tier": 0
+    },
+    "intel core i7-4790 cpu @ 3.60ghz": {
+      "score": 66.3,
+      "tier": 0
+    },
+    "intel core i7-4790k cpu @ 4.00ghz": {
+      "score": 78.7,
+      "tier": 1
+    },
+    "intel core i7-4910mq cpu @ 2.90ghz": {
+      "score": 60.3,
+      "tier": 0
+    },
+    "intel core i7-4930k cpu @ 3.40ghz": {
+      "score": 65.6,
+      "tier": 0
+    },
+    "intel core i7-5557u cpu @ 3.10ghz": {
+      "score": 28.9,
+      "tier": 0
+    },
+    "intel core i7-5820k cpu @ 3.30ghz": {
+      "score": 96.2,
+      "tier": 1
+    },
+    "intel core i7-5930k cpu @ 3.50ghz": {
+      "score": 99.9,
+      "tier": 1
+    },
+    "intel core i7-6500u cpu @ 2.50ghz": {
+      "score": 26.8,
+      "tier": 0
+    },
+    "intel core i7-6560u cpu @ 2.20ghz": {
+      "score": 27.8,
+      "tier": 0
+    },
+    "intel core i7-6600u cpu @ 2.60ghz": {
+      "score": 26.5,
+      "tier": 0
+    },
+    "intel core i7-6700 cpu @ 3.40ghz": {
+      "score": 75.6,
+      "tier": 0
+    },
+    "intel core i7-6700k cpu @ 4.00ghz": {
+      "score": 84.2,
+      "tier": 1
+    },
+    "intel core i7-6820hq cpu @ 2.70ghz": {
+      "score": 66.0,
+      "tier": 0
+    },
+    "intel core i7-6950x cpu @ 3.00ghz": {
+      "score": 205.6,
+      "tier": 2
+    },
+    "intel core i7-7600u cpu @ 2.80ghz": {
+      "score": 18.7,
+      "tier": 0
+    },
+    "intel core i7-7700 cpu @ 3.60ghz": {
+      "score": 75.9,
+      "tier": 0
+    },
+    "intel core i7-7700hq cpu @ 2.80ghz": {
+      "score": 53.9,
+      "tier": 0
+    },
+    "intel core i7-7700k cpu @ 4.20ghz": {
+      "score": 85.9,
+      "tier": 1
+    },
+    "intel core i7-7820hq cpu @ 2.90ghz": {
+      "score": 55.2,
+      "tier": 0
+    },
+    "intel core i7-7y75 cpu @ 1.30ghz": {
+      "score": 6.3,
+      "tier": 0
+    },
+    "intel core i7-8550u cpu @ 1.80ghz": {
+      "score": 54.4,
+      "tier": 0
+    },
+    "intel core i7-8559u cpu @ 2.70ghz": {
+      "score": 78.3,
+      "tier": 1
+    },
+    "intel core i7-8565u cpu @ 1.80ghz": {
+      "score": 49.0,
+      "tier": 0
+    },
+    "intel core i7-8650u cpu @ 1.90ghz": {
+      "score": 53.2,
+      "tier": 0
+    },
+    "intel core i7-8700 cpu @ 3.20ghz": {
+      "score": 125.8,
+      "tier": 1
+    },
+    "intel core i7-8700k cpu @ 3.70ghz": {
+      "score": 137.4,
+      "tier": 1
+    },
+    "intel core i7-8750h cpu @ 2.20ghz": {
+      "score": 96.9,
+      "tier": 1
+    },
+    "intel core i7-8850h cpu @ 2.60ghz": {
+      "score": 91.4,
+      "tier": 1
+    },
+    "intel core i7-9700 cpu @ 3.00ghz": {
+      "score": 136.4,
+      "tier": 1
+    },
+    "intel core i7-9700f cpu @ 3.00ghz": {
+      "score": 120.6,
+      "tier": 1
+    },
+    "intel core i7-9700k cpu @ 3.60ghz": {
+      "score": 134.8,
+      "tier": 1
+    },
+    "intel core i7-9700kf cpu @ 3.60ghz": {
+      "score": 116.3,
+      "tier": 1
+    },
+    "intel core i7-9750h cpu @ 2.60ghz": {
+      "score": 86.1,
+      "tier": 1
+    },
+    "intel core i7 cpu         860  @ 2.80ghz": {
+      "score": 17.4,
+      "tier": 0
+    },
+    "intel core i7 cpu         870  @ 2.93ghz": {
+      "score": 36.9,
+      "tier": 0
+    },
+    "intel core i9-10850k cpu @ 3.60ghz": {
+      "score": 215.0,
+      "tier": 2
+    },
+    "intel core i9-10900k cpu @ 3.70ghz": {
+      "score": 220.4,
+      "tier": 2
+    },
+    "intel core i9-10900kf cpu @ 3.70ghz": {
+      "score": 249.1,
+      "tier": 2
+    },
+    "intel core i9-10900x cpu @ 3.70ghz": {
+      "score": 186.4,
+      "tier": 1
+    },
+    "intel core i9-10920x cpu @ 3.50ghz": {
+      "score": 281.5,
+      "tier": 2
+    },
+    "intel core i9-10980hk cpu @ 2.40ghz": {
+      "score": 165.1,
+      "tier": 1
+    },
+    "intel core i9-10980xe cpu @ 3.00ghz": {
+      "score": 331.4,
+      "tier": 2
+    },
+    "intel core i9-11900 @ 2.50ghz": {
+      "score": 169.6,
+      "tier": 1
+    },
+    "intel core i9-11900h @ 2.50ghz": {
+      "score": 114.7,
+      "tier": 1
+    },
+    "intel core i9-11900k @ 3.50ghz": {
+      "score": 188.3,
+      "tier": 1
+    },
+    "intel core i9-11900kf @ 3.50ghz": {
+      "score": 185.0,
+      "tier": 1
+    },
+    "intel core i9-11950h @ 2.60ghz": {
+      "score": 127.7,
+      "tier": 1
+    },
+    "intel core i9-11980hk @ 2.60ghz": {
+      "score": 131.2,
+      "tier": 1
+    },
+    "intel core i9-12900h": {
+      "score": 196.7,
+      "tier": 1
+    },
+    "intel core i9-12900hx": {
+      "score": 305.5,
+      "tier": 2
+    },
+    "intel core i9-12900k": {
+      "score": 375.8,
+      "tier": 2
+    },
+    "intel core i9-12900kf": {
+      "score": 315.4,
+      "tier": 2
+    },
+    "intel core i9-12900ks": {
+      "score": 379.4,
+      "tier": 2
+    },
+    "intel core i9-14900": {
+      "score": 353.4,
+      "tier": 2
+    },
+    "intel core i9-14900f": {
+      "score": 352.9,
+      "tier": 2
+    },
+    "intel core i9-14900hx": {
+      "score": 358.5,
+      "tier": 2
+    },
+    "intel core i9-14900k": {
+      "score": 539.6,
+      "tier": 3
+    },
+    "intel core i9-14900kf": {
+      "score": 546.7,
+      "tier": 3
+    },
+    "intel core i9-14900ks": {
+      "score": 555.9,
+      "tier": 3
+    },
+    "intel core i9-7900x cpu @ 3.30ghz": {
+      "score": 183.5,
+      "tier": 1
+    },
+    "intel core i9-7920x cpu @ 2.90ghz": {
+      "score": 233.7,
+      "tier": 2
+    },
+    "intel core i9-9820x cpu @ 3.30ghz": {
+      "score": 187.4,
+      "tier": 1
+    },
+    "intel core i9-9880h cpu @ 2.30ghz": {
+      "score": 77.7,
+      "tier": 0
+    },
+    "intel core i9-9900k cpu @ 3.60ghz": {
+      "score": 181.1,
+      "tier": 1
+    },
+    "intel core i9-9900kf cpu @ 3.60ghz": {
+      "score": 195.4,
+      "tier": 1
+    },
+    "intel core i9-9900ks cpu @ 4.00ghz": {
+      "score": 184.6,
+      "tier": 1
+    },
+    "intel core i9-9900t cpu @ 2.10ghz": {
+      "score": 125.3,
+      "tier": 1
+    },
+    "intel core ultra 5 115u": {
+      "score": 54.5,
+      "tier": 0
+    },
+    "intel core ultra 5 125h": {
+      "score": 154.0,
+      "tier": 1
+    },
+    "intel core ultra 5 125u": {
+      "score": 96.3,
+      "tier": 1
+    },
+    "intel core ultra 5 134u": {
+      "score": 44.8,
+      "tier": 0
+    },
+    "intel core ultra 5 225f": {
+      "score": 242.7,
+      "tier": 2
+    },
+    "intel core ultra 5 225h": {
+      "score": 198.1,
+      "tier": 1
+    },
+    "intel core ultra 5 225u": {
+      "score": 101.8,
+      "tier": 1
+    },
+    "intel core ultra 5 228v": {
+      "score": 75.6,
+      "tier": 0
+    },
+    "intel core ultra 5 235": {
+      "score": 326.5,
+      "tier": 2
+    },
+    "intel core ultra 5 235u": {
+      "score": 115.3,
+      "tier": 1
+    },
+    "intel core ultra 5 238v": {
+      "score": 84.8,
+      "tier": 1
+    },
+    "intel core ultra 5 245k": {
+      "score": 355.0,
+      "tier": 2
+    },
+    "intel core ultra 5 250kf plus": {
+      "score": 479.5,
+      "tier": 2
+    },
+    "intel core ultra 5 250k plus": {
+      "score": 470.6,
+      "tier": 2
+    },
+    "intel core ultra 5 322": {
+      "score": 57.5,
+      "tier": 0
+    },
+    "intel core ultra 5 325": {
+      "score": 141.8,
+      "tier": 1
+    },
+    "intel core ultra 5 338h": {
+      "score": 203.2,
+      "tier": 1
+    },
+    "intel core ultra 7 155h": {
+      "score": 178.7,
+      "tier": 1
+    },
+    "intel core ultra 7 255h": {
+      "score": 175.1,
+      "tier": 1
+    },
+    "intel core ultra 7 255hx": {
+      "score": 389.0,
+      "tier": 2
+    },
+    "intel core ultra 7 255u": {
+      "score": 70.9,
+      "tier": 0
+    },
+    "intel core ultra 7 256v": {
+      "score": 99.7,
+      "tier": 1
+    },
+    "intel core ultra 7 258v": {
+      "score": 123.1,
+      "tier": 1
+    },
+    "intel core ultra 7 265": {
+      "score": 356.0,
+      "tier": 2
+    },
+    "intel core ultra 7 265f": {
+      "score": 379.9,
+      "tier": 2
+    },
+    "intel core ultra 7 265h": {
+      "score": 211.9,
+      "tier": 2
+    },
+    "intel core ultra 7 265k": {
+      "score": 513.2,
+      "tier": 3
+    },
+    "intel core ultra 7 265kf": {
+      "score": 507.5,
+      "tier": 3
+    },
+    "intel core ultra 7 266v": {
+      "score": 132.0,
+      "tier": 1
+    },
+    "intel core ultra 7 268v": {
+      "score": 137.0,
+      "tier": 1
+    },
+    "intel core ultra 7 270k plus": {
+      "score": 633.6,
+      "tier": 3
+    },
+    "intel core ultra 7 355": {
+      "score": 138.8,
+      "tier": 1
+    },
+    "intel core ultra 7 356h": {
+      "score": 284.3,
+      "tier": 2
+    },
+    "intel core ultra 7 365": {
+      "score": 127.4,
+      "tier": 1
+    },
+    "intel core ultra 7 366h": {
+      "score": 198.6,
+      "tier": 1
+    },
+    "intel core ultra 9 185h": {
+      "score": 178.6,
+      "tier": 1
+    },
+    "intel core ultra 9 275hx": {
+      "score": 501.5,
+      "tier": 3
+    },
+    "intel core ultra 9 285": {
+      "score": 582.4,
+      "tier": 3
+    },
+    "intel core ultra 9 285h": {
+      "score": 270.1,
+      "tier": 2
+    },
+    "intel core ultra 9 285hx": {
+      "score": 493.4,
+      "tier": 3
+    },
+    "intel core ultra 9 285k": {
+      "score": 610.5,
+      "tier": 3
+    },
+    "intel core ultra 9 290hx plus": {
+      "score": 542.5,
+      "tier": 3
+    },
+    "intel core ultra 9 386h": {
+      "score": 298.1,
+      "tier": 2
+    },
+    "intel core ultra x7 358h": {
+      "score": 261.7,
+      "tier": 2
+    },
+    "intel core ultra x9 388h": {
+      "score": 307.2,
+      "tier": 2
+    },
+    "intel n100": {
+      "score": 35.7,
+      "tier": 0
+    },
+    "intel n97": {
+      "score": 34.9,
+      "tier": 0
+    },
+    "intel pentium cpu g3250 @ 3.20ghz": {
+      "score": 17.9,
+      "tier": 0
+    },
+    "intel pentium cpu g3260 @ 3.30ghz": {
+      "score": 18.8,
+      "tier": 0
+    },
+    "intel pentium cpu g4400t @ 2.90ghz": {
+      "score": 6.2,
+      "tier": 0
+    },
+    "intel pentium cpu g4500 @ 3.50ghz": {
+      "score": 21.4,
+      "tier": 0
+    },
+    "intel pentium gold 8505": {
+      "score": 28.9,
+      "tier": 0
+    },
+    "intel pentium gold g6605 cpu @ 4.30ghz": {
+      "score": 39.0,
+      "tier": 0
+    },
+    "intel pentium silver j5005 cpu @ 1.50ghz": {
+      "score": 19.3,
+      "tier": 0
+    },
+    "intel xeon 6507p": {
+      "score": 289.5,
+      "tier": 2
+    },
+    "intel xeon 6521p": {
+      "score": 800.4,
+      "tier": 3
+    },
+    "intel xeon 6731p": {
+      "score": 956.7,
+      "tier": 3
+    },
+    "intel xeon cpu d-1518 @ 2.20ghz": {
+      "score": 38.6,
+      "tier": 0
+    },
+    "intel xeon cpu e3-1220 v2 @ 3.10ghz": {
+      "score": 11.9,
+      "tier": 0
+    },
+    "intel xeon cpu e3-1230 v2 @ 3.30ghz": {
+      "score": 46.9,
+      "tier": 0
+    },
+    "intel xeon cpu e3-1230 v3 @ 3.30ghz": {
+      "score": 43.2,
+      "tier": 0
+    },
+    "intel xeon cpu e3-1231 v3 @ 3.40ghz": {
+      "score": 59.7,
+      "tier": 0
+    },
+    "intel xeon cpu e3-1240 v5 @ 3.50ghz": {
+      "score": 65.6,
+      "tier": 0
+    },
+    "intel xeon cpu e3-1245 v2 @ 3.40ghz": {
+      "score": 50.8,
+      "tier": 0
+    },
+    "intel xeon cpu e3-1276 v3 @ 3.60ghz": {
+      "score": 72.6,
+      "tier": 0
+    },
+    "intel xeon cpu e3-1505m v6 @ 3.00ghz": {
+      "score": 63.4,
+      "tier": 0
+    },
+    "intel xeon cpu e5-1650 v4 @ 3.60ghz": {
+      "score": 93.1,
+      "tier": 1
+    },
+    "intel xeon cpu e5-1660 v4 @ 3.20ghz": {
+      "score": 134.5,
+      "tier": 1
+    },
+    "intel xeon cpu e5-2630 v3 @ 2.40ghz": {
+      "score": 101.9,
+      "tier": 1
+    },
+    "intel xeon cpu e5-2660 v3 @ 2.60ghz": {
+      "score": 147.9,
+      "tier": 1
+    },
+    "intel xeon cpu e5-2667 v4 @ 3.20ghz": {
+      "score": 141.0,
+      "tier": 1
+    },
+    "intel xeon cpu e5-2673 v4 @ 2.30ghz": {
+      "score": 274.0,
+      "tier": 2
+    },
+    "intel xeon cpu e5-2678 v3 @ 2.50ghz": {
+      "score": 156.5,
+      "tier": 1
+    },
+    "intel xeon cpu e5-2680 v3 @ 2.50ghz": {
+      "score": 168.7,
+      "tier": 1
+    },
+    "intel xeon cpu e5-2680 v4 @ 2.40ghz": {
+      "score": 200.7,
+      "tier": 1
+    },
+    "intel xeon cpu e5-2686 v4 @ 2.30ghz": {
+      "score": 273.3,
+      "tier": 2
+    },
+    "intel xeon cpu e5-2687w v4 @ 3.00ghz": {
+      "score": 192.3,
+      "tier": 1
+    },
+    "intel xeon cpu e5-2696 v3 @ 2.30ghz": {
+      "score": 264.1,
+      "tier": 2
+    },
+    "intel xeon cpu e5-2697a v4 @ 2.60ghz": {
+      "score": 261.2,
+      "tier": 2
+    },
+    "intel xeon cpu e5-2697 v2 @ 2.70ghz": {
+      "score": 116.9,
+      "tier": 1
+    },
+    "intel xeon cpu e5-2697 v4 @ 2.30ghz": {
+      "score": 258.5,
+      "tier": 2
+    },
+    "intel xeon cpu           w3565  @ 3.20ghz": {
+      "score": 40.3,
+      "tier": 0
+    },
+    "intel xeon cpu           w3680  @ 3.33ghz": {
+      "score": 62.9,
+      "tier": 0
+    },
+    "intel xeon e-2186m  cpu @ 2.90ghz": {
+      "score": 70.6,
+      "tier": 0
+    },
+    "intel xeon e-2246g cpu @ 3.60ghz": {
+      "score": 134.8,
+      "tier": 1
+    },
+    "intel xeon e-2276m  cpu @ 2.80ghz": {
+      "score": 113.4,
+      "tier": 1
+    },
+    "intel xeon e e-2414": {
+      "score": 92.1,
+      "tier": 1
+    },
+    "intel xeon e e-2434": {
+      "score": 127.3,
+      "tier": 1
+    },
+    "intel xeon gold 6254 cpu @ 3.10ghz": {
+      "score": 304.7,
+      "tier": 2
+    },
+    "intel xeon platinum 8160 cpu @ 2.10ghz": {
+      "score": 334.1,
+      "tier": 2
+    },
+    "intel xeon platinum 8259cl cpu @ 2.50ghz": {
+      "score": 13.9,
+      "tier": 0
+    },
+    "intel xeon platinum 8375c cpu @ 2.90ghz": {
+      "score": 837.0,
+      "tier": 3
+    },
+    "intel xeon platinum 8473c": {
+      "score": 1039.6,
+      "tier": 3
+    },
+    "intel xeon silver 4410y": {
+      "score": 265.7,
+      "tier": 2
+    },
+    "intel xeon w-10855m cpu @ 2.80ghz": {
+      "score": 110.3,
+      "tier": 1
+    },
+    "intel xeon w-10885m cpu @ 2.40ghz": {
+      "score": 154.9,
+      "tier": 1
+    },
+    "intel xeon w-11955m cpu @ 2.60ghz": {
+      "score": 141.2,
+      "tier": 1
+    },
+    "intel xeon w-2104 cpu @ 3.20ghz": {
+      "score": 32.4,
+      "tier": 0
+    },
+    "intel xeon w-2135 cpu @ 3.70ghz": {
+      "score": 118.0,
+      "tier": 1
+    },
+    "intel xeon w-2155 cpu @ 3.30ghz": {
+      "score": 151.1,
+      "tier": 1
+    },
+    "intel xeon w-2223 cpu @ 3.60ghz": {
+      "score": 44.8,
+      "tier": 0
+    },
+    "intel xeon w-2225 cpu @ 4.10ghz": {
+      "score": 73.7,
+      "tier": 0
+    },
+    "intel xeon w-3235 cpu @ 3.30ghz": {
+      "score": 240.0,
+      "tier": 2
+    },
+    "intel xeon w-3245 cpu @ 3.20ghz": {
+      "score": 290.7,
+      "tier": 2
+    },
+    "intel xeon w-3275m cpu @ 2.50ghz": {
+      "score": 455.4,
+      "tier": 2
+    },
+    "intel xeon w5-3423": {
+      "score": 272.3,
+      "tier": 2
+    },
+    "intel xeon w5-3435x": {
+      "score": 424.7,
+      "tier": 2
+    },
+    "intel xeon w7-2475x": {
+      "score": 670.4,
+      "tier": 3
+    },
+    "intel xeon w7-3445": {
+      "score": 553.2,
+      "tier": 3
+    },
+    "intel xeon w7-3455": {
+      "score": 527.7,
+      "tier": 3
+    },
+    "intel xeon w7-3465x": {
+      "score": 633.5,
+      "tier": 3
+    },
+    "intel xeon w9-3575x": {
+      "score": 861.9,
+      "tier": 3
+    },
+    "snapdragon compute platform": {
+      "score": 101.6,
+      "tier": 1
+    },
+    "snapdragon x 10-core x1p64100 @ 3.40 ghz": {
+      "score": 215.6,
+      "tier": 2
+    },
+    "snapdragon x 12-core x1e80100 @ 3.40 ghz": {
+      "score": 164.4,
+      "tier": 1
+    },
+    "snapdragon x2 elite extreme - x2e94100 - qualcomm oryon cpu": {
+      "score": 442.9,
+      "tier": 2
+    },
+    "snapdragon x2 elite - x2e88100 - qualcomm oryon cpu": {
+      "score": 325.7,
+      "tier": 2
+    },
+    "snapdragon x2 elite - x2e90100 - qualcomm oryon cpu": {
+      "score": 320.4,
+      "tier": 2
+    },
+    "snapdragon x2 plus - x2p42100 - qualcomm oryon cpu": {
+      "score": 172.0,
+      "tier": 1
+    },
+    "snapdragon x plus - x1p42100 - qualcomm oryon cpu": {
+      "score": 182.4,
+      "tier": 1
+    },
+    "snapdragon x - x126100 - qualcomm oryon cpu": {
+      "score": 168.6,
+      "tier": 1
+    }
+  }
+}

@@ -118,3 +118,21 @@ class TestKeyPointsDoNotClaimWhatWasNeverMeasured:
 
     def test_a_known_old_age_is_not(self):
         assert "Still within its expected prime years" not in self._points(age=9)["strengths"]
+
+    # Deep scan: battery and age are scored inside the measured trust score, so
+    # blend_score adds no adjustment for them. The reading must still decide.
+    def _deep_points(self, battery, age):
+        from afterlife.assessment import blend_score, estimate_years, key_points
+        blend = blend_score(75, None, battery, age, False, trust_measured=True)
+        years = estimate_years(blend["combined_score"], age, battery)
+        return key_points(blend, years, None, battery_health=battery, age_years=age)
+
+    def test_deep_scan_worn_battery_is_a_weakness_not_good_health(self):
+        pts = self._deep_points(55.0, 3)
+        assert "Battery in good health" not in pts["strengths"]
+        assert "battery wear: 55%" in pts["weaknesses"]
+
+    def test_deep_scan_old_age_is_a_weakness_not_prime_years(self):
+        pts = self._deep_points(90.0, 6.5)
+        assert "Still within its expected prime years" not in pts["strengths"]
+        assert "age: 6 yr" in pts["weaknesses"] or "age: 7 yr" in pts["weaknesses"]

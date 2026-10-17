@@ -106,3 +106,31 @@ describe("the recognised fault travels with the request (S2-11)", () => {
     expect(sent().fault_detail).toBeNull();
   });
 });
+
+describe("the usage answer is sent and used (S2-07)", () => {
+  it("instant scan: sends the owner's answer, the browser's specs and the fault text", async () => {
+    await fetchAssessment({ ...SCANNED, cpu_cores: 8, ram_gb: 8, gpu: "Intel UHD" },
+      { persona: "gamer", problem: "battery drains fast", device_age: 4 });
+    const b = sent();
+    expect(b.persona).toBe("gamer");
+    expect([b.cores, b.ram_gb, b.gpu]).toEqual([8, 8, "Intel UHD"]);
+    expect(b.problem).toBe("battery drains fast");
+    expect(b).not.toHaveProperty("persona_signals");
+  });
+
+  it("deep scan: sends the detected tool categories, never a self-reported answer", async () => {
+    const payload = { trust_score: 70, cpu_cores: 4, ram_gb: 15.8, os_support: "unsupported",
+      sub_scores: [{ name: "Storage health", points: 5, note: "the drive is reporting a critical warning" }] };
+    await fetchAssessment(payload, null, { persona_signals: { coder_matches: ["Visual Studio Code"] } });
+    const b = sent();
+    expect(b.persona_signals).toEqual({ coder_matches: ["Visual Studio Code"] });
+    expect(b).not.toHaveProperty("persona");
+    expect(b.storage_problem).toBe(true);
+    expect(b.os_supported).toBe(false);
+  });
+
+  it("deep scan: a drive that simply wasn't read is not a drive problem", async () => {
+    await fetchAssessment({ trust_score: 70, sub_scores: [{ name: "Storage health", points: 12, note: "not read" }] }, null, {});
+    expect(sent().storage_problem).toBe(false);
+  });
+});

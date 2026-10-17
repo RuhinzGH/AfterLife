@@ -361,6 +361,12 @@ def _storage(device: dict[str, Any]) -> tuple[int, str]:
     return 12, "not read"
 
 
+def battery_points(health_pct: float) -> int:
+    """The deep trust score's battery share (out of 20). Shared with uplift.py,
+    so "replace the battery" is re-scored by the same rule that scored it."""
+    return 20 if health_pct >= 80 else 13 if health_pct >= 60 else 7
+
+
 def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]], Any, str]:
     """Measured hardware trust (0-100) as five sub-scores, each shown."""
     from .win11 import assess as win11_assess
@@ -386,8 +392,7 @@ def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]],
     if isinstance(bh, (int, float)):
         # 80% is a real industry bar: Amazon Renewed sells only devices whose
         # battery holds at least 80% of its original capacity.
-        subs.append(_sub("Battery health", 20 if bh >= 80 else 13 if bh >= 60 else 7,
-                         f"{bh:.0f}% of design capacity"))
+        subs.append(_sub("Battery health", battery_points(bh), f"{bh:.0f}% of design capacity"))
     elif device.get("battery_present") is False:
         subs.append(_sub("Battery health", 20, "no battery (desktop)"))
     else:

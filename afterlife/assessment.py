@@ -113,10 +113,21 @@ def key_points(blend: dict[str, Any], pipeline: dict[str, Any],
     # also what an instant scan produces, where the browser cannot read the
     # battery at all. Reading silence as health put "Battery in good health"
     # beside a passport field saying battery wear was not exposed.
-    if battery_health is not None and "battery wear" not in adj_factors:
-        strengths.append("Battery in good health")
-    if age_years is not None and "age" not in adj_factors:
-        strengths.append("Still within its expected prime years")
+    #
+    # The reading itself decides, at blend_score's own bars (80% battery, 6
+    # years), not the absence of an adjustment: on a deep scan battery and age
+    # are scored inside the measured trust score, so blend_score never adds
+    # those adjustments, and a 55% battery read as "in good health".
+    if battery_health is not None:
+        if battery_health >= 80:
+            strengths.append("Battery in good health")
+        elif "battery wear" not in adj_factors:
+            weaknesses.append(f"battery wear: {battery_health:.0f}%")
+    if age_years is not None:
+        if age_years <= 6:
+            strengths.append("Still within its expected prime years")
+        elif "age" not in adj_factors:
+            weaknesses.append(f"age: {age_years:.0f} yr")
     if "reported fault" not in adj_factors:
         strengths.append("No reported hardware faults")
 

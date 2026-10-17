@@ -56,6 +56,7 @@ export const api = {
       body: JSON.stringify({ passport, scan_type: scanType, assessment }),
     }),
   assess: (body) => postJson("/assess", body),
+  priceEstimate: (body) => postJson("/price-estimate", body),
   // Redesign endpoints: read-only and computed server-side.
   esu: () => req("/esu"),
   gridCountries: () => req("/grid-countries"),

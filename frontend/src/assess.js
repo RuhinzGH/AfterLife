@@ -35,6 +35,16 @@ export async function fetchAssessment(payload, extra, doc) {
       product_category: payload.product_category || null,
       timezone: timezone(),
       country: extra?.country || null,
+      // Usage fit: the collector's installed-tool categories (auto-detected),
+      // which ride beside the passport, never inside it.
+      persona_signals: doc?.persona_signals ?? null,
+      cores: payload.cpu_cores ?? null,
+      ram_gb: payload.ram_gb ?? null,
+      gpu: payload.gpu || null,
+      // Repair records for what the scan measured: a drive that reported a
+      // warning or heavy wear, and an operating system out of support.
+      storage_problem: storageProblem(payload.sub_scores),
+      os_supported: payload.os_support === "unsupported" ? false : payload.os_support === "supported" ? true : null,
     });
   }
   return api.assess({
@@ -56,7 +66,22 @@ export async function fetchAssessment(payload, extra, doc) {
     timezone: timezone(),
     // The user's explicit correction, if they have made one. Always wins.
     country: extra?.country || null,
+    // Usage fit: the owner's own answer (self-reported) and what the browser
+    // could read. Browser memory is capped at 8 GB; the server says so.
+    persona: extra?.persona || null,
+    cores: payload.cpu_cores ?? null,
+    ram_gb: payload.ram_gb ?? null,
+    gpu: payload.gpu || null,
+    // The fault text, only to look up repair records for the same fault.
+    problem: extra?.problem || null,
   });
+}
+
+// The drive's share of the deep trust score is cut when it reports a warning
+// or heavy wear (afterlife/passport.py); "not read" is not a problem.
+function storageProblem(subs) {
+  const s = (subs || []).find((x) => x.name === "Storage health");
+  return !!s && s.points < 20 && !/not read/i.test(s.note || "");
 }
 
 /** Best-effort IANA zone, e.g. "Asia/Kolkata". Null on anything that refuses. */

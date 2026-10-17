@@ -241,7 +241,7 @@ export default function DeepScan({ onBack }) {
           <ReliabilitySignals hardware={passport.hardware} />
           {assessment ? (
             <>
-              <AssessmentDashboard data={assessment} payload={passport?.payload} />
+              <AssessmentDashboard data={assessment} payload={passport?.payload} wipe={passport?.wipe} />
             </>
           ) : (
             <div className="center"><span className="spinner" /> crunching real numbers, not vibes…</div>

@@ -1,0 +1,12 @@
+{
+  "source": "Steam store appdetails API (recommended PC requirements), titles from SteamSpy top-100 lists",
+  "titles": 99,
+  "ram_gb_per_year": 0.68,
+  "ram_titles": 77,
+  "ram_years": [
+    2006,
+    2026
+  ],
+  "gpu_tier_years": 11.8,
+  "gpu_titles": 73
+}

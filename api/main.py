@@ -366,6 +366,20 @@ class AssessIn(BaseModel):
     # clock. `country` is the user's explicit correction and always wins.
     timezone: str | None = None
     country: str | None = None
+    # What the device is used for. Instant scan: the user's answer ("persona",
+    # self-reported). Deep scan: the collector's installed-tool categories
+    # ("persona_signals", auto-detected). Both feed the usage-fit card, the
+    # memory upgrade on the repair outlook, and the key points.
+    persona: str | None = None
+    persona_signals: dict | None = None
+    cores: int | None = None
+    ram_gb: float | None = None
+    gpu: str | None = None
+    # The fault text typed into "anything wrong?", read only to look up repair
+    # records for the same fault (the score uses the recognised theme above).
+    problem: str | None = None
+    storage_problem: bool = False   # deep scan: the drive reported a warning or heavy wear
+    os_supported: bool | None = None
 
 
 def _support_cliff(product: str | None) -> dict | None:
@@ -476,9 +490,59 @@ def assess(body: AssessIn) -> dict:
     except Exception:  # noqa: BLE001
         carbon_tradeoff = None
 
+    # What it is used for, and whether it is up to that work (S2-07).
+    from afterlife.persona import assess_fit, classify_signals
+    usage_fit = None
+    try:
+        if body.persona_signals is not None:
+            detected = classify_signals(body.persona_signals)
+            usage_fit = assess_fit(body.cores, body.ram_gb, body.gpu, detected["persona"],
+                                   "auto-detected", detected["reasons"])
+        elif body.persona:
+            usage_fit = assess_fit(body.cores, body.ram_gb, body.gpu, body.persona, "self-reported")
+    except Exception:  # noqa: BLE001 -- an add-on card must never sink an assessment
+        usage_fit = None
+    if usage_fit:
+        use = usage_fit["label"].lower()
+        if usage_fit["current_tier"]:
+            points["strengths"].append(f"Up to {usage_fit['current_tier']} ({use})")
+        else:
+            points["weaknesses"].append(f"Short of the lightest {use} tier checked")
+
+    # What fixing it would buy, and how often a repair like it succeeds (S2-05).
+    from afterlife.repair_evidence import evidence_block
+    from afterlife.uplift import capability_uplift, condition_uplift
+    condition = condition_uplift(
+        body.hardware_trust, eol_risk, body.battery_health, body.age_years,
+        body.fault_described, fault_detail=body.fault_detail,
+        trust_measured=body.trust_measured, storage=body.storage, eol_source=eol_source)
+    capability = None
+    if usage_fit:
+        from afterlife.persona import BROWSER_RAM_CAP
+        capability = capability_uplift(
+            usage_fit["persona"], body.cores, body.ram_gb, body.gpu,
+            ram_is_lower_bound=usage_fit["source"] == "self-reported"
+            and (body.ram_gb or 0) >= BROWSER_RAM_CAP)
+    repair_evidence = evidence_block(
+        battery_health=body.battery_health,
+        storage_health="FAILING" if body.storage_problem else None,
+        os_supported=body.os_supported,
+        problem=body.problem)
+
+    # What the law entitles the owner to (S2-06), for the country resolved above.
+    from afterlife.repair_rights import assess as repair_rights_for
+    repair_rights = repair_rights_for(
+        body.product_category, in_eea=geo.in_eea if geo.country else None,
+        country=geo.country or None, country_name=geo.country_name if geo.country else None)
+
     return {"blend": blend, "pipeline": years, "narrative": narrative, "key_points": points,
             "pathways": pathways, "pathways_narrative": pathways_narrative, "win11": body.win11,
             "carbon_tradeoff": carbon_tradeoff,
+            "usage_fit": usage_fit,
+            "uplift": ({"condition": condition, "capability": capability}
+                       if condition or capability else None),
+            "repair_evidence": repair_evidence,
+            "repair_rights": repair_rights,
             # The date security updates stop, the months left, and the sentence
             # that turns a static verdict into one with a review date on it.
             # Null when no end date has been published for this device or OS.
@@ -499,6 +563,27 @@ def assess(body: AssessIn) -> dict:
             # interface can show it -- a wrong country gives a wrong carbon
             # figure, so this must never be silent.
             "geo": geo.as_dict()}
+
+
+class PriceIn(BaseModel):
+    price_new: float
+    product_category: str | None = None
+    age_years: float | None = None
+    grade: str = "C - serviceable"
+    cosmetic: str | None = None
+    currency: str = "USD"
+
+
+@app.post("/api/price-estimate")
+def price_estimate(body: PriceIn) -> dict:
+    """Resale range from the formula in afterlife/pricing.py. The grade is the
+    one the assessment awarded; the price new and the cosmetic condition are the
+    owner's own answers."""
+    from afterlife.pricing import estimate_resale
+    if body.price_new <= 0 or body.price_new > 10_000_000:
+        raise HTTPException(400, "price_new must be a positive amount")
+    return estimate_resale(body.price_new, body.product_category, body.age_years,
+                           body.grade, body.cosmetic, body.currency[:3].upper())
 
 
 @app.post("/api/scan-passport")

@@ -172,6 +172,13 @@ def fault_themes(text: str | None) -> list[str]:
     machine. This is what decides the reported-fault adjustment on the score;
     the model separately reads the words whatever they are.
     """
+    return [THEMES[k]["label"] for k in fault_theme_keys(text)]
+
+
+def fault_theme_keys(text: str | None) -> list[str]:
+    """The same reading as fault_themes(), as theme keys ("battery", "screen").
+    Used by repair_evidence.py, so the fault that costs points on the score and
+    the fault whose repair record is shown are always the same fault."""
     if not text or not text.strip():
         return []
-    return [THEMES[k]["label"] for k, pat in _USER_PATTERNS.items() if pat and pat.search(text)]
+    return [k for k, pat in _USER_PATTERNS.items() if pat and pat.search(text)]

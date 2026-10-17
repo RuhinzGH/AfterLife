@@ -15,6 +15,11 @@ import { useAuth } from "./AuthContext.jsx";
 const STAGE = { idle: 0, consent: 1, scanning: 2, complete: 3, done: 4 };
 
 const CATEGORIES = ["Laptop", "Desktop computer", "Tablet", "Mobile", "Games console"];
+// The usage question. A browser cannot see installed software, so on the
+// instant scan the owner says what the device is for; the answer drives the
+// usage-fit card and the memory upgrade on the repair outlook.
+const USES = [["general", "General use (web, office, video calls)"], ["gamer", "Gaming"],
+              ["coder", "Coding"], ["editor", "Video or photo editing"]];
 
 export default function Scanner({ onNavigate, freshScan = 0 }) {
   const [stage, setStage] = useState(STAGE.idle);
@@ -34,7 +39,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
   // tablet, laptop/desktop) instead of always "Laptop" -- someone scanning from
   // their phone who forgets to change the dropdown would otherwise have that
   // scan mis-filed under laptop/desktop history.
-  const [extra, setExtra] = useState({ product_category: defaultProductCategory(), device_age: 4, problem: "" });
+  const [extra, setExtra] = useState({ product_category: defaultProductCategory(), device_age: 4, problem: "", persona: "general" });
   const [minting, setMinting] = useState(false);
   const [assessment, setAssessment] = useState(null);
   const timers = useRef([]);
@@ -288,7 +293,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
           <div className="card pad-lg">
             <h2 style={{ fontWeight: 400 }}>Complete the picture</h2>
             <p className="note" style={{ marginBottom: "1rem" }}>
-              A browser can't see age or faults. Add them and the ML model runs its lifecycle outlook.
+              A browser can't see age, faults or what you use it for. Add them and the ML model runs its lifecycle outlook.
             </p>
             <div className="form">
               <div className="row2">
@@ -304,6 +309,12 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
                   <input type="number" min="0" max="30" value={extra.device_age}
                     onChange={(e) => setExtra({ ...extra, device_age: e.target.value })} />
                 </div>
+              </div>
+              <div className="field">
+                <label>What do you mainly use it for?</label>
+                <select value={extra.persona} onChange={(e) => setExtra({ ...extra, persona: e.target.value })}>
+                  {USES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                </select>
               </div>
               <div className="field">
                 <label>Anything wrong? (optional — sharpens the outlook)</label>

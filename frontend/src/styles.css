@@ -4942,3 +4942,15 @@ body::after {
 }
 
 .monitor-cap { margin-top: 10px; max-width: 68ch; line-height: 1.5; }
+
+/* Usage fit: the ladder of workload tiers for the device's use (S2-07). */
+.fit-ladder { display: grid; gap: 0.35rem; margin-top: 0.7rem; }
+.fit-tier { display: grid; grid-template-columns: 1.2rem 1fr auto; gap: 0.5rem; align-items: baseline;
+  padding: 0.45rem 0.7rem; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); }
+.fit-tier.met { color: var(--ink); border-color: color-mix(in srgb, var(--green) 45%, var(--line)); }
+.fit-tier.met .fit-mark { color: var(--green); }
+.fit-need { font-size: 0.85em; color: var(--muted); text-align: right; }
+@media (max-width: 560px) {
+  .fit-tier { grid-template-columns: 1.2rem 1fr; }
+  .fit-need { grid-column: 2; text-align: left; }
+}
