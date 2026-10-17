@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { reloadIfStale } from "./staleBuild.js";
 
 // Without this, an uncaught render error ANYWHERE in the tree unmounts the
 // entire app -- sidebar, nav, everything -- leaving a blank page with no way
@@ -16,6 +17,8 @@ export default class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
+    // An old tab after a new deploy: load the current version instead of showing an error.
+    if (reloadIfStale(error)) return;
     console.error("Render error caught by ErrorBoundary:", error, info);
   }
 
