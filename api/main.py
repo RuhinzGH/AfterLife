@@ -343,7 +343,9 @@ def verify(body: VerifyIn) -> dict:
 
 
 class AssessIn(BaseModel):
-    hardware_trust: int = 75
+    # An instant scan sends no hardware score and starts from the documented
+    # default (assessment.BROWSER_START_TRUST); a deep scan sends its measured one.
+    hardware_trust: int = Field(default_factory=lambda: _browser_start_trust())
     eol_risk: float | None = None
     battery_health: float | None = None
     age_years: float | None = None
@@ -380,6 +382,11 @@ class AssessIn(BaseModel):
     problem: str | None = None
     storage_problem: bool = False   # deep scan: the drive reported a warning or heavy wear
     os_supported: bool | None = None
+
+
+def _browser_start_trust() -> int:
+    from afterlife.assessment import BROWSER_START_TRUST
+    return BROWSER_START_TRUST
 
 
 def _support_cliff(product: str | None) -> dict | None:
@@ -448,7 +455,7 @@ def assess(body: AssessIn) -> dict:
     context = {**blend, **years,
                "make_model": body.make_model, "cpu": body.cpu, "os": body.os,
                "win11": body.win11, "battery_health": body.battery_health,
-               "age_years": body.age_years}
+               "age_years": body.age_years, "measured": body.trust_measured}
     points = key_points(blend, years, body.win11,
                         battery_health=body.battery_health, age_years=body.age_years)
     pathways = compute_pathways(
@@ -480,12 +487,21 @@ def assess(body: AssessIn) -> dict:
 
         declared = carbon_lookup(body.manufacturer, body.make_model,
                                  device_class=body.product_category)
-        carbon_tradeoff = grid.break_even(
+        from afterlife.cpu_power import rated_power
+        from afterlife.persona import classify_signals as _classify
+        # The usage answer picks the highlighted scenario (light / typical /
+        # heavy), and a deep scan's processor name sets the old machine's
+        # rated power instead of the 45 W default (S2-13).
+        use = (_classify(body.persona_signals)["persona"] if body.persona_signals is not None
+               else body.persona)
+        carbon_tradeoff = grid.payback_range(
             geo.country,
             # A matched model carries its own declared figure; a class estimate
             # carries the median of its class. Either is a measured value.
             embodied_kg=(declared or {}).get("gwp_total_kg") or (declared or {}).get("median_kg"),
             embodied_basis=(declared or {}).get("basis"),
+            cpu=rated_power(body.cpu, body.product_category) if body.trust_measured else None,
+            use=use,
         )
     except Exception:  # noqa: BLE001
         carbon_tradeoff = None
@@ -563,6 +579,37 @@ def assess(body: AssessIn) -> dict:
             # interface can show it -- a wrong country gives a wrong carbon
             # figure, so this must never be silent.
             "geo": geo.as_dict()}
+
+
+@app.get("/api/assumptions")
+def assumptions() -> dict:
+    """Every number AfterLife assumes, its kind (learned / looked up / chosen),
+    the reason for its value, its limit and its source (S2-12). Values are read
+    from the code when asked, never typed into the page."""
+    from afterlife.assumptions import table
+    return table()
+
+
+class ExplainIn(BaseModel):
+    assessment: dict
+    tier: str | None = None
+
+
+@app.post("/api/explain")
+def explain_assessment(body: ExplainIn, request: Request) -> dict:
+    """The plain-language explanation (S2-08). A language model words the
+    already-computed result; afterlife/explain.py rejects any reply containing a
+    number that is not on the page, and falls back to the rule-based summary.
+    Rate-limited per visitor, because the model's free tier has a daily cap."""
+    from afterlife import kvstore
+    from afterlife.explain import explain
+    who = (request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+           or (request.client.host if request.client else "unknown"))
+    if not kvstore.hit(f"explain:{who}", 30, 600):
+        rule = ((body.assessment.get("narrative") or {}).get("summary")) or ""
+        return {"text": rule, "source": "rule-based", "checked": True,
+                "reason": "too many explanations from this address in 10 minutes"}
+    return explain(body.assessment, body.tier)
 
 
 class PriceIn(BaseModel):

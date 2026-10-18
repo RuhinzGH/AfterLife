@@ -48,9 +48,9 @@ export async function fetchAssessment(payload, extra, doc) {
     });
   }
   return api.assess({
-    // A browser scan has no measured hardware score, so it starts from the
-    // documented default and the adjustments explain every point from there.
-    hardware_trust: 75,
+    // A browser scan has no measured hardware score, so none is sent: the
+    // server starts from its documented default (assessment.BROWSER_START_TRUST)
+    // and the adjustments explain every point from there.
     // The ML model's end-of-life probability, signed into the passport.
     eol_risk: lc.eol_risk ?? null,
     age_years: lc.device_age ?? (extra ? Number(extra.device_age) : payload.age_years) ?? null,

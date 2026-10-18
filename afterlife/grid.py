@@ -41,9 +41,24 @@ from typing import Any
 DATA = pathlib.Path(__file__).resolve().parents[1] / "app_data" / "grid_intensity.json"
 
 # --- the duty cycle. Authored, not fitted; unchanged from carbon_tradeoff.py ---
-HOURS_PER_YEAR = 8 * 250     # 8h/day, 250 working days
+DAYS_PER_YEAR = 250          # working days
+HOURS_PER_YEAR = 8 * DAYS_PER_YEAR   # the "typical" scenario: a full working day
 LOAD_FACTOR = 0.40           # average draw as a fraction of TDP under office load
 SYSTEM_OVERHEAD = 1.6        # whole laptop vs CPU alone: display, chipset, losses
+
+#: Hours of use a day for the three scenarios on the carbon card (S2-13). A
+#: metered study of home laptops found 4.8 h a day on average, so "light" is
+#: close to measured use and "heavy" is well above it.
+SCENARIO_HOURS = {"light": 4, "typical": 8, "heavy": 12}
+#: Which scenario the usage answer highlights. Gaming and editing keep a
+#: machine busy for long sessions; no answer means typical.
+USE_SCENARIO = {"general": "typical", "coder": "typical", "gamer": "heavy", "editor": "heavy"}
+
+#: The default old and replacement processors when the real one is not known:
+#: a 2019 performance laptop chip (i7-9750H, 45 W) and a current mainstream
+#: thin-and-light one (i7-1260P, 28 W base power).
+DEFAULT_OLD_TDP_W = 45.0
+DEFAULT_NEW_TDP_W = 28.0
 
 #: Fallback embodied figure when the device has no declared LCA and no class
 #: median is available. Mid-point of the 200-400 kg range in published laptop
@@ -89,17 +104,18 @@ def intensity(country: str | None) -> dict[str, Any] | None:
             "source": data.get("source"), "unit": data.get("unit")}
 
 
-def annual_kwh(tdp_w: float) -> float:
+def annual_kwh(tdp_w: float, hours_per_year: float = HOURS_PER_YEAR) -> float:
     """Yearly electricity for a machine of this TDP, on the duty cycle above."""
-    return tdp_w * LOAD_FACTOR * SYSTEM_OVERHEAD * HOURS_PER_YEAR / 1000.0
+    return tdp_w * LOAD_FACTOR * SYSTEM_OVERHEAD * hours_per_year / 1000.0
 
 
 def break_even(
     country: str | None,
     embodied_kg: float | None = None,
-    old_tdp_w: float = 45.0,
-    new_tdp_w: float = 28.0,
+    old_tdp_w: float = DEFAULT_OLD_TDP_W,
+    new_tdp_w: float = DEFAULT_NEW_TDP_W,
     embodied_basis: str | None = None,
+    hours_per_year: float = HOURS_PER_YEAR,
 ) -> dict[str, Any] | None:
     """Years of use before replacing repays its own manufacturing carbon.
 
@@ -112,7 +128,7 @@ def break_even(
         return None
 
     embodied = embodied_kg if (embodied_kg and embodied_kg > 0) else DEFAULT_EMBODIED_KG
-    saved_kwh = annual_kwh(old_tdp_w) - annual_kwh(new_tdp_w)
+    saved_kwh = annual_kwh(old_tdp_w, hours_per_year) - annual_kwh(new_tdp_w, hours_per_year)
 
     where = _where(grid)
 
@@ -131,7 +147,7 @@ def break_even(
             "headline": (
                 f"{where}, replacing this device would never repay the carbon spent "
                 f"building the replacement."),
-            "assumptions": _assumptions(old_tdp_w, new_tdp_w),
+            "assumptions": _assumptions(old_tdp_w, new_tdp_w, hours_per_year),
         }
 
     annual_saving_kg = saved_kwh * grid["gco2_kwh"] / 1000.0
@@ -149,8 +165,62 @@ def break_even(
             f"{where} ({grid['gco2_kwh']:.0f} gCO₂e/kWh), a replacement would need an estimated "
             f"{years:.1f} years of use to repay the {embodied:.0f} kg of carbon "
             f"spent building it."),
-        "assumptions": _assumptions(old_tdp_w, new_tdp_w),
+        "assumptions": _assumptions(old_tdp_w, new_tdp_w, hours_per_year),
     }
+
+
+def payback_range(
+    country: str | None,
+    embodied_kg: float | None = None,
+    embodied_basis: str | None = None,
+    cpu: dict[str, Any] | None = None,
+    use: str | None = None,
+) -> dict[str, Any] | None:
+    """The break-even for light, typical and heavy use (S2-13).
+
+    `cpu` is cpu_power.rated_power() for the old machine when its processor is
+    known (deep scan): its rated power replaces the 45 W default, and the
+    replacement is assumed to be no hungrier than it (a 15 W laptop is compared
+    with a 15 W replacement, which saves nothing). `use` is the usage answer;
+    it picks which scenario the card highlights. The top-level fields are the
+    highlighted scenario, so older callers read it as before.
+    """
+    old_w = float(cpu["watts"]) if cpu else DEFAULT_OLD_TDP_W
+    new_w = min(DEFAULT_NEW_TDP_W, old_w)
+    picked = USE_SCENARIO.get(use or "", "typical")
+    scenarios = []
+    for name, hours in SCENARIO_HOURS.items():
+        r = break_even(country, embodied_kg, old_w, new_w, embodied_basis, hours * DAYS_PER_YEAR)
+        if r is None:
+            return None
+        scenarios.append({"name": name, "hours_per_day": hours, "repays": r["repays"],
+                          "years": r.get("years"), "annual_saving_kg": r["annual_saving_kg"]})
+    out = break_even(country, embodied_kg, old_w, new_w, embodied_basis,
+                     SCENARIO_HOURS[picked] * DAYS_PER_YEAR)
+    if not out["repays"] and new_w >= old_w and out["grid"]["gco2_kwh"] >= _MIN_CREDIBLE_INTENSITY:
+        out["headline"] += (f" Its {old_w:g} W processor is already in the low-power class, so a "
+                            f"replacement saves no electricity to pay that carbon back.")
+    out["scenarios"] = scenarios
+    out["picked"] = picked
+    out["picked_reason"] = ("from what the device is used for" if use in USE_SCENARIO
+                            else "use not known, so typical")
+    out["inputs"] = [
+        {"name": "Grid carbon intensity", "measured": True,
+         "source": "Our World in Data" if out["grid"]["basis"] != "world" else "world average (country unknown)"},
+        {"name": "Making a replacement", "measured": out["embodied_basis"] != "default",
+         "source": {"matched": "this model's published life-cycle figure",
+                    "class": "median of published figures for this device class",
+                    "default": "fallback estimate (no published figure)"}.get(out["embodied_basis"], out["embodied_basis"])},
+        {"name": "Old processor power", "measured": bool(cpu),
+         "source": (f"{cpu['model']}: rated {cpu['watts']:g} W for its class" if cpu
+                    else f"assumed {DEFAULT_OLD_TDP_W:g} W (a 2019 performance laptop chip)")},
+        {"name": "Replacement processor power", "measured": False,
+         "source": (f"assumed {new_w:g} W: a replacement in the same class" if new_w < DEFAULT_NEW_TDP_W
+                    else f"assumed {new_w:g} W (a current thin-and-light chip)")},
+        {"name": "Hours of use", "measured": False,
+         "source": f"{SCENARIO_HOURS[picked]} h a day, {DAYS_PER_YEAR} days a year ({picked})"},
+    ]
+    return out
 
 
 def _where(grid: dict[str, Any]) -> str:
@@ -165,16 +235,17 @@ def _where(grid: dict[str, Any]) -> str:
     return f"On {grid['region']}'s grid"
 
 
-def _assumptions(old_tdp_w: float, new_tdp_w: float) -> dict[str, Any]:
+def _assumptions(old_tdp_w: float, new_tdp_w: float,
+                 hours_per_year: float = HOURS_PER_YEAR) -> dict[str, Any]:
     """Stated, not buried. Every one of these is a judgement call."""
     return {
-        "hours_per_year": HOURS_PER_YEAR,
+        "hours_per_year": hours_per_year,
         "load_factor": LOAD_FACTOR,
         "system_overhead": SYSTEM_OVERHEAD,
         "old_tdp_w": old_tdp_w,
         "new_tdp_w": new_tdp_w,
-        "note": "Duty cycle is authored, not measured: 8 hours a day, 250 days a "
-                "year, averaging 40% of TDP, with a 1.6x whole-system multiplier "
+        "note": f"Duty cycle is authored, not measured: {hours_per_year / DAYS_PER_YEAR:g} hours a day, "
+                f"{DAYS_PER_YEAR} days a year, averaging 40% of TDP, with a 1.6x whole-system multiplier "
                 "over the CPU alone. Grid intensity and embodied carbon are "
                 "measured. Change the duty cycle and the break-even moves.",
     }

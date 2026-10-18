@@ -27,7 +27,7 @@ PATHWAYS: list[dict[str, str]] = [
 # Base fit score (0-100) by combined-score grade -- explicit and reproducible,
 # same spirit as blend_score()'s point table in assessment.py. Every number
 # here is a judgment call, disclosed as such rather than dressed up as learned.
-_GRADE_FIT: dict[str, dict[str, int]] = {
+GRADE_FIT: dict[str, dict[str, int]] = {
     "primary":   {"A - excellent": 95, "B - good": 75, "C - serviceable": 45, "D - limited": 15},
     "hardening": {"A - excellent": 30, "B - good": 50, "C - serviceable": 60, "D - limited": 40},
     "repurpose": {"A - excellent": 40, "B - good": 55, "C - serviceable": 75, "D - limited": 60},
@@ -35,6 +35,12 @@ _GRADE_FIT: dict[str, dict[str, int]] = {
     "recycle":   {"A - excellent": 5,  "B - good": 15, "C - serviceable": 30, "D - limited": 85},
 }
 _DEFAULT_GRADE = "C - serviceable"
+
+# Windows 11 adjustments to the table above, and the bar for "also viable".
+WIN11_PRIMARY_PENALTY = 25     # a machine that cannot reach Windows 11 is a weaker everyday device
+HARDENING_IF_FIXABLE = 85      # a firmware switch away from Windows 11: hardening becomes the clear move
+HARDENING_IF_BLOCKED = 55      # permanently blocked: hardening stays a live option
+ALSO_VIABLE_MIN = 55           # same as grade C's lower edge
 
 # win11.py's Blocker enum values -> a plain-English fix. Permanent blockers
 # (cpu_generation, cpu_spec) and the non-finding unknown_tpm map to None on
@@ -57,7 +63,7 @@ _REPURPOSE_IDEAS = {
 _SELL_NOTE = {
     "A - excellent": "Strong resale candidate — sell sooner rather than later, value only drops from here.",
     "B - good": "Still worth listing; a clean cosmetic condition matters more at this grade.",
-    "C - serviceable": "Resale value is modest — worth checking the estimate before deciding vs. repurposing.",
+    "C - serviceable": "Resale value is modest: open the resale estimate below before choosing between selling and repurposing.",
     "D - limited": "Resale value is likely minimal; repurposing or recycling is usually the better outcome.",
 }
 
@@ -98,23 +104,23 @@ def compute_pathways(
     actually asked. Every score and action list here is explicit and
     reproducible from the inputs; nothing is inferred by an LLM.
     """
-    fits = {k: table.get(grade, table[_DEFAULT_GRADE]) for k, table in _GRADE_FIT.items()}
+    fits = {k: table.get(grade, table[_DEFAULT_GRADE]) for k, table in GRADE_FIT.items()}
 
     # Windows 11 eligibility reshapes "primary" and "hardening" specifically --
     # repurpose/sell/recycle don't care whether Windows 11 is reachable.
     if win11_status == "NOT ELIGIBLE":
-        fits["primary"] = max(0, fits["primary"] - 25)
+        fits["primary"] = max(0, fits["primary"] - WIN11_PRIMARY_PENALTY)
         if win11_firmware_fixable:
-            fits["hardening"] = max(fits["hardening"], 85)
+            fits["hardening"] = max(fits["hardening"], HARDENING_IF_FIXABLE)
         elif win11_permanently_blocked:
-            fits["hardening"] = max(fits["hardening"], 55)
+            fits["hardening"] = max(fits["hardening"], HARDENING_IF_BLOCKED)
 
     best_key = max(fits, key=fits.get)
 
     out = []
     for p in PATHWAYS:
         key, score = p["key"], fits[p["key"]]
-        status = "best_fit" if key == best_key else ("also_viable" if score >= 55 else "not_ideal")
+        status = "best_fit" if key == best_key else ("also_viable" if score >= ALSO_VIABLE_MIN else "not_ideal")
 
         if key == "hardening":
             actions = _hardware_actions(win11_blockers, storage)

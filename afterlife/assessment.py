@@ -13,6 +13,28 @@ from __future__ import annotations
 
 from typing import Any
 
+# --- The scoring rules. Each value is a design choice with a stated reason; the
+# assumptions table on How it works (afterlife/assumptions.py) reads them from
+# here, so the page and the code cannot disagree. ---
+BROWSER_START_TRUST = 75     # an instant scan cannot measure hardware: "working, unverified", inside grade B
+EOL_WEIGHT = 15              # points for a 100% end-of-life risk: one grade band, so it cannot decide alone
+BATTERY_WEAR_PCT = 80        # Amazon Renewed's battery bar for a refurbished device
+BATTERY_WEAR_PENALTY = -3
+BATTERY_BAD_PCT = 60         # a chosen "badly worn" step
+BATTERY_BAD_PENALTY = -6
+AGE_LIMIT_YEARS = 6          # only clearly old machines are affected
+AGE_PENALTY = -4             # small on purpose: age is a weak predictor of failure
+FAULT_PENALTY = -5           # a recognised fault in "Anything wrong?" makes the score more cautious
+GRADE_CUTOFFS = {"A - excellent": 85, "B - good": 70, "C - serviceable": 55}   # equal 15-point bands
+YEARS_SCALE = 8              # a perfect score maps to 8 more years: a way to picture the score, not a lifespan model
+
+
+def grade_for(score: float) -> str:
+    """The grade word for a 0-100 score."""
+    for grade, cutoff in GRADE_CUTOFFS.items():
+        if score >= cutoff:
+            return grade
+    return "D - limited"
 
 
 #: What an `eol_risk` value actually measures. Two different quantities reach
@@ -59,7 +81,7 @@ def blend_score(hardware_trust: int, eol_risk: float | None,
         # resolved from a published support date -- and the page still reported it
         # as a model verdict the product had not computed. Provenance now travels
         # with the number rather than being assumed.
-        delta = -round(eol_risk * 15, 1)
+        delta = -round(eol_risk * EOL_WEIGHT, 1)
         score += delta
         adjustments.append({"factor": EOL_SOURCE_LABELS.get(eol_source, _EOL_FACTOR_UNLABELLED),
                             "detail": eol_detail or f"{eol_risk*100:.0f}% risk",
@@ -71,21 +93,23 @@ def blend_score(hardware_trust: int, eol_risk: float | None,
     # scan cannot read battery health, so this only applies when it is supplied.
     # A measured (deep-scan) trust score already contains battery wear and age,
     # so they are not subtracted a second time here.
-    if battery_health is not None and battery_health < 80 and not trust_measured:
-        delta = -6 if battery_health < 60 else -3
+    if battery_health is not None and battery_health < BATTERY_WEAR_PCT and not trust_measured:
+        delta = BATTERY_BAD_PENALTY if battery_health < BATTERY_BAD_PCT else BATTERY_WEAR_PENALTY
         score += delta
-        adjustments.append({"factor": "battery wear", "detail": f"{battery_health:.0f}%",
+        adjustments.append({"factor": "battery wear", "detail": f"holds {battery_health:.0f}% of its original charge",
                             "delta": delta})
 
-    if age_years is not None and age_years > 6 and not trust_measured:
-        score -= 4; adjustments.append({"factor": "age", "detail": f"{age_years:.0f} yr", "delta": -4})
+    if age_years is not None and age_years > AGE_LIMIT_YEARS and not trust_measured:
+        score += AGE_PENALTY
+        adjustments.append({"factor": "age", "detail": f"{age_years:.0f} yr", "delta": AGE_PENALTY})
 
     if fault_described:
-        score -= 5; adjustments.append({"factor": "reported fault", "detail": fault_detail or "user-described", "delta": -5})
+        score += FAULT_PENALTY
+        adjustments.append({"factor": "reported fault", "detail": fault_detail or "user-described",
+                            "delta": FAULT_PENALTY})
 
     score = max(0, min(100, round(score)))
-    grade = ("A - excellent" if score >= 85 else "B - good" if score >= 70
-             else "C - serviceable" if score >= 55 else "D - limited")
+    grade = grade_for(score)
     return {"combined_score": score, "grade": grade,
             "hardware_trust": hardware_trust, "adjustments": adjustments}
 
@@ -119,12 +143,12 @@ def key_points(blend: dict[str, Any], pipeline: dict[str, Any],
     # are scored inside the measured trust score, so blend_score never adds
     # those adjustments, and a 55% battery read as "in good health".
     if battery_health is not None:
-        if battery_health >= 80:
+        if battery_health >= BATTERY_WEAR_PCT:
             strengths.append("Battery in good health")
         elif "battery wear" not in adj_factors:
-            weaknesses.append(f"battery wear: {battery_health:.0f}%")
+            weaknesses.append(f"battery wear: holds {battery_health:.0f}% of its original charge")
     if age_years is not None:
-        if age_years <= 6:
+        if age_years <= AGE_LIMIT_YEARS:
             strengths.append("Still within its expected prime years")
         elif "age" not in adj_factors:
             weaknesses.append(f"age: {age_years:.0f} yr")
@@ -152,8 +176,8 @@ def key_points(blend: dict[str, Any], pipeline: dict[str, Any],
 def estimate_years(combined_score: int, age_years: float | None,
                    battery_health: float | None) -> dict[str, Any]:
     """A transparent remaining-safe-life estimate and a lifecycle stage pipeline."""
-    remaining = round(combined_score / 100 * 8)  # 0-100 -> up to ~8 years
-    if battery_health is not None and battery_health < 60:
+    remaining = round(combined_score / 100 * YEARS_SCALE)
+    if battery_health is not None and battery_health < BATTERY_BAD_PCT:
         remaining = max(1, remaining - 1)
     age = age_years or 0
     stages = [
@@ -213,7 +237,9 @@ def _fallback(context: dict[str, Any]) -> dict[str, Any]:
             "Reassign to lighter-duty or secondary use as it ages rather than retiring it.",
             "Store the signed passport so a future buyer can trust its condition.",
         ],
-        "confidence_note": "Based on what a browser can see -- battery wear and disk health "
-                           "are not measured in this scan.",
+        "confidence_note": ("Based on a deep scan: Windows 11 readiness, disk health, battery and "
+                            "age were measured on the machine." if context.get("measured") else
+                            "Based on what a browser can see: battery wear and disk health "
+                            "are not measured in this scan."),
         "source": "fallback",
     }

@@ -29,7 +29,7 @@ _TABLE: dict | None = None
 # else (battery, storage, speed) will decide first. Chosen as a round three years
 # rather than fitted; it is a presentation threshold, not a learned parameter.
 FULL_RISK_HORIZON_MONTHS = 36
-_MIN_RISK, _MAX_RISK = 0.05, 0.95
+RISK_FLOOR, RISK_CAP = 0.05, 0.95    # a long-supported device is never risk-free; a soon-unsupported one never hopeless
 
 
 @dataclass(frozen=True)
@@ -101,7 +101,7 @@ def risk_from_months(months: float, is_eol: bool) -> float:
     if is_eol:
         return 1.0
     frac = 1.0 - (months / FULL_RISK_HORIZON_MONTHS)
-    return round(min(_MAX_RISK, max(_MIN_RISK, frac)), 3)
+    return round(min(RISK_CAP, max(RISK_FLOOR, frac)), 3)
 
 
 def lookup(make_model: str | None = None, os_name: str | None = None,

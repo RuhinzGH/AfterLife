@@ -146,3 +146,21 @@
 }
 .v2 .hw-cta .v2-h2 { margin: 0 0 22px; }
 .v2 .hw-cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Every number we assume (S2-12). */
+.hw-kinds { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 1.2rem; }
+.hw-kind { border: 1px solid var(--line, #2a3236); background: transparent; color: inherit; border-radius: 999px;
+  padding: 0.35rem 0.85rem; font: inherit; font-size: 0.88rem; cursor: pointer; }
+.hw-kind.on { border-color: var(--brand, #8b5cf6); background: color-mix(in srgb, var(--brand, #8b5cf6) 16%, transparent); }
+.hw-assume-group { margin-top: 1.4rem; }
+.hw-assume-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.hw-assume { min-width: 900px; font-size: 0.88rem; table-layout: fixed; width: 100%; }
+.hw-assume td { vertical-align: top; }
+.hw-val { font-variant-numeric: tabular-nums; font-weight: 600; overflow-wrap: anywhere; }
+.hw-src { overflow-wrap: anywhere; }
+.hw-code-ref { font-family: ui-monospace, Consolas, monospace; font-size: 0.75rem; opacity: 0.6; margin-top: 0.25rem; word-break: break-all; }
+.hw-kind-tag { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.75rem; white-space: nowrap;
+  border: 1px solid currentColor; }
+.hw-kind-tag.k-learned { color: #34d399; }
+.hw-kind-tag.k-looked-up { color: #22d3ee; }
+.hw-kind-tag.k-chosen { color: #c4b5fd; }

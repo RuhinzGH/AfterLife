@@ -4954,3 +4954,15 @@ body::after {
   .fit-tier { grid-template-columns: 1.2rem 1fr; }
   .fit-need { grid-column: 2; text-align: left; }
 }
+
+/* Carbon payback range (S2-13). */
+.ct-scen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.9rem; }
+.ct-scen-cell { border: 1px solid var(--line); border-radius: 8px; padding: 0.55rem 0.7rem; color: var(--muted); }
+.ct-scen-cell.on { border-color: var(--brand); color: var(--ink); background: color-mix(in srgb, var(--brand) 10%, transparent); }
+.ct-scen-name { font-size: 0.8rem; }
+.ct-scen-val { font-size: 1.25rem; font-weight: 600; margin-top: 0.15rem; }
+.ct-scen-note { grid-column: 1 / -1; margin: 0.2rem 0 0; }
+.ct-inputs { list-style: none; padding: 0; margin: 0.8rem 0 0; display: grid; gap: 0.35rem; font-size: 0.88rem; }
+.ct-inputs li { display: flex; gap: 0.5rem; align-items: baseline; }
+.ct-inputs .pill { flex: none; }
+@media (max-width: 560px) { .ct-scen { grid-template-columns: 1fr; } }

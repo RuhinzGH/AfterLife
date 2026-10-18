@@ -39,9 +39,9 @@ describe("what a browser scan must NOT claim", () => {
     expect(sent()).not.toHaveProperty("battery_health");
   });
 
-  it("starts from the documented default trust score", async () => {
+  it("sends no hardware score, so the server's documented default applies", async () => {
     await fetchAssessment(SCANNED, null);
-    expect(sent().hardware_trust).toBe(75);
+    expect(sent()).not.toHaveProperty("hardware_trust");
   });
 });
 

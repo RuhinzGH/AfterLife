@@ -130,7 +130,7 @@ class TestKeyPointsDoNotClaimWhatWasNeverMeasured:
     def test_deep_scan_worn_battery_is_a_weakness_not_good_health(self):
         pts = self._deep_points(55.0, 3)
         assert "Battery in good health" not in pts["strengths"]
-        assert "battery wear: 55%" in pts["weaknesses"]
+        assert "battery wear: holds 55% of its original charge" in pts["weaknesses"]
 
     def test_deep_scan_old_age_is_a_weakness_not_prime_years(self):
         pts = self._deep_points(90.0, 6.5)

@@ -9,6 +9,7 @@ import RepairOutlook from "./RepairOutlook.jsx";
 import RepairRights from "./RepairRights.jsx";
 import PriceEstimate from "./PriceEstimate.jsx";
 import SellChecklist from "./SellChecklist.jsx";
+import PlainExplanation from "./PlainExplanation.jsx";
 
 // Lifecycle result dashboard. A vertical stack of equal-width full-width cards —
 // nothing sits beside anything of a different height, so the layout stays
@@ -132,6 +133,12 @@ export default function AssessmentDashboard({ data, payload, wipe }) {
             ))}
           </div>
         </div>
+      </Reveal>
+
+      {/* Card 3b — the result in plain words, worded by a language model and
+          checked against the numbers above (S2-08) */}
+      <Reveal>
+        <PlainExplanation data={data} tier={payload?.tier} />
       </Reveal>
 
       {/* Card 4 — narrated detail, secondary to the checklist above */}

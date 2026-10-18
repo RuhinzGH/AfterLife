@@ -244,17 +244,20 @@ export default function HowItWorks({ onNavigate }) {
         <Reveal className="hw-stage">
           <div className="hw-stage-n">01</div>
           <div>
-            <h3 className="v2-h3">Scan: what a browser can see, plus your answers</h3>
+            <h3 className="v2-h3">Scan: two depths, instant or deep</h3>
             <p>
               The <b>instant scan</b> needs no download. It reads what a browser exposes: graphics,
               processor cores, memory and architecture, and turns it into a signed profile in
-              seconds. A browser cannot see battery wear, disk health or the machine's age, so an
-              instant result is built on less evidence and tends to read lower.
+              seconds. A browser cannot see battery wear, disk health or the machine's age, so you
+              <b> complete the picture</b> with the device type, its age, what you mainly use it for,
+              and any faults in your own words. The device type, age and fault description are what
+              the end-of-life model reads.
             </p>
             <p>
-              You then <b>complete the picture</b> with what a browser cannot see: the device type,
-              its age, and any faults in your own words. The device type, age and fault description
-              are what the end-of-life model reads.
+              The <b>deep scan</b> runs a small read-only script on the computer (its source and
+              checksum are shown before you run it). It measures what a browser cannot: Windows 11
+              readiness, disk health, battery wear, age, the processor model and which kinds of tools
+              are installed. It reads no files, names or browsing history.
             </p>
           </div>
         </Reveal>
@@ -265,9 +268,10 @@ export default function HowItWorks({ onNavigate }) {
             <h3 className="v2-h3">Score: trust, then end-of-life risk</h3>
             <p>
               <b>Hardware trust</b> is deliberately rule-based. A browser cannot measure hardware
-              condition, so an instant scan starts from a documented baseline of 75, and every
-              adjustment after that is shown on the score, because a black box would defeat the
-              point of a trust document.
+              condition, so an instant scan starts from a documented baseline of 75. A deep scan
+              replaces it with a measured score out of 100: Windows 11 readiness 35, storage 25,
+              battery 20 and age 20, each fact counted once. Every adjustment is shown on the score,
+              because a black box would defeat the point of a trust document.
             </p>
             <p>
               <b>End-of-life risk</b> comes from one of two places, and the result says which: the
@@ -395,19 +399,22 @@ export default function HowItWorks({ onNavigate }) {
           </Reveal>
           <Reveal className="hw-cvn-card is-written" delay={120}>
             <div className="hw-cvn-tag">Written</div>
-            <h3 className="v2-h3">By fixed rules, from the computed numbers</h3>
+            <h3 className="v2-h3">By fixed rules, then put into plain words</h3>
             <ul>
-              <li>A plain-language summary filled in from the score and years</li>
-              <li>A lifecycle note and practical suggestions</li>
-              <li>It never sets, changes or rounds a value</li>
+              <li>A rule-based summary filled in from the score and years</li>
+              <li>"In plain words": a language model rewords the computed result</li>
+              <li>Neither sets, changes or rounds a value</li>
             </ul>
             <div className="hw-fallback">
-              <b>The same inputs always give the same words</b>, so every sentence can be traced
-              back to a number on the page.
+              <b>Every number in the plain-words text is checked against the page.</b> If the model
+              writes a number that is not there, its text is thrown away and the rule-based summary
+              is shown instead, with the reason.
             </div>
           </Reveal>
         </div>
       </section>
+
+      <Assumptions />
 
       <Reveal as="section" className="hw-cta" aria-label="Try it">
         <h2 className="v2-h2">See it on your own device.</h2>
@@ -419,6 +426,73 @@ export default function HowItWorks({ onNavigate }) {
         </div>
       </Reveal>
     </div>
+  );
+}
+
+/* Every number AfterLife assumes (S2-12), read from the code through
+   /api/assumptions, so this table cannot drift from what the site computes. */
+const KINDS = [["all", "All"], ["learned", "Learned from data"], ["looked up", "Looked up"], ["chosen", "Chosen by design"]];
+
+function Assumptions() {
+  const [t, setT] = useState(null);
+  const [kind, setKind] = useState("all");
+  useEffect(() => {
+    let live = true;
+    api.assumptions().then((d) => { if (live) setT(d); }).catch(() => {});
+    return () => { live = false; };
+  }, []);
+  if (!t) return null;
+  const total = Object.values(t.counts).reduce((a, b) => a + b, 0);
+
+  return (
+    <section className="hw-block" aria-labelledby="hw-assume">
+      <Reveal>
+        <div className="v2-eyebrow">Every number we assume</div>
+        <h2 id="hw-assume" className="v2-h2">What each number is, and <span className="v2-grad-text">why</span>.</h2>
+        <p className="v2-lede">
+          {total} numbers, each marked as learned from data ({t.counts.learned || 0}), looked up in a
+          public source ({t.counts["looked up"] || 0}) or chosen by design ({t.counts.chosen || 0}), with
+          the reason for its value and its limit. The values are read from the code when this page
+          loads, so the table cannot disagree with what the site computes.
+        </p>
+      </Reveal>
+      <div className="hw-kinds" role="group" aria-label="Filter by kind">
+        {KINDS.map(([k, label]) => (
+          <button key={k} className={`hw-kind ${kind === k ? "on" : ""}`} onClick={() => setKind(k)}>{label}</button>
+        ))}
+      </div>
+      {t.groups.map((g) => {
+        const rows = g.rows.filter((r) => kind === "all" || r.kind === kind);
+        if (!rows.length) return null;
+        return (
+          <div className="hw-assume-group" key={g.title}>
+            <h3 className="v2-h3">{g.title}</h3>
+            <div className="hw-assume-scroll">
+              <table className="hw-table hw-assume">
+                <colgroup>
+                  <col style={{ width: "17%" }} /><col style={{ width: "12%" }} /><col style={{ width: "9%" }} />
+                  <col style={{ width: "30%" }} /><col style={{ width: "17%" }} /><col style={{ width: "15%" }} />
+                </colgroup>
+                <thead><tr><th scope="col">Number</th><th scope="col">Value</th><th scope="col">Kind</th>
+                  <th scope="col">Why this value</th><th scope="col">Limit</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                  {rows.map((r) => (
+                    <tr key={r.name}>
+                      <td>{r.name}</td>
+                      <td className="hw-val">{r.value}{r.unit ? ` ${r.unit}` : ""}</td>
+                      <td><span className={`hw-kind-tag k-${r.kind.replace(" ", "-")}`}>{r.kind}</span></td>
+                      <td>{r.why}</td>
+                      <td>{r.limit}</td>
+                      <td className="hw-src">{r.source}<div className="hw-code-ref">{r.code}</div></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+      })}
+    </section>
   );
 }
 

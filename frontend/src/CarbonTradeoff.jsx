@@ -73,6 +73,32 @@ export default function CarbonTradeoff({ tradeoff }) {
         )}
       </ul>
 
+      {/* S2-13: the payback for light, typical and heavy use, with the one the
+          usage answer picks highlighted, and which inputs were measured. */}
+      {tradeoff.scenarios && (
+        <div className="ct-scen">
+          {tradeoff.scenarios.map((sc) => (
+            <div key={sc.name} className={`ct-scen-cell ${sc.name === tradeoff.picked ? "on" : ""}`}>
+              <div className="ct-scen-name">{sc.name[0].toUpperCase() + sc.name.slice(1)} · {sc.hours_per_day} h a day</div>
+              <div className="ct-scen-val">{sc.repays ? `${sc.years.toFixed(0)} years` : "never"}</div>
+            </div>
+          ))}
+          <p className="note ct-scen-note">
+            Highlighted: {tradeoff.picked} use, {tradeoff.picked_reason}.
+          </p>
+        </div>
+      )}
+      {tradeoff.inputs && (
+        <ul className="ct-inputs">
+          {tradeoff.inputs.map((i) => (
+            <li key={i.name}>
+              <span className={`pill ${i.measured ? "cyan" : "muted"}`}>{i.measured ? "measured" : "assumed"}</span>
+              <span><b>{i.name}:</b> {i.source}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
       {worldFallback && (
         <p className="note ct-warn">
           We could not determine your country, so this uses the world average.

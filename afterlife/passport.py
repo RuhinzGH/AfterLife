@@ -327,6 +327,21 @@ UNKNOWN = "UNKNOWN"
 
 DEEP_WEIGHTS = {"Windows 11 ready": 35, "Storage health": 25, "Battery health": 20, "Age": 20}
 
+#: Points within each share. Full points mean "no problem found"; a reading that
+#: could not be taken scores about half, so a missing reading is neither a pass
+#: nor a fail. Listed with reasons in the assumptions table (assumptions.py).
+DEEP_POINTS = {
+    "Windows 11 ready": {"ready": 35, "tpm_not_read": 21, "firmware_fixable": 16, "cpu_blocked": 5},
+    "Storage health": {"healthy": 25, "heavy_wear": 12, "not_read": 12, "windows_warning": 10, "critical": 5},
+    "Battery health": {"good": 20, "no_battery": 20, "worn": 13, "not_read": 10, "badly_worn": 7},
+    "Age": {"up_to_3": 20, "up_to_5": 14, "up_to_8": 8, "older": 3, "unknown": 10},
+}
+DRIVE_WEAR_PCT = 90                # rated write life used at which a drive counts as heavily worn
+DEEP_AGE_BANDS = (3, 5, 8)         # years: the edges of the age points above
+
+
+_P = DEEP_POINTS
+
 
 def _sub(name: str, points: int, note: str) -> dict[str, Any]:
     return {"name": name, "points": points, "max_points": DEEP_WEIGHTS[name], "note": note}
@@ -348,23 +363,25 @@ def _storage(device: dict[str, Any]) -> tuple[int, str]:
     if nvme and isinstance(nvme.get("critical_warning"), (int, float)):
         used = nvme.get("percentage_used")
         if nvme["critical_warning"]:
-            return 5, "the drive is reporting a critical warning"
-        if isinstance(used, (int, float)) and used >= 90:
-            return 12, f"{used:.0f}% of rated write life used"
-        return 25, (f"healthy, {used:.0f}% of rated write life used"
+            return _P["Storage health"]["critical"], "the drive is reporting a critical warning"
+        if isinstance(used, (int, float)) and used >= DRIVE_WEAR_PCT:
+            return _P["Storage health"]["heavy_wear"], f"{used:.0f}% of rated write life used"
+        return _P["Storage health"]["healthy"], (f"healthy, {used:.0f}% of rated write life used"
                     if isinstance(used, (int, float)) else "healthy (drive self-report)")
     health = str(device.get("disk_health") or "").strip()
     if health.lower() == "healthy":
-        return 25, "healthy (Windows)"
+        return _P["Storage health"]["healthy"], "healthy (Windows)"
     if health:
-        return 10, f"{health} (Windows)"
-    return 12, "not read"
+        return _P["Storage health"]["windows_warning"], f"{health} (Windows)"
+    return _P["Storage health"]["not_read"], "not read"
 
 
 def battery_points(health_pct: float) -> int:
     """The deep trust score's battery share (out of 20). Shared with uplift.py,
     so "replace the battery" is re-scored by the same rule that scored it."""
-    return 20 if health_pct >= 80 else 13 if health_pct >= 60 else 7
+    from .assessment import BATTERY_BAD_PCT, BATTERY_WEAR_PCT
+    b = _P["Battery health"]
+    return b["good"] if health_pct >= BATTERY_WEAR_PCT else b["worn"] if health_pct >= BATTERY_BAD_PCT else b["badly_worn"]
 
 
 def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]], Any, str]:
@@ -373,13 +390,13 @@ def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]],
     elig = win11_assess(device)
     subs = []
     if elig.eligible is True:
-        subs.append(_sub("Windows 11 ready", 35, "meets every Windows 11 requirement"))
+        subs.append(_sub("Windows 11 ready", _P["Windows 11 ready"]["ready"], "meets every Windows 11 requirement"))
     elif elig.eligible is None:
-        subs.append(_sub("Windows 11 ready", 21, "not determined: the TPM could not be read (run as administrator)"))
+        subs.append(_sub("Windows 11 ready", _P["Windows 11 ready"]["tpm_not_read"], "not determined: the TPM could not be read (run as administrator)"))
     elif elig.permanently_blocked:
-        subs.append(_sub("Windows 11 ready", 5, "blocked by the CPU generation (permanent)"))
+        subs.append(_sub("Windows 11 ready", _P["Windows 11 ready"]["cpu_blocked"], "blocked by the CPU generation (permanent)"))
     else:
-        subs.append(_sub("Windows 11 ready", 16, "blocked by a firmware setting that can be switched on"))
+        subs.append(_sub("Windows 11 ready", _P["Windows 11 ready"]["firmware_fixable"], "blocked by a firmware setting that can be switched on"))
 
     # Recorded on the passport as a fact, but not scored here: the combined
     # score applies the support date once (see the note above DEEP_WEIGHTS).
@@ -394,23 +411,24 @@ def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]],
         # battery holds at least 80% of its original capacity.
         subs.append(_sub("Battery health", battery_points(bh), f"{bh:.0f}% of design capacity"))
     elif device.get("battery_present") is False:
-        subs.append(_sub("Battery health", 20, "no battery (desktop)"))
+        subs.append(_sub("Battery health", _P["Battery health"]["no_battery"], "no battery (desktop)"))
     else:
-        subs.append(_sub("Battery health", 10, "not read (run as administrator)"))
+        subs.append(_sub("Battery health", _P["Battery health"]["not_read"], "not read (run as administrator)"))
 
     age = device.get("approx_age_years")
     if isinstance(age, (int, float)):
-        subs.append(_sub("Age", 20 if age <= 3 else 14 if age <= 5 else 8 if age <= 8 else 3,
-                         f"about {age:.1f} years"))
+        a, (b3, b5, b8) = _P["Age"], DEEP_AGE_BANDS
+        pts = a["up_to_3"] if age <= b3 else a["up_to_5"] if age <= b5 else a["up_to_8"] if age <= b8 else a["older"]
+        subs.append(_sub("Age", pts, f"about {age:.1f} years"))
     else:
-        subs.append(_sub("Age", 10, "not determined"))
+        subs.append(_sub("Age", _P["Age"]["unknown"], "not determined"))
     return sum(s["points"] for s in subs), subs, elig, state
 
 
 def deep_grade(score: int) -> str:
     """The same cut-offs as the blended score's grades, so one scale reads the same everywhere."""
-    return ("A - excellent" if score >= 85 else "B - good" if score >= 70
-            else "C - serviceable" if score >= 55 else "D - limited")
+    from .assessment import grade_for
+    return grade_for(score)
 
 
 _GENERIC_FAMILY_NAMES = {"", "system product name", "not applicable", "to be filled by o.e.m.",
