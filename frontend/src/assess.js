@@ -74,6 +74,8 @@ export async function fetchAssessment(payload, extra, doc) {
     gpu: payload.gpu || null,
     // The fault text, only to look up repair records for the same fault.
     problem: extra?.problem || null,
+    // A phone's model code or a typed model, for the EU repairability grade.
+    model_code: extra?.model_code || null,
   });
 }
 

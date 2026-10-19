@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { openPassportPdf } from "./passportPdf.js";
 import { api } from "./api.js";
 import PassportCard from "./PassportCard.jsx";
 import AssessmentDashboard from "./AssessmentDashboard.jsx";
@@ -215,6 +216,7 @@ export default function DeepScan({ onBack }) {
           <div className="passport-actions">
             <button className="cta" onClick={savePassport}>Save passport (JSON)</button>
             <button className="ghost" onClick={saveQr} disabled={!qr}>{qr ? "Save QR (PNG)" : "QR unavailable"}</button>
+            <button className="ghost" onClick={() => openPassportPdf(passport, { qr, final: assessment?.blend ? { score: assessment.blend.combined_score, grade: assessment.blend.grade } : null })}>Save as PDF</button>
             <button className="ghost" onClick={onBack}>Start a new scan</button>
             <span className="note">
               Scan the QR with any phone camera to open the verifier, or save it and upload it there later.

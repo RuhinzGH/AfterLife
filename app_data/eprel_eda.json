@@ -1,0 +1,140 @@
+{
+  "fetched": "2026-08-27",
+  "source": "European Product Registry for Energy Labelling (EPREL)",
+  "regulation": "Regulation (EU) 2023/1669 \u2014 smartphones and slate tablets",
+  "n": 2568,
+  "variables": 33,
+  "date_min": "2019-07-01",
+  "date_max": "2026-08-26",
+  "missing_pct": {
+    "modelIdentifier": 0.35,
+    "batteryUserReplaceable": 0.35,
+    "supplierOrTrademark": 0.35,
+    "deviceType": 0.35,
+    "operatingSystem": 0.35,
+    "isFoldable": 0.35,
+    "repairabilityClass": 0.35,
+    "repairabilityIndex": 0.35,
+    "disassemblyDepthScore": 0.35,
+    "fastenersScore": 0.35,
+    "toolsScore": 0.35,
+    "sparePartScore": 0.35,
+    "repairInfoScore": 0.35,
+    "repeatedFreeFallReliabilityClass": 0.35,
+    "fallsWithoutDefect": 0.35,
+    "ingressProtectionRating": 0.35,
+    "screenScratchResistance": 0.35,
+    "webLinkInfoSparePartsAvailability": 0.35,
+    "batteryEnduranceInCycles": 0.35,
+    "ratedBatteryCapacity": 0.35,
+    "batteryEndurancePerCycleInHours": 0.35,
+    "minYearsSoftwareUpdates": 0.35,
+    "softwareUpdatesScore": 0.35,
+    "guaranteeDuration": 0.35,
+    "webLinkRepairInstructions": 0.35,
+    "modelAvailabilityInEUEEACountries": 0.35,
+    "webLinkPretaxPrices": 0.35,
+    "energyClass": 0.35,
+    "onMarketStartDate": 0.35,
+    "ip_water": 0.35,
+    "mohs": 0.35
+  },
+  "repairability_class": {
+    "A": 137,
+    "B": 1272,
+    "C": 850,
+    "D": 264,
+    "E": 36
+  },
+  "repairability_index": {
+    "mean": 3.247,
+    "median": 3.37,
+    "min": 1.0,
+    "max": 5.0
+  },
+  "brands_total": 359,
+  "brands_top10_share": 30.1,
+  "brands_singleton": 122,
+  "brands_top": {
+    "OUKITEL": 183,
+    "DOOGEE": 133,
+    "Blackview": 96,
+    "ulefone": 68,
+    "HOTWAV": 61,
+    "Samsung": 53,
+    "Shenzhen Efercro Electronic Technology Co., Ltd.": 52,
+    "motorola": 46
+  },
+  "devicetype_chi2": {
+    "chi2": 206.3,
+    "df": 4,
+    "p": 1.6238580900743584e-43,
+    "v": 0.284
+  },
+  "devicetype_index_mean": {
+    "SMARTPHONE": 3.328,
+    "TABLET": 3.178
+  },
+  "battery": {
+    "replaceable_mean": 3.355,
+    "fixed_mean": 3.226,
+    "H": 18.7,
+    "p": 1.5581533398259415e-05,
+    "n_replaceable": 410,
+    "n_fixed": 2149
+  },
+  "spearman_vs_index": {
+    "disassemblyDepthScore": 0.298,
+    "fastenersScore": 0.371,
+    "toolsScore": 0.481,
+    "minYearsSoftwareUpdates": 0.379,
+    "batteryEnduranceInCycles": 0.028,
+    "ratedBatteryCapacity": 0.005,
+    "guaranteeDuration": 0.056,
+    "mohs": 0.055,
+    "ip_water": 0.053,
+    "countries": -0.086
+  },
+  "durability_chi2": {
+    "chi2": 483.0,
+    "df": 16,
+    "p": 1.269732557758586e-92,
+    "v": 0.217
+  },
+  "fall_class": {
+    "A": 727,
+    "B": 420,
+    "C": 261,
+    "D": 298,
+    "E": 853
+  },
+  "quality": {
+    "sw_years": {
+      "5": 1907,
+      "6": 414,
+      "7": 224,
+      "8": 6,
+      "9": 2,
+      "10": 3,
+      "12": 1,
+      "48": 2
+    },
+    "sw_above_10": 3,
+    "capacity_min": 500.0,
+    "capacity_max": 33280.0,
+    "cycles_min": 2.0,
+    "cycles_max": 99.0,
+    "duplicate_model_ids": 449,
+    "no_country_listed": 2189
+  },
+  "by_year": {
+    "2019": 1,
+    "2020": 1,
+    "2021": 1,
+    "2022": 5,
+    "2023": 33,
+    "2024": 193,
+    "2025": 1580,
+    "2026": 745
+  }
+}

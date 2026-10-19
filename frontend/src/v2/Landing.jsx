@@ -4,6 +4,7 @@
 // rather than filled with a stand-in. The only invented number is the hero
 // ring's score, and it is labelled "example" on screen.
 import { useEffect, useState } from "react";
+import { INTENTS, setIntent } from "../intent.js";
 import { api } from "../api.js";
 import { HowSteps, Reveal, prefersReducedMotion, useInView } from "./HowItWorks.jsx";
 import "./landing.css";
@@ -133,6 +134,16 @@ function Hero({ onNavigate }) {
             <button className="v2-btn ghost lp-btn-lg" onClick={() => onNavigate("thesis")}>
               See the evidence
             </button>
+          </div>
+          {/* Why are you here? (S3-04) The answer decides which result cards lead. */}
+          <div className="lp-intent" role="group" aria-label="What do you want to know?">
+            <span className="lp-intent-q">What do you want to know?</span>
+            {Object.entries(INTENTS).map(([k, v]) => (
+              <button key={k} type="button" className="lp-intent-btn"
+                      onClick={() => { setIntent(k); onNavigate("scan", { fresh: true }); }}>
+                {v.label}
+              </button>
+            ))}
           </div>
         </div>
         <ExampleRing />
@@ -286,6 +297,11 @@ function EsuTeaser({ esu, onNavigate }) {
 /* ------------------------------------------------------------ tools */
 
 const TOOLS = [
+  {
+    id: "compare", title: "Compare devices",
+    text: "Put two signed passports side by side; only like-for-like readings are ranked.",
+    icon: <><rect x="3" y="7" width="11" height="15" rx="2" /><rect x="18" y="7" width="11" height="15" rx="2" /><path d="M8.5 26h15" /></>,
+  },
   {
     id: "esu", title: "Windows 10 countdown",
     text: "How long Windows 10 keeps getting security updates, and what changes after.",

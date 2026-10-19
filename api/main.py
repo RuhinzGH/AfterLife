@@ -381,6 +381,9 @@ class AssessIn(BaseModel):
     # records for the same fault (the score uses the recognised theme above).
     problem: str | None = None
     storage_problem: bool = False   # deep scan: the drive reported a warning or heavy wear
+    # A phone or tablet's model code as Chrome on Android reports it ("SM-S931B"),
+    # or a model name the owner typed, for the EU repairability grade (S3-01).
+    model_code: str | None = None
     os_supported: bool | None = None
 
 
@@ -502,6 +505,7 @@ def assess(body: AssessIn) -> dict:
             embodied_basis=(declared or {}).get("basis"),
             cpu=rated_power(body.cpu, body.product_category) if body.trust_measured else None,
             use=use,
+            device_class=body.product_category,
         )
     except Exception:  # noqa: BLE001
         carbon_tradeoff = None
@@ -551,7 +555,21 @@ def assess(body: AssessIn) -> dict:
         body.product_category, in_eea=geo.in_eea if geo.country else None,
         country=geo.country or None, country_name=geo.country_name if geo.country else None)
 
+    # The official EU repairability grade for a phone or tablet (S3-01): what
+    # the maker declared to the EPREL registry, shown next to the model's
+    # prediction. Laptops are not in the registry and get nothing, never a guess.
+    eprel = None
+    try:
+        from afterlife.eprel import class_spread, find as eprel_find, is_covered
+        if is_covered(body.product_category) and (body.model_code or "").strip():
+            rec = eprel_find(body.model_code, body.product_category)
+            eprel = ({**rec, "matched": True, "spread": class_spread()} if rec
+                     else {"matched": False, "query": body.model_code.strip()[:60]})
+    except Exception:  # noqa: BLE001 -- an enrichment must never sink an assessment
+        eprel = None
+
     return {"blend": blend, "pipeline": years, "narrative": narrative, "key_points": points,
+            "eprel": eprel,
             "pathways": pathways, "pathways_narrative": pathways_narrative, "win11": body.win11,
             "carbon_tradeoff": carbon_tradeoff,
             "usage_fit": usage_fit,

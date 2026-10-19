@@ -8,6 +8,7 @@ import FindingsSkeleton from "../FindingsSkeleton.jsx";
 import ErrorBoundary from "../ErrorBoundary.jsx";
 import { AuthProvider, useAuth } from "../AuthContext.jsx";
 import AccountButton from "../AccountButton.jsx";
+import { shouldPlayIntro } from "../introGate.js";
 import "./tokens.css";
 import "./shell.css";
 import "./skin.css";
@@ -34,6 +35,15 @@ const Landing = lazyWithReload(() => import("./Landing.jsx"));
 const HowItWorks = lazyWithReload(() => import("./HowItWorks.jsx"));
 const EsuCountdown = lazyWithReload(() => import("./EsuCountdown.jsx"));
 const CarbonCalc = lazyWithReload(() => import("./CarbonCalc.jsx"));
+const Compare = lazyWithReload(() => import("./Compare.jsx"));
+// Fetched only when it is going to play: most loads skip it.
+const Intro = lazyWithReload(() => import("./Intro.jsx"));
+const PLAY_INTRO = (() => {
+  try {
+    return !new URLSearchParams(window.location.search).has("verify")
+      && shouldPlayIntro(window.sessionStorage, window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
+  } catch { return false; }
+})();
 const Findings = lazyWithReload(() => import("../Findings.jsx"));
 const Verifier = lazyWithReload(() => import("../Verifier.jsx"));
 const Sources = lazyWithReload(() => import("../Sources.jsx"));
@@ -54,6 +64,7 @@ export const ROUTES = {
   home: { label: "Home" },
   how: { label: "How it works", app: true },
   scan: { label: "Scan", app: true },
+  compare: { label: "Compare", app: true },
   carbon: { label: "Carbon calculator", app: true },
   esu: { label: "Windows 10 countdown", app: true },
   verify: { label: "Verify a passport", app: true },
@@ -67,7 +78,7 @@ export const ROUTES = {
 //: The top bar. Groups open as menus; single items are plain links.
 export const NAV = [
   { id: "scan" },
-  { label: "Tools", items: ["carbon", "esu"] },
+  { label: "Tools", items: ["compare", "carbon", "esu"] },
   { id: "verify" },
   { label: "Evidence", items: ["how", "thesis", "findings", "sources"] },
 ];
@@ -132,6 +143,9 @@ function Shell() {
         e.preventDefault();
         document.getElementById("v2-main")?.focus();
       }}>Skip to content</a>
+      {/* The opening animation (S3-04): once per browser session, skippable, never
+          under reduced motion (introGate.js), and not when a QR opens a passport. */}
+      {PLAY_INTRO && <Suspense fallback={null}><Intro /></Suspense>}
       <TopNav view={view} navigate={navigate} newScan={() => setFreshScan((n) => n + 1)} />
       <main id="v2-main" tabIndex={-1} className={page.app ? "v2-app v2-wrap" : "v2-bleed"}>
         {/* Scanner stays mounted so a result survives navigating away. It sits
@@ -148,6 +162,7 @@ function Shell() {
             {view === "how" && <HowItWorks onNavigate={openPage} />}
             {view === "esu" && <EsuCountdown onNavigate={openPage} />}
             {view === "carbon" && <CarbonCalc onNavigate={openPage} />}
+            {view === "compare" && <Compare onNavigate={openPage} />}
             {view === "findings" && <Findings />}
             {view === "verify" && <Verifier onNavigate={openPage} />}
             {view === "sources" && <Sources />}

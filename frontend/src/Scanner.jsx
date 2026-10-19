@@ -2,14 +2,16 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { api } from "./api.js";
 import { scanDevice, SCAN_STEPS } from "./scan.js";
 import PassportCard from "./PassportCard.jsx";
-import AssessmentDashboard from "./AssessmentDashboard.jsx";
 import { b64encodeCompressed } from "./b64.js";
 import { useCountUp } from "./useCountUp.js";
 import { fetchAssessment } from "./assess.js";
 import { defaultProductCategory } from "./deviceCategory.js";
 import { markScanned } from "./deviceStore.js";
+import { openPassportPdf } from "./passportPdf.js";
 // Loaded only when someone chooses the deep scan, so the first page stays small.
 const DeepScan = lazy(() => import("./DeepScan.jsx"));
+// The results page and its cards only appear after a scan, so they load then.
+const AssessmentDashboard = lazy(() => import("./AssessmentDashboard.jsx"));
 import { useAuth } from "./AuthContext.jsx";
 
 const STAGE = { idle: 0, consent: 1, scanning: 2, complete: 3, done: 4 };
@@ -39,7 +41,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
   // tablet, laptop/desktop) instead of always "Laptop" -- someone scanning from
   // their phone who forgets to change the dropdown would otherwise have that
   // scan mis-filed under laptop/desktop history.
-  const [extra, setExtra] = useState({ product_category: defaultProductCategory(), device_age: 4, problem: "", persona: "general" });
+  const [extra, setExtra] = useState({ product_category: defaultProductCategory(), device_age: 4, problem: "", persona: "general", model_code: "" });
   const [minting, setMinting] = useState(false);
   const [assessment, setAssessment] = useState(null);
   const timers = useRef([]);
@@ -76,6 +78,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
     }
     if (mine !== run.current) return;
     setScan(data);
+    if (data.model) setExtra((x) => (x.model_code ? x : { ...x, model_code: data.model }));
 
     // reveal fields one-by-one for the "it's reading my machine" moment
     SCAN_STEPS.forEach((_, i) => {
@@ -310,6 +313,14 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
                     onChange={(e) => setExtra({ ...extra, device_age: e.target.value })} />
                 </div>
               </div>
+              {(extra.product_category === "Mobile" || extra.product_category === "Tablet") && (
+                <div className="field">
+                  <label>Model (optional, for the EU repairability grade)</label>
+                  <input type="text" value={extra.model_code} maxLength={60}
+                    placeholder="e.g. SM-S931B, from Settings → About phone"
+                    onChange={(e) => setExtra({ ...extra, model_code: e.target.value })} />
+                </div>
+              )}
               <div className="field">
                 <label>What do you mainly use it for?</label>
                 <select value={extra.persona} onChange={(e) => setExtra({ ...extra, persona: e.target.value })}>
@@ -338,6 +349,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
               <button className="cta" onClick={savePassport}>Save passport (JSON)</button>
               <button className="ghost" onClick={saveQr} disabled={!qr}>{qr ? "Save QR (PNG)" : "QR unavailable"}</button>
               <button className="ghost" onClick={copyLink} disabled={!verifyUrl}>{copied ? "Link copied" : "Copy verify link"}</button>
+              <button className="ghost" onClick={() => openPassportPdf(passport, { qr, final: assessment?.blend ? { score: assessment.blend.combined_score, grade: assessment.blend.grade } : null })}>Save as PDF</button>
               <button className="ghost" onClick={startNew}>Start a new scan</button>
               <span className="note">
                 Scan the QR with any phone camera to open the verifier, or save it and upload it there later.
@@ -346,7 +358,9 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
           </div>
           <div className="results-right">
             {assessment ? (
-              <AssessmentDashboard data={assessment} payload={passport?.payload} />
+              <Suspense fallback={<div className="center"><span className="spinner" /> loading the results…</div>}>
+                <AssessmentDashboard data={assessment} payload={passport?.payload} />
+              </Suspense>
             ) : (
               <div className="center"><span className="spinner" /> crunching real numbers, not vibes…</div>
             )}

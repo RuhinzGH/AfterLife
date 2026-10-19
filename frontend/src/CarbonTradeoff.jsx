@@ -117,12 +117,16 @@ export default function CarbonTradeoff({ tradeoff }) {
           wins" is not automatically true, and this works it out rather than
           assuming it.
         </p>
-        <p className="note">{assumptions?.note}</p>
-        <p className="note">
-          Comparing a {assumptions?.old_tdp_w}W machine kept in service against a
-          {" "}{assumptions?.new_tdp_w}W replacement doing the same work, at{" "}
-          {assumptions?.hours_per_year} hours a year.
-        </p>
+        {assumptions && (
+          <>
+            <p className="note">{assumptions.note}</p>
+            <p className="note">
+              Comparing a {assumptions.old_tdp_w}W machine kept in service against a
+              {" "}{assumptions.new_tdp_w}W replacement doing the same work, at{" "}
+              {assumptions.hours_per_year} hours a year.
+            </p>
+          </>
+        )}
         <p className="note src">
           Grid intensity: {grid.source}
           {declared && <> · Embodied carbon: manufacturer LCA declaration via Boavizta.</>}

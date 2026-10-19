@@ -63,3 +63,12 @@ def test_assess_uses_the_deep_scan_processor_but_not_on_an_instant_scan():
                                                "cpu": "Intel(R) Core(TM) i5-8250U"}).json()
     assert instant["carbon_tradeoff"]["picked"] == "heavy"
     assert not next(i for i in instant["carbon_tradeoff"]["inputs"] if i["name"] == "Old processor power")["measured"]
+
+
+def test_phones_and_tablets_are_not_run_through_the_laptop_power_model():
+    for cat in ("Mobile", "Tablet", "Games console"):
+        r = grid.payback_range("IN", 70, "class", device_class=cat)
+        assert r["applies"] is False and not r["repays"] and r["scenarios"] is None
+        assert "not applied" in r["headline"]
+    assert grid.payback_range("IN", 70, device_class="Mobile")["headline"].startswith("Making a replacement phone")
+    assert grid.payback_range("IN", 307, device_class="Laptop")["repays"]

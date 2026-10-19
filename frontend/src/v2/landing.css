@@ -189,3 +189,10 @@
 @media (prefers-reduced-motion: reduce) {
   .v2 .lp-ring-glow, .v2 .lp-chip, .v2 .lp-scroll-hint span, .v2 .lp-hero-copy, .v2 .lp-ring { animation: none; }
 }
+
+/* Why are you here? (S3-04) */
+.v2 .lp-intent { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; }
+.v2 .lp-intent-q { color: var(--v2-muted, #a1a1aa); font-size: 0.92rem; margin-right: 4px; }
+.v2 .lp-intent-btn { border: 1px solid var(--v2-line, rgba(255,255,255,0.14)); background: transparent; color: inherit;
+  font: inherit; font-size: 0.9rem; padding: 7px 14px; border-radius: 999px; cursor: pointer; }
+.v2 .lp-intent-btn:hover, .v2 .lp-intent-btn:focus-visible { border-color: var(--v2-brand, #8b5cf6); }

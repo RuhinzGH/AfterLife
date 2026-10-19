@@ -169,12 +169,20 @@ def break_even(
     }
 
 
+#: Device types the processor-power model fits. A phone, tablet or console
+#: draws a few watts, nothing like a laptop's 15-45 W chip, so running them
+#: through the laptop figures would print a payback that means nothing.
+POWER_MODEL_TYPES = (None, "", "Laptop", "Desktop computer")
+_NOUN = {"Mobile": "phone", "Tablet": "tablet", "Games console": "games console"}
+
+
 def payback_range(
     country: str | None,
     embodied_kg: float | None = None,
     embodied_basis: str | None = None,
     cpu: dict[str, Any] | None = None,
     use: str | None = None,
+    device_class: str | None = None,
 ) -> dict[str, Any] | None:
     """The break-even for light, typical and heavy use (S2-13).
 
@@ -185,6 +193,26 @@ def payback_range(
     it picks which scenario the card highlights. The top-level fields are the
     highlighted scenario, so older callers read it as before.
     """
+    if device_class not in POWER_MODEL_TYPES:
+        grid = intensity(country)
+        if not grid:
+            return None
+        embodied = embodied_kg if (embodied_kg and embodied_kg > 0) else DEFAULT_EMBODIED_KG
+        return {
+            "repays": False, "applies": False, "grid": grid,
+            "embodied_kg": round(embodied, 1),
+            "embodied_basis": embodied_basis or ("declared" if embodied_kg else "default"),
+            "annual_saving_kg": 0.0,
+            "headline": (f"Making a replacement {_NOUN.get(device_class, 'device')} took about {embodied:.0f} kg CO₂e. "
+                         f"AfterLife's payback model is built for laptop and desktop processors, so it "
+                         f"is not applied here: keeping this one avoids that carbon."),
+            "scenarios": None,
+            "inputs": [{"name": "Making a replacement", "measured": embodied_basis in ("matched", "class"),
+                        "source": {"matched": "this model's published life-cycle figure",
+                                   "class": "median of published figures for this device class"}.get(
+                                       embodied_basis, "fallback estimate (no published figure)")}],
+            "assumptions": None,
+        }
     old_w = float(cpu["watts"]) if cpu else DEFAULT_OLD_TDP_W
     new_w = min(DEFAULT_NEW_TDP_W, old_w)
     picked = USE_SCENARIO.get(use or "", "typical")

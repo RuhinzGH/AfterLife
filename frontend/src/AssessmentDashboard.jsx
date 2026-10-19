@@ -9,7 +9,11 @@ import RepairOutlook from "./RepairOutlook.jsx";
 import RepairRights from "./RepairRights.jsx";
 import PriceEstimate from "./PriceEstimate.jsx";
 import SellChecklist from "./SellChecklist.jsx";
+import { Fragment } from "react";
+import { INTENTS, orderCards, setIntent, useIntent } from "./intent.js";
+import { setTechnical, useTechnical } from "./prefs.js";
 import PlainExplanation from "./PlainExplanation.jsx";
+import EprelGrade from "./EprelGrade.jsx";
 
 // Lifecycle result dashboard. A vertical stack of equal-width full-width cards —
 // nothing sits beside anything of a different height, so the layout stays
@@ -24,6 +28,8 @@ function scoreColor(s) {
 
 
 export default function AssessmentDashboard({ data, payload, wipe }) {
+  const intent = useIntent();
+  const technical = useTechnical();
   if (!data) return null;
   const { blend, pipeline, narrative, key_points, pathways, pathways_narrative, win11,
           carbon_tradeoff, usage_fit, uplift, repair_evidence, repair_rights, geo } = data;
@@ -33,11 +39,157 @@ export default function AssessmentDashboard({ data, payload, wipe }) {
   const total = pipeline.projected_total_life || 1;
   const used = Math.max(0, total - pipeline.estimated_remaining_years);
 
+  // The result cards, by name, so the visitor's reason for coming (intent.js)
+  // can bring its cards to the top. Nothing is hidden by the order.
+  const blocks = {
+    life: (
+      <>
+        {/* Card 2 — remaining life + lifespan position */}
+        <Reveal delay={120}>
+          <div className="dash-card" id="tour-life">
+            <div className="k-label">Estimated safe service life</div>
+            <div className="split">
+              <div className="split-fixed life-metric">
+                <div className="metric-big" style={{ color: col }}>
+                  {pipeline.estimated_remaining_years}<span>yr left</span>
+                </div>
+                <div className="life-bar"><i style={{ width: `${(used / total) * 100}%`, background: col }} /></div>
+                <div className="note">{used.toFixed(1)} of ~{total} estimated years used</div>
+              </div>
+              <MiniGauge value={used} max={total} color={col} />
+              <div className="split-main">
+                <LifespanBar pipeline={pipeline} color={col} />
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </>
+    ),
+    pipeline: (
+      <>
+        {/* Card 3 — lifecycle pipeline */}
+        <Reveal delay={60}>
+          <div className="dash-card tech-only">
+            <div className="k-label">Lifecycle pipeline</div>
+            <div className="timeline">
+              {pipeline.stages.map((s, i) => (
+                <div className="tl-wrap" key={i}>
+                  <div className={`tl-stage ${s.state}`}>
+                    <div className="tl-dot" />
+                    <div className="tl-name">{s.stage}</div>
+                    <div className="tl-year">yr {s.year}</div>
+                  </div>
+                  {i < pipeline.stages.length - 1 && <div className="tl-arrow">→</div>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </>
+    ),
+    plain: (
+      <>
+        {/* Card 3b — the result in plain words, worded by a language model and
+            checked against the numbers above (S2-08) */}
+        <Reveal>
+          <PlainExplanation data={data} tier={payload?.tier} />
+        </Reveal>
+      </>
+    ),
+    summary: (
+      <>
+        {/* Card 4 — narrated detail, secondary to the checklist above */}
+        <Reveal>
+          <div className="dash-card">
+            <div className="k-label">Assessment summary <span className="pill muted">rule-based</span></div>
+            <p className="ai-summary">{narrative.summary}</p>
+            {narrative.lifecycle_note && <p className="note" style={{ marginTop: "0.6rem" }}>{narrative.lifecycle_note}</p>}
+            {narrative.confidence_note && (
+              <p className="note" style={{ marginTop: "0.6rem", opacity: 0.8 }}>{narrative.confidence_note}</p>
+            )}
+            <div className="k-label" style={{ marginTop: "1.2rem" }}>Get more from this device</div>
+            <div className="sugg-list">
+              {narrative.suggestions.filter((s) => s && s.trim()).map((s, i) => (
+                <div className="sugg" key={i}>
+                  <span className="sugg-n">{i + 1}</span><span>{s}</span>
+                </div>
+              ))}
+            </div>
+            <AiCaption source={narrative.source} />
+          </div>
+        </Reveal>
+      </>
+    ),
+    usage: (
+      <>
+        {/* Card 4d -- is it up to the work its owner does on it (S2-07) */}
+        <Reveal delay={60}>
+          <UsageFit fit={usage_fit} lifecycleYears={pipeline.estimated_remaining_years} />
+        </Reveal>
+      </>
+    ),
+    carbon: (
+      <>
+        {/* Card 4e -- the carbon half of the keep-or-replace decision, on the grid
+            this device is actually plugged into rather than the single global
+            figure the research page quotes. */}
+        <Reveal delay={60}>
+          <CarbonTradeoff tradeoff={carbon_tradeoff} />
+        </Reveal>
+      </>
+    ),
+    pathways: (
+      <>
+        {/* Card 5 — Lifecycle Pathways: the decision itself, not just the score behind it */}
+        <Reveal delay={80}>
+          <div id="tour-reco" className="tour-reco-wrap">
+            <LifecyclePathways pathways={pathways} narrative={pathways_narrative} />
+          </div>
+        </Reveal>
+      </>
+    ),
+    outlook: (
+      <>
+        <Reveal delay={60}>
+          <RepairOutlook uplift={uplift} evidence={repair_evidence} />
+        </Reveal>
+      </>
+    ),
+    rights: (
+      <>
+        <Reveal delay={60}>
+          <RepairRights rights={repair_rights} />
+        </Reveal>
+      </>
+    ),
+    price: (
+      <>
+        <PriceEstimate defaultOpen={intent === "sell"} grade={blend.grade} ageYears={ageYears}
+          productCategory={payload?.product_category} currency={geo?.currency} />
+      </>
+    ),
+    sell: (
+      <>
+        <SellChecklist wipe={wipe} defaultOpen={intent === "sell"} />
+      </>
+    ),
+    eugrade: data.eprel ? (
+      <Reveal delay={60}>
+        <EprelGrade eprel={data.eprel} eolRisk={payload?.lifecycle?.eol_risk} />
+      </Reveal>
+    ) : null,
+    security: intent === "safe" ? <SecuritySummary data={data} /> : null,
+  };
+  const order = orderCards(["life", "pipeline", "plain", "summary", "usage", "carbon", "pathways",
+                            "outlook", "eugrade", "rights", "price", "sell", "security"], intent);
+
+
   return (
-    <div className="dash">
+    <div className={`dash ${technical ? "is-technical" : "is-plain"}`}>
       <div className="dash-head">
         <div className="eyebrow">Lifecycle assessment · blended score + explanation</div>
         <h2 className="dash-title">Should this device continue existing?</h2>
+        <ViewToggle technical={technical} />
       </div>
 
       {/* Phone-only TL;DR. The full dashboard is a long scroll of cards that a
@@ -96,105 +248,10 @@ export default function AssessmentDashboard({ data, payload, wipe }) {
         </Reveal>
       )}
 
-      {/* Card 2 — remaining life + lifespan position */}
-      <Reveal delay={120}>
-        <div className="dash-card" id="tour-life">
-          <div className="k-label">Estimated safe service life</div>
-          <div className="split">
-            <div className="split-fixed life-metric">
-              <div className="metric-big" style={{ color: col }}>
-                {pipeline.estimated_remaining_years}<span>yr left</span>
-              </div>
-              <div className="life-bar"><i style={{ width: `${(used / total) * 100}%`, background: col }} /></div>
-              <div className="note">{used.toFixed(1)} of ~{total} estimated years used</div>
-            </div>
-            <MiniGauge value={used} max={total} color={col} />
-            <div className="split-main">
-              <LifespanBar pipeline={pipeline} color={col} />
-            </div>
-          </div>
-        </div>
-      </Reveal>
+      <IntentBar intent={intent} />
+      {order.map((k) => <Fragment key={k}>{blocks[k]}</Fragment>)}
 
-      {/* Card 3 — lifecycle pipeline */}
-      <Reveal delay={60}>
-        <div className="dash-card">
-          <div className="k-label">Lifecycle pipeline</div>
-          <div className="timeline">
-            {pipeline.stages.map((s, i) => (
-              <div className="tl-wrap" key={i}>
-                <div className={`tl-stage ${s.state}`}>
-                  <div className="tl-dot" />
-                  <div className="tl-name">{s.stage}</div>
-                  <div className="tl-year">yr {s.year}</div>
-                </div>
-                {i < pipeline.stages.length - 1 && <div className="tl-arrow">→</div>}
-              </div>
-            ))}
-          </div>
-        </div>
-      </Reveal>
-
-      {/* Card 3b — the result in plain words, worded by a language model and
-          checked against the numbers above (S2-08) */}
-      <Reveal>
-        <PlainExplanation data={data} tier={payload?.tier} />
-      </Reveal>
-
-      {/* Card 4 — narrated detail, secondary to the checklist above */}
-      <Reveal>
-        <div className="dash-card">
-          <div className="k-label">Assessment summary</div>
-          <p className="ai-summary">{narrative.summary}</p>
-          {narrative.lifecycle_note && <p className="note" style={{ marginTop: "0.6rem" }}>{narrative.lifecycle_note}</p>}
-          {narrative.confidence_note && (
-            <p className="note" style={{ marginTop: "0.6rem", opacity: 0.8 }}>{narrative.confidence_note}</p>
-          )}
-          <div className="k-label" style={{ marginTop: "1.2rem" }}>Get more from this device</div>
-          <div className="sugg-list">
-            {narrative.suggestions.filter((s) => s && s.trim()).map((s, i) => (
-              <div className="sugg" key={i}>
-                <span className="sugg-n">{i + 1}</span><span>{s}</span>
-              </div>
-            ))}
-          </div>
-          <AiCaption source={narrative.source} />
-        </div>
-      </Reveal>
-
-
-      {/* Card 4d -- is it up to the work its owner does on it (S2-07) */}
-      <Reveal delay={60}>
-        <UsageFit fit={usage_fit} lifecycleYears={pipeline.estimated_remaining_years} />
-      </Reveal>
-
-      {/* Card 4e -- the carbon half of the keep-or-replace decision, on the grid
-          this device is actually plugged into rather than the single global
-          figure the research page quotes. */}
-      <Reveal delay={60}>
-        <CarbonTradeoff tradeoff={carbon_tradeoff} />
-      </Reveal>
-
-      {/* Card 5 — Lifecycle Pathways: the decision itself, not just the score behind it */}
-      <Reveal delay={80}>
-        <div id="tour-reco" className="tour-reco-wrap">
-          <LifecyclePathways pathways={pathways} narrative={pathways_narrative} />
-        </div>
-      </Reveal>
-
-
-      {/* What fixing it buys and how often such repairs work (S2-05), what the
-          law entitles the owner to (S2-06), and, if it is going, what it is worth
-          and how to hand it over cleanly (S2-07). */}
-      <Reveal delay={60}>
-        <RepairOutlook uplift={uplift} evidence={repair_evidence} />
-      </Reveal>
-      <Reveal delay={60}>
-        <RepairRights rights={repair_rights} />
-      </Reveal>
-      <PriceEstimate grade={blend.grade} ageYears={ageYears}
-        productCategory={payload?.product_category} currency={geo?.currency} />
-      <SellChecklist wipe={wipe} />
+      {technical && <TheWorking data={data} />}
 
       <div className="dash-foot">
         <Disclose label="How this score was calculated">
@@ -371,3 +428,95 @@ function Dial({ value, color }) {
     </svg>
   );
 }
+
+/* Plain / technical (S3-03). One preference over the same cards: technical
+   opens every "how this is worked out" fold, shows the lifecycle pipeline, the
+   detail on each score adjustment and the raw working below; plain keeps the
+   verdicts. Stored per browser (prefs.js). */
+function ViewToggle({ technical }) {
+  return (
+    <div className="view-toggle" role="group" aria-label="How much detail to show">
+      <button type="button" aria-pressed={!technical} className={!technical ? "on" : ""}
+              onClick={() => setTechnical(false)}>Plain</button>
+      <button type="button" aria-pressed={technical} className={technical ? "on" : ""}
+              onClick={() => setTechnical(true)}>Technical</button>
+    </div>
+  );
+}
+
+/* Why the visitor came (S3-04): which cards lead, and a way to change it. */
+function IntentBar({ intent }) {
+  return (
+    <div className="intent-bar">
+      <span className="note">{intent ? <>Showing first: <b>{INTENTS[intent].lead}</b>.</> : "What do you want to know first?"}</span>
+      <div className="intent-chips">
+        {Object.entries(INTENTS).map(([k, v]) => (
+          <button key={k} type="button" className={`intent-chip ${intent === k ? "on" : ""}`}
+                  aria-pressed={intent === k} onClick={() => setIntent(intent === k ? null : k)}>{v.label}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* "Is it safe to use?" in one card: the support dates already on the page,
+   and the hardening steps from the pathways. Nothing new is computed. */
+function SecuritySummary({ data }) {
+  const sh = data.support_horizon, cliff = data.support_cliff;
+  const hardening = (data.pathways || []).find((p) => p.key === "hardening");
+  const when = (iso) => new Date(`${iso}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  return (
+    <Reveal>
+      <div className="dash-card">
+        <div className="k-label">Is it safe to use?</div>
+        {sh ? (
+          <p style={{ marginTop: "0.3rem" }}>
+            {sh.is_eol ? <>Ordinary security updates for {sh.product} {sh.release} ended on <b>{when(sh.eol_from)}</b>.</>
+                       : <>{sh.product} {sh.release} gets security updates until <b>{when(sh.eol_from)}</b>.</>}
+            {cliff && <> Paid extended updates (ESU) run until <b>{when(cliff.date)}</b>, {cliff.days_away} days from now.</>}
+          </p>
+        ) : (
+          <p className="note" style={{ marginTop: "0.3rem" }}>No published support end date matched this device or operating system.</p>
+        )}
+        {sh?.note && <p className="note">{sh.note}</p>}
+        {hardening?.actions?.length > 0 && (
+          <>
+            <div className="k-label" style={{ marginTop: "1rem" }}>To stay safer on it</div>
+            <div className="sugg-list">
+              {hardening.actions.map((a, i) => <div className="sugg" key={i}><span className="sugg-n">{i + 1}</span><span>{a}</span></div>)}
+            </div>
+          </>
+        )}
+      </div>
+    </Reveal>
+  );
+}
+
+/* Technical view: the raw working behind the cards, as the server returned it. */
+function TheWorking({ data }) {
+  const { blend, pipeline, carbon_tradeoff: ct } = data;
+  return (
+    <div className="dash-card">
+      <div className="k-label">The working</div>
+      <table className="working-table">
+        <tbody>
+          <tr><th>Start</th><td>{blend.hardware_trust}</td><td className="note">hardware trust</td></tr>
+          {blend.adjustments.map((a, i) => (
+            <tr key={i}><th>{a.delta > 0 ? `+${a.delta}` : a.delta}</th><td>{a.factor}</td><td className="note">{a.detail}</td></tr>
+          ))}
+          <tr><th>= {blend.combined_score}</th><td>{blend.grade}</td><td className="note">grade cut-offs 85 / 70 / 55</td></tr>
+          <tr><th>{pipeline.estimated_remaining_years} yr</th><td>estimated years left</td><td className="note">score ÷ 100 × 8</td></tr>
+          {ct?.assumptions && (
+            <tr><th>{ct.repays ? `${ct.years} yr` : "never"}</th><td>carbon payback ({ct.picked})</td>
+              <td className="note">{ct.embodied_kg} kg ÷ ({ct.assumptions.old_tdp_w} W − {ct.assumptions.new_tdp_w} W) × {ct.assumptions.load_factor} × {ct.assumptions.system_overhead} × {ct.assumptions.hours_per_year} h × {ct.grid.gco2_kwh} g/kWh</td></tr>
+          )}
+        </tbody>
+      </table>
+      <Disclose label="The full result as the server returned it (JSON)">
+        <pre className="working-json">{JSON.stringify(data, null, 2)}</pre>
+      </Disclose>
+      <p className="note" style={{ marginTop: "0.6rem" }}>Every number and its reason: How it works → Every number we assume.</p>
+    </div>
+  );
+}
+

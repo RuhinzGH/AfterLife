@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "./icons.jsx";
 
 // Sell checklist (S2-07). AfterLife never erases anything: it walks the owner
@@ -22,8 +22,9 @@ const STATUS = {
   unknown: ["unknown", "?", "Couldn't check this"],
 };
 
-export default function SellChecklist({ wipe }) {
-  const [open, setOpen] = useState(false);
+export default function SellChecklist({ wipe, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
+  useEffect(() => { if (defaultOpen) setOpen(true); }, [defaultOpen]);   // chose "sell" after the page loaded
 
   if (!open) {
     return (

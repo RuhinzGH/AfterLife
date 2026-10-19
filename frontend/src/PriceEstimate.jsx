@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "./api.js";
 import { ChevronDown, ChevronUp } from "./icons.jsx";
 import Disclose from "./Disclose.jsx";
@@ -18,8 +18,9 @@ function money(n, currency) {
   }
 }
 
-export default function PriceEstimate({ grade, ageYears, productCategory, currency: localCurrency }) {
-  const [open, setOpen] = useState(false);
+export default function PriceEstimate({ grade, ageYears, productCategory, currency: localCurrency, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
+  useEffect(() => { if (defaultOpen) setOpen(true); }, [defaultOpen]);   // chose "sell" after the page loaded
   const [currency, setCurrency] = useState(localCurrency || "USD");
   const [category, setCategory] = useState(productCategory || "Laptop");
   const [cosmetic, setCosmetic] = useState("Good");
