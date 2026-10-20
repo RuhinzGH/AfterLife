@@ -142,6 +142,13 @@ export default function Findings() {
             href={`#${id}`}
             className={`research-toc-link ${activeSec === id ? "on" : ""}`}
             aria-current={activeSec === id ? "true" : undefined}
+            // The site keeps its page name after the "#" (#/findings), so a plain
+            // "#section" link replaced it and the router fell back to the home
+            // page. Scroll in place instead and leave the address alone.
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
           >{label}</a>
         ))}
       </nav>
