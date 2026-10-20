@@ -225,6 +225,12 @@ class Report:
     remote_no_lever_cves: int    # genuinely residual
     remote_no_creds_cves: int    # residual AND needs no credentials -- the real tail
     app_update_cves: int
+    # Overlap (S2-17): flaws with a published fix that network isolation ALSO
+    # reduces, and the flags' basis ("full rule match" when the corpus stores
+    # every mitigation, else "attack vector" from the stored columns).
+    fix_also_isolatable: int = 0
+    isolation_applies_cves: int = 0
+    flags_basis: str = "attack vector"
     actions: list[Action] = field(default_factory=list)
     already_applied: int = 0
     outstanding: int = 0
@@ -257,6 +263,9 @@ class Report:
             "remote_no_creds_cves": self.remote_no_creds_cves,
             "addressable_share": round(self.addressable_share, 3),
             "app_update_cves": self.app_update_cves,
+            "fix_also_isolatable": self.fix_also_isolatable,
+            "isolation_applies_cves": self.isolation_applies_cves,
+            "flags_basis": self.flags_basis,
             "already_applied": self.already_applied,
             "outstanding": self.outstanding,
             "unknown_state": self.unknown_state,
@@ -380,6 +389,22 @@ def build_report(
     actions.sort(key=lambda a: (a.applied is True, -a.cves_closed))
 
     fixable = counts.get("service_disable", 0) + counts.get("app_update", 0) + counts.get("os_upgrade", 0)
+
+    # Every mitigation, not only the primary one (S2-17). The corpus stores the
+    # full list from its next rebuild ("mitigations"); until then the isolation
+    # overlap is read from the stored attack vector and privileges, by the same
+    # rule the classifier uses.
+    from .mitigation import isolation_applies
+    full = any(r.get("mitigations") for r in serious)
+
+    def isolatable(r: dict[str, str]) -> bool:
+        if full:
+            return "network_isolate" in (r.get("mitigations") or "")
+        return isolation_applies(r.get("attack_vector"), r.get("privileges_required"))
+
+    fix_classes = ("service_disable", "app_update", "os_upgrade")
+    iso_any = sum(1 for r in serious if isolatable(r))
+    fix_and_iso = sum(1 for r in serious if (r.get("mitigation_class") or "") in fix_classes and isolatable(r))
     meta = WINDOWS_VERSIONS[major]
     return Report(
         os_label=meta["label"],
@@ -392,6 +417,9 @@ def build_report(
         remote_no_lever_cves=remote_no_lever,
         remote_no_creds_cves=remote_no_creds,
         app_update_cves=counts.get("app_update", 0),
+        fix_also_isolatable=fix_and_iso,
+        isolation_applies_cves=iso_any,
+        flags_basis="full rule match" if full else "attack vector",
         actions=actions,
         already_applied=sum(1 for a in actions if a.applied is True),
         outstanding=sum(1 for a in actions if a.applied is False),

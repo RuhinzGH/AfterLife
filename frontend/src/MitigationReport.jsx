@@ -86,7 +86,7 @@ export default function MitigationReport({ mitigation, token }) {
           </span>
         </div>
         <span className="life-tag fix">
-          {Math.round(m.addressable_share * 100)}% have an answer
+          {Math.round(m.addressable_share * 100)}% addressable
         </span>
       </div>
 

@@ -73,6 +73,10 @@ FIG = ROOT / "app_data" / "figures"
 FIG.mkdir(parents=True, exist_ok=True)
 RANDOM = 42
 FOLDS = 4
+RF_TREES = 150
+#: The saved model is zlib-compressed (level 3): 4.9 MB instead of 15 MB, and it
+#: still loads in about a quarter of a second.
+MODEL_COMPRESS = 3
 
 GROUND, GRID, INK, SECOND, MUTED = "#0E1518", "#243033", "#F2F5F4", "#9DB0AD", "#7D8F8C"
 BRAND, AMBER = "#8b5cf6", "#c98500"
@@ -117,7 +121,10 @@ def candidates() -> dict:
     return {
         "Logistic Regression": LogisticRegression(max_iter=2000, class_weight="balanced",
                                                   n_jobs=-1, random_state=RANDOM),
-        "Random Forest": RandomForestClassifier(n_estimators=300, max_depth=18,
+        # 150 trees, not 300 (S3-05): scripts/measure_model_size.py found the same
+        # unseen-venue accuracy (end-of-life recall 0.639 vs 0.638, calibration
+        # error 0.0245 vs 0.025) at half the size; see app_data/model_size_experiment.json.
+        "Random Forest": RandomForestClassifier(n_estimators=RF_TREES, max_depth=18,
                                                 min_samples_leaf=3, class_weight="balanced",
                                                 n_jobs=-1, random_state=RANDOM),
         "XGBoost": XGBClassifier(n_estimators=400, max_depth=6, learning_rate=0.08,
@@ -342,7 +349,7 @@ def main() -> None:
         make_pipe(best_eol["representation"], best_eol["model"]), method="isotonic", cv=3)
     shipped.fit(X, y)
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
-    joblib.dump(shipped, MODEL_DIR / "lifecycle_model.joblib")
+    joblib.dump(shipped, MODEL_DIR / "lifecycle_model.joblib", compress=MODEL_COMPRESS)
 
     leakage = {
         "model": best_f1["model"], "representation": best_f1["representation"],

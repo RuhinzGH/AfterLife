@@ -104,9 +104,10 @@ def intensity(country: str | None) -> dict[str, Any] | None:
             "source": data.get("source"), "unit": data.get("unit")}
 
 
-def annual_kwh(tdp_w: float, hours_per_year: float = HOURS_PER_YEAR) -> float:
+def annual_kwh(tdp_w: float, hours_per_year: float = HOURS_PER_YEAR,
+               load_factor: float = LOAD_FACTOR, system_overhead: float = SYSTEM_OVERHEAD) -> float:
     """Yearly electricity for a machine of this TDP, on the duty cycle above."""
-    return tdp_w * LOAD_FACTOR * SYSTEM_OVERHEAD * hours_per_year / 1000.0
+    return tdp_w * load_factor * system_overhead * hours_per_year / 1000.0
 
 
 def break_even(
@@ -116,6 +117,8 @@ def break_even(
     new_tdp_w: float = DEFAULT_NEW_TDP_W,
     embodied_basis: str | None = None,
     hours_per_year: float = HOURS_PER_YEAR,
+    load_factor: float = LOAD_FACTOR,
+    system_overhead: float = SYSTEM_OVERHEAD,
 ) -> dict[str, Any] | None:
     """Years of use before replacing repays its own manufacturing carbon.
 
@@ -128,7 +131,8 @@ def break_even(
         return None
 
     embodied = embodied_kg if (embodied_kg and embodied_kg > 0) else DEFAULT_EMBODIED_KG
-    saved_kwh = annual_kwh(old_tdp_w, hours_per_year) - annual_kwh(new_tdp_w, hours_per_year)
+    saved_kwh = (annual_kwh(old_tdp_w, hours_per_year, load_factor, system_overhead)
+                 - annual_kwh(new_tdp_w, hours_per_year, load_factor, system_overhead))
 
     where = _where(grid)
 

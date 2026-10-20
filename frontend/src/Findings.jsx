@@ -64,6 +64,7 @@ const TOC = [
   ["security-evidence", "Security"],
   ["environmental-evidence", "Environmental"],
   ["model-methodology", "Model & method"],
+  ["sensitivity", "Sensitivity"],
 ];
 
 export default function Findings() {
@@ -154,7 +155,7 @@ export default function Findings() {
         />
         <Stat k="Win 10 clears vs Win 7" v={`~${clearRatio}×`} cls="amber" n={`${decay.win10_projected_months} vs ${decay.win7_settled_months} months to <5%`} />
         <Stat k="Serious CVEs needing local access" v={`${(security.local_share * 100).toFixed(0)}%`} cls="blue" n="attacker already on device" />
-        <Stat k="Carbon break-even, dirtiest grid" v={dirtiest != null ? `${dirtiest} yr` : "—"} cls="green" n="no laptop lives that long" />
+        <Stat k="Carbon break-even, India's grid" v={dirtiest != null ? `${dirtiest} yr` : "—"} cls="green" n="typical laptop and use; where it changes: see below" />
       </div>
 
       {/* ============================================ 1. the claim itself */}
@@ -179,11 +180,21 @@ export default function Findings() {
             <div className="fh-cell res"><b>{mit.remote_no_lever}</b><span>reachable remotely with nothing published to stop them</span></div>
           </div>
           <p className="fh-punch">
-            <b>{mit.addressable_pct}%</b> can be fixed, shut off, or need someone already on the machine.
-            And of the{" "}
+            <b>{mit.addressable_pct}%</b> are addressable: fixed, or their exposure reduced. That is not
+            "all fixed": <b>{mit.fixable_pct}%</b> have a published fix; the rest are reduced by keeping the
+            PC off the open network, or need someone already on the machine. And of the{" "}
             {mit.remote_no_lever} genuinely residual ones, <b>zero</b> can be reached over a network
             without credentials — every one needs an account on the machine first.
           </p>
+          {Number.isFinite(mit.fix_also_isolatable) && (
+            <p className="fh-also">
+              Each flaw is counted once, under its best option, so the totals add up. Many have more
+              than one: <b>{mit.fix_also_isolatable.toLocaleString()}</b> of the {mit.fixable.toLocaleString()} with
+              a fix can <i>also</i> be reduced by network isolation, and isolation applies
+              to <b>{mit.isolation_applies.toLocaleString()}</b> of the {mit.serious.toLocaleString()} serious
+              flaws in all.
+            </p>
+          )}
           {mit11 && (
             <p className="fh-also">
               The same holds on a currently-supported OS: across{" "}
@@ -795,7 +806,74 @@ export default function Findings() {
 
         <Provenance />
       </Section>
+
+      {/* ============================================ 5. do the conclusions hold? */}
+      <Section
+        id="sensitivity"
+        eyebrow="Sensitivity analysis"
+        title="Do the conclusions hold if the assumptions change?"
+        sub="Every assumption moved to the edge of its plausible range, one at a time, using the site's own
+             functions. Where a conclusion changes, this says so."
+      >
+        <Sensitivity />
+      </Section>
     </div>
+  );
+}
+
+function Sensitivity() {
+  const [d, setD] = useState(null);
+  useEffect(() => { api.sensitivity().then(setD).catch(() => {}); }, []);
+  if (!d) return <Loading />;
+  const c = d.carbon, sc = d.score;
+  const yr = (v) => (v == null ? "never" : `${v.toFixed(1)} yr`);
+  return (
+    <>
+      <div className="card pad-lg">
+        <h2>Carbon payback, one assumption at a time</h2>
+        <p className="sub">
+          Default: a laptop with the median declared manufacturing carbon ({c.base.embodied_kg} kg) on {c.base.grid}'s grid,
+          {" "}{c.base.old_w} W kept against a {c.base.new_w} W replacement, {c.base.hours_a_day} hours a day:
+          <b> {yr(c.base.years)}</b> to repay.
+        </p>
+        <table className="sens-table">
+          <thead><tr><th>Changed</th><th>To</th><th>Years to repay</th></tr></thead>
+          <tbody>
+            {c.one_at_a_time.map((r) => (
+              <tr key={r.factor + r.value}><td>{r.factor}</td><td>{r.value}</td><td className="num">{yr(r.years)}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="note" style={{ marginTop: "0.8rem" }}>
+          With one change at a time the payback runs from <b>{yr(c.range_years?.[0])}</b> to <b>{yr(c.range_years?.[1])}</b>
+          {c.never_repays.length > 0 && <>, and never repays with a {c.never_repays.join(", ")} old processor</>}.
+          With every change stacked in replacement's favour ({c.everything_against_keeping.what}) it is
+          <b> {yr(c.everything_against_keeping.years)}</b>. So "keep it" holds for a typical laptop on most grids, but not
+          for a power-hungry machine used heavily on the dirtiest grids, which is why the result card works it out
+          for each device rather than assuming it.
+        </p>
+      </div>
+
+      <div className="card pad-lg">
+        <h2>How much the grade depends on the chosen weights</h2>
+        <p className="sub">Across {sc.devices.toLocaleString()} device inputs: {sc.grid}.</p>
+        <table className="sens-table">
+          <thead><tr><th>Changed</th><th>Grade changes</th><th>Top option changes</th><th>Points moved (mean / max)</th></tr></thead>
+          <tbody>
+            {sc.variants.map((v) => (
+              <tr key={v.change}><td>{v.change}</td><td className="num">{v.grade_changes_pct}%</td>
+                <td className="num">{v.top_option_changes_pct}%</td><td className="num">{v.mean_points_moved} / {v.max_points_moved}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="note" style={{ marginTop: "0.8rem" }}>
+          A changed grade means a device sat near a grade boundary: the scores move by a few points on average, never
+          by more than the largest number shown. The weights are design choices and the grade is a band, so the page
+          shows every adjustment rather than the grade alone. The end-of-life weight is {sc.base_eol_weight} because that
+          is one grade band.
+        </p>
+      </div>
+    </>
   );
 }
 

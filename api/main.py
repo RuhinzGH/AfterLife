@@ -246,7 +246,9 @@ def thesis() -> dict:
             "unit": "to break even, depending on the grid",
             "detail": "On a coal-heavy grid a newer machine's efficiency repays its "
                       "manufacturing carbon in about two decades. On a clean one it "
-                      "effectively never does. No laptop lives that long either way.",
+                      "effectively never does. It can be much shorter for a power-hungry "
+                      "machine used heavily on the dirtiest grids: the sensitivity analysis "
+                      "on Our Research shows where the conclusion changes.",
             "basis": f"{kg:.0f} kg embodied carbon (median of {laptop['n']} laptop "
                      f"declarations), measured grid intensity per country",
             "source": grid.intensity("FR")["source"],
@@ -606,6 +608,16 @@ def assumptions() -> dict:
     from the code when asked, never typed into the page."""
     from afterlife.assumptions import table
     return table()
+
+
+@app.get("/api/sensitivity")
+def sensitivity() -> dict:
+    """Whether the main conclusions hold when the assumptions change (S3-08):
+    carbon payback with one input moved at a time, and how often the grade and
+    the top recommendation change with the end-of-life weight and penalties.
+    Computed by the site's own functions (afterlife/sensitivity.py)."""
+    from afterlife.sensitivity import analysis
+    return analysis()
 
 
 class ExplainIn(BaseModel):
@@ -1057,5 +1069,8 @@ def _mitigation_summary() -> dict:
             "remote_no_lever": rep.remote_no_lever_cves,
             "remote_no_creds": rep.remote_no_creds_cves,
             "addressable_pct": round(rep.addressable_share * 100, 1),
+            "fixable_pct": round(rep.fixable_share * 100, 1),
+            "fix_also_isolatable": rep.fix_also_isolatable,
+            "isolation_applies": rep.isolation_applies_cves,
         }
     return out

@@ -17,7 +17,15 @@ MODEL_PATH = MODEL_DIR / "lifecycle_model.joblib"
 def _model():
     if not MODEL_PATH.exists():
         raise FileNotFoundError("train the model first: scripts/train_lifecycle.py")
-    return joblib.load(MODEL_PATH)
+    model = joblib.load(MODEL_PATH)
+    # The site predicts one device at a time; starting parallel workers for a
+    # single row costs more than it saves (184 ms -> 81 ms per prediction,
+    # scripts/measure_model_size.py).
+    for c in getattr(model, "calibrated_classifiers_", []):
+        clf = c.estimator.named_steps.get("clf") if hasattr(c.estimator, "named_steps") else None
+        if clf is not None and hasattr(clf, "n_jobs"):
+            clf.n_jobs = 1
+    return model
 
 
 def predict_lifecycle(

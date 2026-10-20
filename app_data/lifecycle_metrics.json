@@ -50,20 +50,20 @@
       "model": "Random Forest",
       "representation": "tokens",
       "random": {
-        "accuracy": 0.498,
-        "macro_f1": 0.491,
-        "eol_recall": 0.698,
-        "eol_precision": 0.297,
-        "fixed_recall": 0.43
+        "accuracy": 0.501,
+        "macro_f1": 0.493,
+        "eol_recall": 0.683,
+        "eol_precision": 0.304,
+        "fixed_recall": 0.432
       },
       "grouped": {
         "accuracy": 0.362,
-        "macro_f1": 0.34,
-        "eol_recall": 0.638,
-        "eol_precision": 0.247,
-        "fixed_recall": 0.251,
+        "macro_f1": 0.342,
+        "eol_recall": 0.639,
+        "eol_precision": 0.246,
+        "fixed_recall": 0.255,
         "macro_f1_sd": 0.049,
-        "eol_recall_sd": 0.155
+        "eol_recall_sd": 0.148
       }
     },
     {
@@ -72,18 +72,18 @@
       "random": {
         "accuracy": 0.559,
         "macro_f1": 0.539,
-        "eol_recall": 0.645,
+        "eol_recall": 0.651,
         "eol_precision": 0.357,
-        "fixed_recall": 0.539
+        "fixed_recall": 0.541
       },
       "grouped": {
-        "accuracy": 0.446,
-        "macro_f1": 0.388,
-        "eol_recall": 0.402,
-        "eol_precision": 0.259,
-        "fixed_recall": 0.485,
-        "macro_f1_sd": 0.029,
-        "eol_recall_sd": 0.176
+        "accuracy": 0.437,
+        "macro_f1": 0.382,
+        "eol_recall": 0.407,
+        "eol_precision": 0.254,
+        "fixed_recall": 0.467,
+        "macro_f1_sd": 0.03,
+        "eol_recall_sd": 0.186
       }
     },
     {
@@ -110,20 +110,20 @@
       "model": "Random Forest",
       "representation": "lexicon",
       "random": {
-        "accuracy": 0.442,
-        "macro_f1": 0.433,
-        "eol_recall": 0.547,
-        "eol_precision": 0.273,
-        "fixed_recall": 0.375
+        "accuracy": 0.445,
+        "macro_f1": 0.435,
+        "eol_recall": 0.541,
+        "eol_precision": 0.271,
+        "fixed_recall": 0.387
       },
       "grouped": {
-        "accuracy": 0.377,
-        "macro_f1": 0.343,
-        "eol_recall": 0.317,
+        "accuracy": 0.378,
+        "macro_f1": 0.345,
+        "eol_recall": 0.318,
         "eol_precision": 0.237,
-        "fixed_recall": 0.315,
-        "macro_f1_sd": 0.049,
-        "eol_recall_sd": 0.094
+        "fixed_recall": 0.318,
+        "macro_f1_sd": 0.05,
+        "eol_recall_sd": 0.071
       }
     },
     {
@@ -131,19 +131,19 @@
       "representation": "lexicon",
       "random": {
         "accuracy": 0.456,
-        "macro_f1": 0.441,
-        "eol_recall": 0.514,
-        "eol_precision": 0.27,
-        "fixed_recall": 0.425
+        "macro_f1": 0.44,
+        "eol_recall": 0.519,
+        "eol_precision": 0.273,
+        "fixed_recall": 0.429
       },
       "grouped": {
-        "accuracy": 0.397,
+        "accuracy": 0.395,
         "macro_f1": 0.338,
-        "eol_recall": 0.277,
-        "eol_precision": 0.211,
-        "fixed_recall": 0.434,
-        "macro_f1_sd": 0.032,
-        "eol_recall_sd": 0.153
+        "eol_recall": 0.282,
+        "eol_precision": 0.209,
+        "fixed_recall": 0.433,
+        "macro_f1_sd": 0.026,
+        "eol_recall_sd": 0.157
       }
     },
     {
@@ -170,38 +170,38 @@
       "model": "Random Forest",
       "representation": "invariant",
       "random": {
-        "accuracy": 0.419,
-        "macro_f1": 0.407,
-        "eol_recall": 0.541,
+        "accuracy": 0.421,
+        "macro_f1": 0.409,
+        "eol_recall": 0.547,
         "eol_precision": 0.258,
         "fixed_recall": 0.383
       },
       "grouped": {
-        "accuracy": 0.372,
-        "macro_f1": 0.354,
-        "eol_recall": 0.447,
+        "accuracy": 0.373,
+        "macro_f1": 0.355,
+        "eol_recall": 0.448,
         "eol_precision": 0.241,
-        "fixed_recall": 0.324,
+        "fixed_recall": 0.323,
         "macro_f1_sd": 0.007,
-        "eol_recall_sd": 0.088
+        "eol_recall_sd": 0.095
       }
     },
     {
       "model": "XGBoost",
       "representation": "invariant",
       "random": {
-        "accuracy": 0.429,
-        "macro_f1": 0.41,
-        "eol_recall": 0.477,
-        "eol_precision": 0.251,
-        "fixed_recall": 0.427
+        "accuracy": 0.431,
+        "macro_f1": 0.411,
+        "eol_recall": 0.476,
+        "eol_precision": 0.254,
+        "fixed_recall": 0.428
       },
       "grouped": {
-        "accuracy": 0.375,
-        "macro_f1": 0.355,
-        "eol_recall": 0.442,
-        "eol_precision": 0.239,
-        "fixed_recall": 0.346,
+        "accuracy": 0.379,
+        "macro_f1": 0.357,
+        "eol_recall": 0.444,
+        "eol_precision": 0.242,
+        "fixed_recall": 0.352,
         "macro_f1_sd": 0.005,
         "eol_recall_sd": 0.117
       }
@@ -211,12 +211,12 @@
   "winner_representation": "tokens",
   "winner_grouped": {
     "accuracy": 0.362,
-    "macro_f1": 0.34,
-    "eol_recall": 0.638,
-    "eol_precision": 0.247,
-    "fixed_recall": 0.251,
+    "macro_f1": 0.342,
+    "eol_recall": 0.639,
+    "eol_precision": 0.246,
+    "fixed_recall": 0.255,
     "macro_f1_sd": 0.049,
-    "eol_recall_sd": 0.155
+    "eol_recall_sd": 0.148
   },
   "best_macro_f1": {
     "model": "Logistic Regression",
@@ -238,11 +238,11 @@
     "accuracy": 0.068
   },
   "calibration": {
-    "ece_raw": 0.1407,
-    "ece_calibrated": 0.025,
-    "mean_points_docked_raw": 4.83,
+    "ece_raw": 0.1416,
+    "ece_calibrated": 0.0245,
+    "mean_points_docked_raw": 4.85,
     "mean_points_docked_calibrated": 3.05,
-    "mean_absolute_shift_points": 1.79,
+    "mean_absolute_shift_points": 1.8,
     "base_rate": 0.182
   },
   "by_category": [
@@ -250,8 +250,8 @@
       "category": "Laptop",
       "n": 11903,
       "share": 0.501,
-      "macro_f1": 0.411,
-      "eol_recall": 0.326,
+      "macro_f1": 0.415,
+      "eol_recall": 0.339,
       "eol_base_rate": 0.159,
       "age_known": 0.333
     },
@@ -259,8 +259,8 @@
       "category": "Mobile",
       "n": 5032,
       "share": 0.212,
-      "macro_f1": 0.326,
-      "eol_recall": 0.676,
+      "macro_f1": 0.325,
+      "eol_recall": 0.671,
       "eol_base_rate": 0.16,
       "age_known": 0.296
     },
@@ -268,7 +268,7 @@
       "category": "Tablet",
       "n": 3606,
       "share": 0.152,
-      "macro_f1": 0.293,
+      "macro_f1": 0.29,
       "eol_recall": 0.81,
       "eol_base_rate": 0.254,
       "age_known": 0.325
@@ -277,8 +277,8 @@
       "category": "Desktop computer",
       "n": 2204,
       "share": 0.093,
-      "macro_f1": 0.373,
-      "eol_recall": 0.71,
+      "macro_f1": 0.375,
+      "eol_recall": 0.717,
       "eol_base_rate": 0.196,
       "age_known": 0.27
     },
@@ -286,8 +286,8 @@
       "category": "Games console",
       "n": 1003,
       "share": 0.042,
-      "macro_f1": 0.37,
-      "eol_recall": 0.695,
+      "macro_f1": 0.367,
+      "eol_recall": 0.688,
       "eol_base_rate": 0.268,
       "age_known": 0.381
     }

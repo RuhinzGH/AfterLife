@@ -29,6 +29,12 @@ GRADE_CUTOFFS = {"A - excellent": 85, "B - good": 70, "C - serviceable": 55}   #
 YEARS_SCALE = 8              # a perfect score maps to 8 more years: a way to picture the score, not a lifespan model
 
 
+_RULES = {"EOL_WEIGHT": EOL_WEIGHT, "BATTERY_WEAR_PCT": BATTERY_WEAR_PCT,
+          "BATTERY_WEAR_PENALTY": BATTERY_WEAR_PENALTY, "BATTERY_BAD_PCT": BATTERY_BAD_PCT,
+          "BATTERY_BAD_PENALTY": BATTERY_BAD_PENALTY, "AGE_LIMIT_YEARS": AGE_LIMIT_YEARS,
+          "AGE_PENALTY": AGE_PENALTY, "FAULT_PENALTY": FAULT_PENALTY}
+
+
 def grade_for(score: float) -> str:
     """The grade word for a 0-100 score."""
     for grade, cutoff in GRADE_CUTOFFS.items():
@@ -58,7 +64,7 @@ def blend_score(hardware_trust: int, eol_risk: float | None,
                 battery_health: float | None, age_years: float | None,
                 fault_described: bool, eol_source: str | None = None,
                 eol_detail: str | None = None, fault_detail: str | None = None,
-                trust_measured: bool = False) -> dict[str, Any]:
+                trust_measured: bool = False, rules: dict[str, float] | None = None) -> dict[str, Any]:
     """Deterministically fold the end-of-life signal + user signals into the hardware score.
 
     Starts from the hardware trust score, then applies bounded adjustments so the result
@@ -68,7 +74,12 @@ def blend_score(hardware_trust: int, eol_risk: float | None,
     `eol_source` names where `eol_risk` came from (see EOL_SOURCE_LABELS) and
     `eol_detail` is the human-readable evidence for it -- a support end date reads
     as a date the owner can go and check, which "63% risk" never does.
+
+    `rules` overrides any of the named constants above (keys such as
+    "EOL_WEIGHT" or "FAULT_PENALTY"). Only the sensitivity analysis uses it
+    (afterlife/sensitivity.py), to ask how the grade moves when a rule changes.
     """
+    r = {**_RULES, **(rules or {})}
     score = float(hardware_trust)
     adjustments: list[dict[str, Any]] = []
 
@@ -81,7 +92,7 @@ def blend_score(hardware_trust: int, eol_risk: float | None,
         # resolved from a published support date -- and the page still reported it
         # as a model verdict the product had not computed. Provenance now travels
         # with the number rather than being assumed.
-        delta = -round(eol_risk * EOL_WEIGHT, 1)
+        delta = -round(eol_risk * r["EOL_WEIGHT"], 1)
         score += delta
         adjustments.append({"factor": EOL_SOURCE_LABELS.get(eol_source, _EOL_FACTOR_UNLABELLED),
                             "detail": eol_detail or f"{eol_risk*100:.0f}% risk",
@@ -93,20 +104,20 @@ def blend_score(hardware_trust: int, eol_risk: float | None,
     # scan cannot read battery health, so this only applies when it is supplied.
     # A measured (deep-scan) trust score already contains battery wear and age,
     # so they are not subtracted a second time here.
-    if battery_health is not None and battery_health < BATTERY_WEAR_PCT and not trust_measured:
-        delta = BATTERY_BAD_PENALTY if battery_health < BATTERY_BAD_PCT else BATTERY_WEAR_PENALTY
+    if battery_health is not None and battery_health < r["BATTERY_WEAR_PCT"] and not trust_measured:
+        delta = r["BATTERY_BAD_PENALTY"] if battery_health < r["BATTERY_BAD_PCT"] else r["BATTERY_WEAR_PENALTY"]
         score += delta
         adjustments.append({"factor": "battery wear", "detail": f"holds {battery_health:.0f}% of its original charge",
                             "delta": delta})
 
-    if age_years is not None and age_years > AGE_LIMIT_YEARS and not trust_measured:
-        score += AGE_PENALTY
-        adjustments.append({"factor": "age", "detail": f"{age_years:.0f} yr", "delta": AGE_PENALTY})
+    if age_years is not None and age_years > r["AGE_LIMIT_YEARS"] and not trust_measured:
+        score += r["AGE_PENALTY"]
+        adjustments.append({"factor": "age", "detail": f"{age_years:.0f} yr", "delta": r["AGE_PENALTY"]})
 
     if fault_described:
-        score += FAULT_PENALTY
+        score += r["FAULT_PENALTY"]
         adjustments.append({"factor": "reported fault", "detail": fault_detail or "user-described",
-                            "delta": FAULT_PENALTY})
+                            "delta": r["FAULT_PENALTY"]})
 
     score = max(0, min(100, round(score)))
     grade = grade_for(score)

@@ -59,6 +59,7 @@ export const api = {
   priceEstimate: (body) => postJson("/price-estimate", body),
   explain: (assessment, tier) => postJson("/explain", { assessment, tier }),
   assumptions: () => req("/assumptions"),
+  sensitivity: () => req("/sensitivity"),
   // Redesign endpoints: read-only and computed server-side.
   esu: () => req("/esu"),
   gridCountries: () => req("/grid-countries"),

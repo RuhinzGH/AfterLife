@@ -214,6 +214,49 @@ def classify(vuln: Vuln, os_upgradable: bool = False) -> Mitigation:
     )
 
 
+def all_mitigations(vuln: Vuln, os_upgradable: bool = False) -> list[Mitigation]:
+    """Every documented way to reduce this flaw, not only the first (S2-17).
+
+    classify() gives each flaw ONE primary category, in a fixed priority (a real
+    fix before exposure reduction), so every flaw is counted exactly once and the
+    totals add up. That hides second options: a flaw an update fixes may also be
+    blocked by switching a service off, or kept away from attackers by network
+    isolation. This lists them all, primary first. Empty means no lever at all.
+    """
+    found: list[Mitigation] = []
+    if vuln.is_application_layer:
+        found.append(Mitigation(vuln.cve_id, MitigationClass.APP_UPDATE,
+                                "Update the affected application; it services independently of the OS",
+                                component="application"))
+    haystack = f"{vuln.description} {' '.join(vuln.cpe_criteria)}"
+    for pattern, action, source, key in _COMPILED:
+        if pattern.search(haystack):
+            found.append(Mitigation(vuln.cve_id, MitigationClass.SERVICE_DISABLE, action, source, key))
+    if os_upgradable:
+        found.append(Mitigation(vuln.cve_id, MitigationClass.OS_UPGRADE,
+                                "In-place upgrade to a supported OS build; hardware meets requirements",
+                                component="os"))
+    if isolation_applies(vuln.attack_vector, vuln.privileges_required):
+        found.append(Mitigation(vuln.cve_id, MitigationClass.NETWORK_ISOLATE,
+                                "Segment to a restricted VLAN and block inbound access at the host firewall",
+                                component="network"))
+    return found
+
+
+def isolation_applies(attack_vector: str | None, privileges_required: str | None) -> bool:
+    """Network isolation reduces a flaw an attacker reaches over the network
+    without logging in. The same rule classify() uses for its isolation class,
+    shared so stored rows (attack vector and privileges are kept in the corpus
+    CSV) can be flagged without the full description."""
+    return (attack_vector or "").upper() in ("NETWORK", "ADJACENT_NETWORK", "ADJACENT") \
+        and (privileges_required or "").upper() == "NONE"
+
+
+def flags_label(found: list[Mitigation]) -> str:
+    """The stored form of all_mitigations(): "class:component" joined by ";"."""
+    return ";".join(f"{m.klass.value}:{m.component or ''}" for m in found)
+
+
 @dataclass
 class DeviceVerdict:
     total_cves: int

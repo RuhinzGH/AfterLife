@@ -4994,3 +4994,9 @@ body::after {
 .eprel-spread { display: flex; height: 1.4rem; border-radius: 6px; overflow: hidden; margin-top: 0.9rem; font-size: 0.75rem; }
 .eprel-bar { display: grid; place-items: center; color: #0b1012; opacity: 0.45; min-width: 1.2rem; }
 .eprel-bar.on { opacity: 1; font-weight: 800; outline: 2px solid var(--ink); outline-offset: -2px; }
+
+/* Sensitivity analysis (S3-08). */
+.sens-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.92rem; }
+.sens-table th, .sens-table td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--line); }
+.sens-table th { color: var(--muted); font-weight: 600; font-size: 0.82rem; }
+.sens-table td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }

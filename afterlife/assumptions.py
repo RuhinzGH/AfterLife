@@ -240,6 +240,7 @@ NOT_ASSUMPTIONS = {
     "afterlife.persona:_BENCH": "the loaded benchmark file; its cut-offs are a row",
     "afterlife.pricing:GRADE_LADDER": "the order of the grades, not a number",
     "afterlife.persona:_GPU_NAMES": "the benchmark file re-sorted for matching",
+    "afterlife.assessment:_RULES": "the scoring constants above, gathered so the sensitivity analysis can vary them",
 }
 
 AUDITED_MODULES = [A, D, G, C, W, PE, U, PR]

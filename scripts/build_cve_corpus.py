@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from afterlife import vulnrichment
-from afterlife.mitigation import classify
+from afterlife.mitigation import all_mitigations, classify, flags_label
 from afterlife.nvd import iter_cves
 
 OUT_DIR = ROOT / "app_data"
@@ -42,7 +42,7 @@ VARIANTS = {
 
 FIELDS = ["cve_id", "published", "severity", "base_score", "attack_vector",
           "privileges_required", "app_layer", "mitigation_class", "component",
-          "action", "source", "metric_source", "metric_version"]
+          "action", "source", "metric_source", "metric_version", "mitigations"]
 
 
 def _backfill(rows: list[dict], limit: int | None = None) -> dict[str, int]:
@@ -136,6 +136,8 @@ def main() -> None:
                     "source": m.source or "",
                     "metric_source": v.metric_source or "",
                     "metric_version": v.metric_version or "",
+                    # Every available mitigation, not only the primary one (S2-17).
+                    "mitigations": flags_label(all_mitigations(v, os_upgradable=False)),
                 }
         except Exception as exc:  # noqa: BLE001
             print(f"  {variant:<22} FAILED: {type(exc).__name__}: {exc}")

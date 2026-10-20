@@ -1,4 +1,12 @@
-"""Pull the latest Open Repair Alliance aggregate and characterise the IT slice."""
+"""Pull the Open Repair Alliance aggregate the model was trained on, and characterise the IT slice.
+
+Pinned to a commit, not "latest": the Open Repair data repository was
+reorganised on 12 Oct 2026 and the July 2025 aggregate this project trained on
+(23,748 IT records from 8 data providers) was removed from its main branch. The
+file is still in the repository's history at commit 4a5209d, which is what
+this downloads, so the model and every figure built from it can be reproduced
+exactly. A newer aggregate (2026) exists; moving to it would mean retraining.
+"""
 from __future__ import annotations
 
 import io
@@ -12,7 +20,8 @@ import pandas as pd
 import requests
 
 UA = {"User-Agent": "Afterlife-research/0.1"}
-BASE = "https://raw.githubusercontent.com/openrepair/data/master/"
+COMMIT = "4a5209d87478fc322d000132cf06ef20d946037b"
+BASE = f"https://raw.githubusercontent.com/openrepair/data/{COMMIT}/"
 LATEST = "aggregated/202507/OpenRepairData_v0.3_aggregate_202507.csv"
 OUT = ROOT / "data" / "raw"
 OUT.mkdir(parents=True, exist_ok=True)
