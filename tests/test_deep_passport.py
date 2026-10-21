@@ -88,3 +88,18 @@ def test_collector_is_served_as_readable_text(client):
     r = client.get("/api/collector.ps1")
     assert r.status_code == 200 and r.headers["content-type"].startswith("text/plain")
     assert "Read-only" in r.text
+
+
+def test_a_mac_gets_no_windows_11_points_and_the_rest_scale_to_100():
+    """The Windows 11 share only applies to a Windows PC. A Mac used to collect
+    the full 35 points because the check finds nothing to block without a TPM."""
+    from afterlife.passport import build_deep_passport
+    mac = {"manufacturer": "Apple", "model": "MacBookAir10,1", "cpu_name": "Apple M1", "ram_gb": 8,
+           "os_caption": "macOS 14.5", "battery_present": True, "battery_health_pct": 88,
+           "disk_health": "Healthy", "approx_age_years": 4, "uefi": True}
+    p = build_deep_passport(mac)["payload"]
+    assert p["win11"] == "NOT APPLICABLE" and p["win11_blockers"] == []
+    assert "Windows 11 ready" not in [s["name"] for s in p["sub_scores"]]
+    got = sum(s["points"] for s in p["sub_scores"])
+    out_of = sum(s["max_points"] for s in p["sub_scores"])
+    assert p["trust_score"] == round(100 * got / out_of)

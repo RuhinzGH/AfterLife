@@ -134,9 +134,11 @@ class TestUnixFeatureParity:
         exact feature these fields exist for."""
         r = subprocess.run(["sh", str(SH)], capture_output=True, text=True, timeout=300)
         cs = json.loads(r.stdout)["clean_state"]
-        for field in ("user_profiles", "user_files"):
+        source = SH.read_text(encoding="utf-8")
+        for field in ("user_profiles", "user_files", "os_install_days"):
             assert cs[field] is None or isinstance(cs[field], int)
-            assert cs[field] != 0 or cs[field] == 0  # zero must survive as zero
+            # the count formatter keeps a real 0; the number formatter would null it
+            assert f'"{field}": $(jcount' in source
 
     def test_the_sh_collector_declares_no_names_only_counts(self):
         """clean_state must never carry a filename, account or network name."""

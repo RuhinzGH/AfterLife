@@ -3,7 +3,9 @@
 
     Read-only. Emits one JSON object describing the machine it runs on:
     identity, CPU, TPM, firmware, memory, storage and battery wear.
-    No data leaves the machine -- it prints to stdout.
+    Without -PostUrl it only prints the JSON. With -PostUrl and -Token (how the
+    deep-scan page runs it) it sends that one JSON object to AfterLife, and
+    nothing else: no file contents, names or browsing history.
 
     Every probe is wrapped: on a locked-down or older box, an unavailable
     class yields null for that field rather than killing the run.

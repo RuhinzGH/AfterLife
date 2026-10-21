@@ -384,12 +384,26 @@ def battery_points(health_pct: float) -> int:
     return b["good"] if health_pct >= BATTERY_WEAR_PCT else b["worn"] if health_pct >= BATTERY_BAD_PCT else b["badly_worn"]
 
 
+def is_windows(device: dict[str, Any]) -> bool:
+    """The machine runs Windows (or the collector could not say). The Windows 11
+    share only means something on a Windows PC."""
+    caption = str(device.get("os_caption") or "").lower()
+    return not caption or "windows" in caption
+
+
 def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]], Any, str]:
-    """Measured hardware trust (0-100) as five sub-scores, each shown."""
+    """Measured hardware trust (0-100) as four sub-scores, each shown.
+
+    On a Mac or Linux machine the "Windows 11 ready" share does not apply, so
+    it is left out and the other three are scaled to 100. (It used to award the
+    full 35 points, because the Windows 11 check finds nothing to block on a
+    machine that reports no TPM at all.)"""
     from .win11 import assess as win11_assess
     elig = win11_assess(device)
     subs = []
-    if elig.eligible is True:
+    if not is_windows(device):
+        pass
+    elif elig.eligible is True:
         subs.append(_sub("Windows 11 ready", _P["Windows 11 ready"]["ready"], "meets every Windows 11 requirement"))
     elif elig.eligible is None:
         subs.append(_sub("Windows 11 ready", _P["Windows 11 ready"]["tpm_not_read"], "not determined: the TPM could not be read (run as administrator)"))
@@ -422,7 +436,8 @@ def deep_trust_score(device: dict[str, Any]) -> tuple[int, list[dict[str, Any]],
         subs.append(_sub("Age", pts, f"about {age:.1f} years"))
     else:
         subs.append(_sub("Age", _P["Age"]["unknown"], "not determined"))
-    return sum(s["points"] for s in subs), subs, elig, state
+    got, out_of = sum(s["points"] for s in subs), sum(s["max_points"] for s in subs)
+    return round(100 * got / out_of), subs, elig, state
 
 
 def deep_grade(score: int) -> str:
@@ -454,6 +469,7 @@ def build_deep_passport(device: dict[str, Any]) -> dict[str, Any]:
     from .win11 import Blocker
     from .wipe import check as wipe_check
     score, subs, elig, state = deep_trust_score(device)
+    windows = is_windows(device)
     coverage = evaluate_coverage(device)
     make_model = f"{device.get('manufacturer') or '?'} {device.get('model') or '?'}".strip()
     bh = device.get("battery_health_pct")
@@ -470,13 +486,14 @@ def build_deep_passport(device: dict[str, Any]) -> dict[str, Any]:
         "storage": f"{device.get('sysdrive_total_gb') or '?'} GB {device.get('disk_media_type') or ''}".strip(),
         "storage_health": next(s["note"] for s in subs if s["name"] == "Storage health"),
         "battery_health": battery,
-        "win11": {True: "ELIGIBLE", False: "NOT ELIGIBLE", None: "INDETERMINATE"}[elig.eligible],
-        "win11_blockers": [b.value for b in elig.blockers if b is not Blocker.UNKNOWN_TPM],
+        "win11": ({True: "ELIGIBLE", False: "NOT ELIGIBLE", None: "INDETERMINATE"}[elig.eligible]
+                  if windows else "NOT APPLICABLE"),
+        "win11_blockers": [b.value for b in elig.blockers if b is not Blocker.UNKNOWN_TPM] if windows else [],
         "win11_note": (", ".join(b.value.replace("_", " ") for b in elig.blockers if b is not Blocker.UNKNOWN_TPM)
                        or ("the TPM could not be read (run as administrator)" if elig.eligible is None
                            else "meets every requirement")),
-        "win11_permanently_blocked": elig.permanently_blocked,
-        "win11_firmware_fixable": elig.firmware_fixable,
+        "win11_permanently_blocked": elig.permanently_blocked if windows else None,
+        "win11_firmware_fixable": elig.firmware_fixable if windows else None,
         "trust_score": score, "grade": deep_grade(score), "sub_scores": subs,
         "age_years": device.get("approx_age_years"),
         "completeness_pct": coverage["completeness_pct"], "scan_coverage": coverage,

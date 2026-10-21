@@ -518,7 +518,6 @@ function Ring({ value, tone }) {
 function ExpandedDevice({ device, nick, detected, onClose, onScanAgain, mine }) {
   const [qr, setQr] = useState(null);
   const [verifyUrl, setVerifyUrl] = useState(null);
-  const [embedData, setEmbedData] = useState(null);
   const [copied, setCopied] = useState("");
   const scan = device.primary;
   const p = scan.passport?.payload || {};
@@ -543,7 +542,6 @@ function ExpandedDevice({ device, nick, detected, onClose, onScanAgain, mine }) 
     const data = b64encodeCompressed(signed);
     const url = `${window.location.origin}/?verify=${data}`;
     setVerifyUrl(url);
-    setEmbedData(data);
     import("qrcode")
       .then(({ default: QRCode }) => QRCode.toDataURL(url, {
           margin: 4, scale: 5, errorCorrectionLevel: "M",
@@ -663,16 +661,6 @@ function ExpandedDevice({ device, nick, detected, onClose, onScanAgain, mine }) 
               {p.device_id && (
                 <button className="ghost dc-btn" onClick={() => copy("id", p.device_id)}>
                   {copied === "id" ? "✓ Copied" : "Copy device ID"}
-                </button>
-              )}
-              {embedData && verifyUrl && (
-                <button className="ghost dc-btn"
-                  title="Paste into a marketplace listing — shows a live 'AfterLife Verified' badge"
-                  onClick={() => copy("embed",
-                    `<a href="${verifyUrl}" target="_blank" rel="noopener">`
-                    + `<img src="${(import.meta.env.VITE_API_BASE || "")}/api/badge?data=${embedData}" `
-                    + `alt="AfterLife Verified" height="28"></a>`)}>
-                  {copied === "embed" ? "✓ Copied" : "Copy “Verified” badge"}
                 </button>
               )}
             </div>

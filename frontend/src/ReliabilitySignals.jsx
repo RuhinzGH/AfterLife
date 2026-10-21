@@ -26,7 +26,7 @@ export default function ReliabilitySignals({ hardware }) {
       </div>
 
       {findings.length === 0 ? (
-        <p className="sh-summary">No hardware faults logged in the last 90 days.</p>
+        <p className="sh-summary">{hardware.summary || "No hardware faults found in the logs that could be read."}</p>
       ) : (
         <ul className="sh-findings">
           {findings.map((f, i) => (

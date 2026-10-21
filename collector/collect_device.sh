@@ -404,7 +404,7 @@ JSON=$(cat <<EOF
     "user_files_capped": $(if [ "$USER_FILES" -ge "$FILE_CAP" ] 2>/dev/null; then printf 'true'; else printf 'false'; fi),
     "wifi_profiles": $(jcount "${WIFI_COUNT:-}"),
     "installed_apps": $(jcount "${INSTALLED_APPS:-}"),
-    "os_install_days": $(jnum "${OS_INSTALL_DAYS:-}")
+    "os_install_days": $(jcount "${OS_INSTALL_DAYS:-}")
   },
   "persona_signals": {
     "gamer_matches": ${GAMER_HITS:-[]},
