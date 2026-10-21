@@ -37,40 +37,53 @@ AfterLife gives people a verdict they can check instead of a guess.
 
 ---
 
-## What it does (Sprint 1)
+## What it does
 
-| Feature | What the user sees |
-|---|---|
-| **Instant scan** | After a consent screen, the browser reads the OS, graphics, CPU cores, memory, architecture, display and timezone. No download. |
-| **Lifecycle assessment** | A combined score out of 100, a grade, and a waterfall showing every point added or taken away |
-| **ML end-of-life risk** | A model trained on real repair outcomes estimates how likely a device like this is to be beyond repair |
-| **Remaining service life** | Estimated years of safe use left, and where the device sits in its lifecycle |
-| **Lifecycle pathways** | Five options (keep, keep with hardening, repurpose, sell, recycle), each scored, with the best fit marked |
-| **Carbon trade-off** | How many years a new machine would need to repay the carbon spent building it, on the user's own electricity grid |
-| **Signed passport + QR** | The result, signed with Ed25519 inside a W3C Verifiable Credential envelope. Can be saved as JSON or as a QR image. |
-| **Passport Verifier** | Upload a passport's QR image, paste its JSON, or point a camera at the QR, to check it was issued by AfterLife and has not been edited |
-| **Evidence pages** | *How it works*, *The Argument*, *Our Research* and *Data Sources*: the method, findings and datasets behind every verdict |
-| **Tools** | A *carbon calculator* for any country and device class, and a *Windows 10 countdown* to the end of security updates |
+Sprint 1 built the core; Sprint 2 made it a complete decision tool.
+
+| Feature | What the user sees | Sprint |
+|---|---|---|
+| **Instant scan** | After a consent screen, the browser reads the OS, graphics, CPU cores, memory, architecture, display and timezone. The user adds age, use and any fault in their own words. No download. | 1 |
+| **Deep scan** | A small read-only script (Windows `.bat` + PowerShell, or a shell script on macOS/Linux) reads battery wear, drive health, TPM and Secure Boot, the real processor, 90 days of error-log counts and 11 security settings. The `.bat` checks the script's SHA-256 fingerprint before running it. It sends counts, never names. | 2 |
+| **Lifecycle assessment** | A score out of 100, a grade and a waterfall showing every point; a deep scan gives a *measured* score from four shown sub-scores | 1, 2 |
+| **ML end-of-life risk** | A calibrated model trained on 23,748 real repair outcomes; the risk % leads | 1, 2 |
+| **Remaining service life and pathways** | Estimated safe years; keep, harden, repurpose, sell or recycle, ranked; the page leads with why the visitor came (sell, keep or safety) | 1, 2 |
+| **Usage fit** | Is the device up to the owner's work (general, gaming, coding, editing), now and in a few years | 2 |
+| **Repair outlook and repair rights** | What fixing it buys (re-scored as if repaired), how often similar repairs succeeded, and which repair laws apply in the owner's country | 2 |
+| **EU repairability grade** | The official A–E grade from the EU's EPREL register for phones and tablets | 2 |
+| **Resale estimate and sell checklist** | A price range with the formula shown, and the steps to sell safely, including a wipe check | 2 |
+| **Carbon trade-off** | Payback years of a replacement for light, typical and heavy use, on the owner's grid, using the processor's power class | 1, 2 |
+| **In plain words** | A language model words the result; every number and date it writes is checked against the computed facts, or the rule-based summary is shown | 2 |
+| **Plain / technical view** | One switch shows the results simply or with *The working* for every calculation | 2 |
+| **Signed passport, QR and PDF** | Ed25519-signed W3C Verifiable Credential; JSON, QR image or printable PDF | 1, 2 |
+| **Verifier and Compare** | Check a passport by upload, paste or camera; compare verified passports side by side | 1, 2 |
+| **Accounts and My Scans** | Optional sign-in (Supabase); only genuine passports can be saved | 2 |
+| **Security report** | Known Windows flaws matched to every setting that blocks them, and which ones this PC already has | 2 |
+| **Evidence pages** | *How it works* (with all 57 assumed numbers and their reasons), *The Argument*, *Our Research* (with a sensitivity analysis), *Data Sources* | 1, 2 |
+| **Tools** | Carbon calculator for any country, Windows 10 support countdown, Secure Boot certificate deadlines | 1, 2 |
 
 ![Assessment result](docs/screenshots/result.png)
 
 ## How it works
 
 ```
-  Browser (React + Vite)                         Backend (FastAPI, Python)
-  ──────────────────────                         ─────────────────────────
-  1. Scan    reads what the browser exposes
-             + age / fault from the user  ──►  /api/scan-passport
-                                                  runs the ML model, signs the passport
-  2. Assess  sends the signed facts       ──►  /api/assess
-                                                  score, grade, years, pathways, carbon
-  3. Show    passport card + dashboard
-  4. Verify  passport JSON or QR          ──►  /api/verify
-                                                  checks the Ed25519 signature
-  Evidence pages                          ──►  /api/thesis  /api/findings  /api/sources
-                                                  read from computed files in app_data/
-  Tools                                   ──►  /api/carbon-calc  /api/grid-countries  /api/esu
+  Browser (React + Vite, on Vercel)              Backend (FastAPI, Python 3.12, Docker on Render)
+  ─────────────────────────────────              ────────────────────────────────────────────────
+  Instant scan  browser facts + owner's answers ─► /api/scan-passport     model risk, signed passport
+  Deep scan     script posts to a one-time link ─► /api/deep-scan/{token} measured, signed passport
+  Results       signed facts                    ─► /api/assess            score, years, pathways, carbon,
+                                                                           usage fit, repair, rights, resale
+                                                ─► /api/explain           plain words (Groq), numbers checked
+  Verify, Compare  passport JSON or QR          ─► /api/verify            Ed25519 signature and issuer
+  Accounts      Supabase sign-in in the browser ─► /api/save-scan  /api/my-scans
+  Evidence, tools                               ─► /api/findings  /api/thesis  /api/sources  /api/assumptions
+                                                   /api/sensitivity  /api/carbon-calc  /api/esu ...
+        all read precomputed files in app_data/ and models/, built offline by scripts/
 ```
+
+Every outside service is optional and has a fallback: without Groq the
+rule-based summary is shown; without Supabase the site works without accounts;
+without Redis, one-time deep-scan links are held in memory.
 
 ### The machine-learning model
 
@@ -100,10 +113,11 @@ own key, so a valid signature alone is never reported as "issued by AfterLife".
 ## Getting started
 
 The site is live at https://afterlife-ruhin.vercel.app (frontend on Vercel, API in
-Docker on Render). Full step-by-step instructions for running it yourself are in
-**[docs/SPRINT1_GUIDE.md](docs/SPRINT1_GUIDE.md)**.
+Docker on Render). More detail on running it locally and on a phone is in
+**[docs/SPRINT1_GUIDE.md](docs/SPRINT1_GUIDE.md)**; the order for rebuilding the
+data is in **[docs/DATA_PIPELINE.md](docs/DATA_PIPELINE.md)**.
 
-Short version (Windows, two Command Prompt windows):
+Windows, two Command Prompt windows (Python 3.12 and Node 22):
 
 ```bat
 :: one-time setup
@@ -121,44 +135,66 @@ npm run dev
 ```
 
 API documentation is generated automatically at http://localhost:8000/docs.
+A local server makes its own signing key in `data/keys/` on first start, so
+passports made locally verify as "Issued by AfterLife" only on that server.
+
+### Optional settings
+
+Everything runs without these. Put them in a `.env` file in the project root
+(git-ignored) or, on a server, in environment variables. Never commit them.
+
+| Setting | Turns on |
+|---|---|
+| `GROQ_API_KEY` (optionally `GROQ_MODEL`) | The *In plain words* card |
+| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Saving scans on the server |
+| `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` (in `frontend/.env.local`) | Sign-in in the browser |
+| `VITE_API_BASE` | Where the frontend finds the API when they are on different domains |
+| `AFTERLIFE_PRIVATE_KEY_B64` | A fixed signing key on a server (otherwise one is generated) |
+| `CORS_ORIGINS`, `REDIS_URL` | Extra allowed origins; a shared store for deep-scan links |
 
 ## Running the tests
 
 ```bat
 set PYTHONPATH=.
-venv\Scripts\python -m pytest          :: backend: 295 tests
+venv\Scripts\python -m pytest          :: backend: 553 tests
 
 cd frontend
-npm test                               :: frontend: 37 tests
+npm test                               :: frontend: 63 tests
 ```
 
 The backend tests drive the real API through FastAPI's test client. They check
 that the figures on the research pages match the data on disk, that a tampered
-passport fails verification, and that a missing measurement is never reported
-as a healthy one. GitHub Actions runs both suites on every push.
+passport fails verification, that a missing measurement is never reported as a
+healthy one, that the language model's text is rejected when a number does not
+match, and that every assumed number has a reason. Outside services (Groq,
+Supabase) are replaced by fakes. GitHub Actions runs both suites and a
+production build on every push.
 
 ---
 
 ## Project structure
 
 ```
-afterlife/      core library
-  assessment.py     blended score, remaining years, key points, summary
-  pathways.py       the five lifecycle pathways
-  predict.py        loads the trained model and predicts
-  passport.py       builds, signs and verifies passports (Ed25519)
-  grid.py           carbon break-even on a country's grid
-  embodied_carbon.py  manufacturer carbon declarations
-  device_support.py / esu.py   OS security-support dates
-  hardening.py / mitigation.py CVE classification behind the security finding
-  geo.py            timezone -> country (no IP address is used)
-  sources.py        provenance and freshness for every dataset
-api/main.py     FastAPI backend
+afterlife/      core library, one module per concern (36 modules), for example:
+  assessment.py       score, grade, remaining years, key points (named rule constants)
+  pathways.py         the lifecycle pathways
+  predict.py          loads the trained model and predicts
+  passport.py         builds, signs and verifies passports; the deep-scan trust score
+  grid.py             carbon payback on a country's grid (break_even, payback_range)
+  persona.py          usage fit;  uplift.py  repair outlook re-scoring
+  repair_evidence.py  repair success rates;  repair_rights.py  repair laws
+  eprel.py            EU repairability grade;  pricing.py  resale estimate
+  explain.py, llm.py  plain words and the number check
+  assumptions.py      the assumptions table;  sensitivity.py  sensitivity analysis
+  hardening.py, mitigation.py  security report;  win11.py, secure_boot.py, esu.py
+  auth.py, kvstore.py accounts and the one-time deep-scan store
+api/main.py     FastAPI backend: validates input and routes the requests
+collector/      the read-only deep-scan scripts (PowerShell and shell)
 frontend/       React + Vite website (src/v2/ holds the site shell and the newer pages)
 scripts/        data pipeline and model training (produce app_data/ and models/)
 app_data/       computed data files the API reads
-models/         trained model + metrics
-tests/          backend tests
+models/         trained model and metrics
+tests/          backend tests (frontend tests sit next to the code as *.test.js)
 docs/           guides and screenshots
 ```
 
@@ -175,45 +211,47 @@ docs/           guides and screenshots
 | [endoflife.date](https://endoflife.date/) | OS security-support dates | CC BY-SA 4.0 |
 | [Steam Hardware Survey](https://store.steampowered.com/hwsurvey) | How fast Windows versions are retired | Public |
 | [Alibaba fail-slow dataset](https://tianchi.aliyun.com/dataset/144479) | Drive degradation versus age | Open dataset, research use |
+| [EU EPREL register](https://eprel.ec.europa.eu/) | Official repairability grades for phones and tablets | Reuse permitted (European Commission) |
+| [Blender Open Data](https://opendata.blender.org/) | Graphics performance tiers for usage fit | CC0 |
 
 The *Data Sources* page in the app shows each one with its row count and how
 fresh it is.
 
 ## Green computing practices
 
-- **Instant scan runs in the browser.** Nothing to download or install.
-- **Load only what is used.** The research, verifier and sources pages load
-  only when they are opened, not with the first page.
-- **Work done once.** The model is trained offline and loaded once per server
-  (`functools.lru_cache`), not on every request.
-- **Precomputed evidence.** Research figures are computed by scripts ahead of
-  time and served as small files, instead of being recalculated per visitor.
-- **Small dependency footprint.** The frontend ships five runtime libraries.
-- **No language model.** The written summary is filled in by fixed rules, so an
-  assessment makes no GPU or external API call.
-- **Measured** (local, median of 10 requests): an assessment takes about 3 ms;
-  the main page script is about 76 kB compressed.
+- **Instant scan runs in the browser.** Nothing to download or install; the deep
+  scan is optional and deletes itself after running.
+- **Load only what is used.** Pages, the sign-in window and the results page load
+  only when opened; the first download is about 76 kB compressed.
+- **A smaller model, measured.** 150 trees instead of 300, compressed: 29.2 MB
+  down to 4.85 MB, with the same accuracy and faster predictions.
+- **Work done once.** The model is trained offline and loaded once per server;
+  research figures are computed by scripts ahead of time.
+- **The language model is small and optional.** It only words results, is
+  rate-limited, and is asked only after the page has shown.
+- **The free server sleeps when idle**, so it draws nothing between uses.
 
 ## Known limitations
 
-- A browser cannot read battery wear, disk health or Windows 11 eligibility, so
-  an instant scan is built on less evidence than a full hardware scan would be.
+- The signature proves a passport was *not edited since issue*. It does not
+  prove the hardware reported itself truthfully (that would need TPM attestation).
+- Score weights, usage tiers and resale rates are design choices. They are
+  listed on *How it works* with their reasons, and the sensitivity analysis on
+  *Our Research* shows how much the conclusions depend on them.
 - Open Repair Alliance data comes from community repair events, mostly in
   Europe. It is not a sample of all devices.
-- The signature proves a passport was *not edited since issue*. It does not
-  prove the browser reported the hardware truthfully.
-- Nothing is stored on the server: there are no accounts or saved scans yet.
+- The EU repairability grade exists only for phones and tablets sold in the EU.
 - The free hosting tier sleeps when idle, so the first request after a quiet
   period is slow.
 
 ## Roadmap
 
-- **Sprint 2:** deep hardware scan (battery, disk health, Windows 11 check),
-  accounts with saved scans, usage fit, repair-outcome and repair-rights
-  evidence, resale estimate, side-by-side passport comparison, plain-language
-  explanations. (The live deployment planned here was done early, in Sprint 1.)
-- **Sprint 3:** EU repairability grade (EPREL), PDF passport, plain/technical
-  view, measured before-and-after green optimisation, user testing
+- **Sprint 1 (done):** instant scan, assessment, model, carbon, signed passport,
+  verifier, evidence pages, live deployment.
+- **Sprint 2 (done):** everything above marked 2, including four features first
+  planned for Sprint 3 (EU grade, PDF passport, plain/technical view, intent).
+- **Sprint 3:** measured before-and-after green study, feedback from at least
+  five users, user manual and the v1.0 release.
 
 ---
 
