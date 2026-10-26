@@ -5011,3 +5011,6 @@ body::after {
 .sens-table th, .sens-table td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--line); }
 .sens-table th { color: var(--muted); font-weight: 600; font-size: 0.82rem; }
 .sens-table td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Password reset (Sprint 3) */
+.auth-forgot { display: inline-block; margin: -0.2rem 0 0.4rem; }

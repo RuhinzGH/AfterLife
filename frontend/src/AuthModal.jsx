@@ -3,7 +3,7 @@ import { useAuth } from "./AuthContext.jsx";
 import { MAX_LENGTH, MIN_LENGTH, passwordChecks, passwordValid } from "./passwordPolicy.js";
 
 export default function AuthModal({ onAuthed, onNavigate }) {
-  const { user, authModalOpen, closeAuthModal } = useAuth();
+  const { user, authModalOpen, closeAuthModal, recovering } = useAuth();
 
   useEffect(() => {
     if (!authModalOpen) return;
@@ -18,7 +18,7 @@ export default function AuthModal({ onAuthed, onNavigate }) {
     <div className="auth-backdrop" onMouseDown={(e) => e.target === e.currentTarget && closeAuthModal()}>
       <div className="auth-card">
         <button className="auth-close" onClick={closeAuthModal} aria-label="Close">✕</button>
-        {user ? <AccountView onNavigate={onNavigate} /> : <SignInUp onAuthed={onAuthed} />}
+        {recovering ? <SetNewPassword /> : user ? <AccountView onNavigate={onNavigate} /> : <SignInUp onAuthed={onAuthed} />}
       </div>
     </div>
   );
@@ -52,14 +52,14 @@ function PasswordChecklist({ password, email }) {
 // password only appears on sign-up, since that's the one place a typo is
 // unrecoverable (a mistyped sign-in just fails and you retype it).
 function SignInUp({ onAuthed }) {
-  const { signIn, signUp, closeAuthModal } = useAuth();
-  const [mode, setMode] = useState("signin");
+  const { signIn, signUp, requestReset, recoveryError, closeAuthModal } = useAuth();
+  const [mode, setMode] = useState(recoveryError ? "forgot" : "signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
   const [slow, setSlow] = useState(false);
-  const [err, setErr] = useState(null);
+  const [err, setErr] = useState(recoveryError);
   const [notice, setNotice] = useState(null);
   const slowTimer = useRef(null);
 
@@ -89,6 +89,14 @@ function SignInUp({ onAuthed }) {
     }
 
     startBusy();
+    if (mode === "forgot") {
+      const { error } = await requestReset(email);
+      stopBusy();
+      if (/rate limit/i.test(error?.message || "")) { setErr("Too many requests right now. Please wait a few minutes and try again."); return; }
+      if (error) { setErr(error.message); return; }
+      setNotice("If an account exists for that email, a reset link is on its way. Open it in this browser.");
+      return;
+    }
     if (mode === "signin") {
       const { error } = await signIn(email, password);
       stopBusy();
@@ -135,11 +143,13 @@ function SignInUp({ onAuthed }) {
         </svg>
       </div>
       <div className="auth-eyebrow">Account</div>
-      <h2 className="auth-title">{mode === "signin" ? "Sign in" : "Create an account"}</h2>
+      <h2 className="auth-title">{mode === "signin" ? "Sign in" : mode === "forgot" ? "Reset your password" : "Create an account"}</h2>
       <p className="auth-sub">
         {mode === "signin"
           ? "Every device you've scanned, kept — so your next one has something to be compared against."
-          : "Scanning works without an account too. Sign up and we'll keep your results, so a future device can be measured against its predecessor."}
+          : mode === "forgot"
+            ? "Enter your account's email and we'll send a link to choose a new password."
+            : "Scanning works without an account too. Sign up and we'll keep your results, so a future device can be measured against its predecessor."}
       </p>
 
       <form className="form" onSubmit={submit}>
@@ -147,13 +157,18 @@ function SignInUp({ onAuthed }) {
           <label>Email</label>
           <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
-        <div className="field">
-          <label>Password</label>
-          <input type="password" required minLength={mode === "signup" ? MIN_LENGTH : undefined}
-                 maxLength={mode === "signup" ? MAX_LENGTH : undefined}
-                 autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                 value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
+        {mode !== "forgot" && (
+          <div className="field">
+            <label>Password</label>
+            <input type="password" required minLength={mode === "signup" ? MIN_LENGTH : undefined}
+                   maxLength={mode === "signup" ? MAX_LENGTH : undefined}
+                   autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                   value={password} onChange={(e) => setPassword(e.target.value)} />
+          </div>
+        )}
+        {mode === "signin" && (
+          <a href="#" className="note auth-forgot" onClick={(e) => { e.preventDefault(); switchMode("forgot"); }}>Forgot password?</a>
+        )}
         {mode === "signup" && (
           <>
             <PasswordChecklist password={password} email={email} />
@@ -179,16 +194,78 @@ function SignInUp({ onAuthed }) {
         )}
         {notice && <div className="badge" style={{ borderColor: "var(--green)", color: "var(--green)" }}>{notice}</div>}
         <button className="cta" type="submit" disabled={busy}>
-          {busy ? "Working…" : mode === "signin" ? "Sign in" : "Sign up"}
+          {busy ? "Working…" : mode === "signin" ? "Sign in" : mode === "forgot" ? "Send reset link" : "Sign up"}
         </button>
         {slow && <p className="note" style={{ marginTop: "0.4rem" }}>Still working — this can take a few seconds.</p>}
       </form>
       <p className="note" style={{ marginTop: "1rem" }}>
-        {mode === "signin" ? "No account yet? " : "Already have an account? "}
+        {mode === "signin" ? "No account yet? " : mode === "forgot" ? "Remembered it? " : "Already have an account? "}
         <a href="#" onClick={(e) => { e.preventDefault(); switchMode(mode === "signin" ? "signup" : "signin"); }}>
           {mode === "signin" ? "Sign up" : "Sign in"}
         </a>
       </p>
+    </>
+  );
+}
+
+/* ---------------------------------------------------------------- password reset */
+// Reached from the reset email: the link signed the person in for this one
+// purpose, so only the new password is asked for. Same rules as sign-up.
+function SetNewPassword() {
+  const { user, updatePassword, finishRecovery, closeAuthModal } = useAuth();
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState(null);
+  const [done, setDone] = useState(false);
+  const email = user?.email || "";
+
+  async function submit(e) {
+    e.preventDefault();
+    setErr(null);
+    if (!passwordValid(password, email)) { setErr("Password doesn't meet the requirements below."); return; }
+    if (password !== confirm) { setErr("Passwords don't match."); return; }
+    setBusy(true);
+    const { error } = await updatePassword(password);
+    setBusy(false);
+    if (error) { setErr(/same/i.test(error.message) ? "That's your current password. Choose a different one." : error.message); return; }
+    setDone(true);
+  }
+
+  if (done) {
+    return (
+      <>
+        <div className="auth-eyebrow">Account</div>
+        <h2 className="auth-title">Password changed</h2>
+        <p className="auth-sub">You're signed in{email ? ` as ${email}` : ""}. Use the new password next time.</p>
+        <button className="cta" onClick={() => { finishRecovery(); closeAuthModal(); }}>Done</button>
+      </>
+    );
+  }
+  return (
+    <>
+      <div className="auth-eyebrow">Account</div>
+      <h2 className="auth-title">Choose a new password</h2>
+      <p className="auth-sub">{email ? <>For <b>{email}</b>.</> : null}</p>
+      <form className="form" onSubmit={submit}>
+        <div className="field">
+          <label>New password</label>
+          <input type="password" required minLength={MIN_LENGTH} maxLength={MAX_LENGTH} autoComplete="new-password"
+                 value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
+        <PasswordChecklist password={password} email={email} />
+        <div className="field">
+          <label>Confirm new password</label>
+          <input type="password" required minLength={MIN_LENGTH} autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+        </div>
+        {confirm && (
+          <span className={`pw-check pw-match ${confirm === password ? "ok" : "bad"}`} role="status">
+            {confirm === password ? "✓ Passwords match" : "✕ Passwords do not match"}
+          </span>
+        )}
+        {err && <div className="badge bad">⚠ {err}</div>}
+        <button className="cta" type="submit" disabled={busy}>{busy ? "Saving…" : "Save new password"}</button>
+      </form>
     </>
   );
 }
