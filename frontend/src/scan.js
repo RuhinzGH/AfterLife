@@ -37,15 +37,26 @@ function windowsFromUA(platformVersion) {
   return major >= 13 ? "11" : "10";
 }
 
+// The OS label, e.g. "Windows 11 (build 15.0.0)" or "Android 16 (build 16.0.0)".
+// Only Windows needs translating: Chromium reports Windows 11 as platformVersion
+// 13+, while on Android and macOS the major version IS the release number. The
+// Windows rule used to run on every platform, so Android 16 read "Android 11"
+// and was matched to Android 11's ended support (defect S2-D16).
+export function osLabel(he, fallback) {
+  if (!(he?.platform && he?.platformVersion)) return fallback || "Unknown OS";
+  if (he.platform === "Windows") {
+    const win = windowsFromUA(he.platformVersion);
+    return `Windows${win ? " " + win : ""} (build ${he.platformVersion})`;
+  }
+  const major = parseInt(he.platformVersion.split(".")[0], 10);
+  return `${he.platform}${major ? " " + major : ""} (build ${he.platformVersion})`;
+}
+
 export async function scanDevice() {
   const he = await highEntropy();
   const gpu = gpuInfo();
-  const winMajor = windowsFromUA(he.platformVersion);
-
-  const os =
-    he.platform && he.platformVersion
-      ? `${he.platform}${winMajor ? " " + winMajor : ""} (build ${he.platformVersion})`
-      : navigator.platform || "Unknown OS";
+  const winMajor = he.platform === "Windows" ? windowsFromUA(he.platformVersion) : null;
+  const os = osLabel(he, navigator.platform);
 
   return {
     // shown on the card
