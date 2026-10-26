@@ -3058,25 +3058,27 @@ button.ghost.sm { margin-top: 0.65rem; font-size: 0.8rem; padding: 0.4rem 0.8rem
    to know which voice spoke, never the reason anyone opened this. */
 .core-via { opacity: .66; text-transform: none; letter-spacing: .06em; }
 
-/* ---- phone TL;DR ----
-   Desktop never sees this: the cards fit on screen there. On a phone the
-   dashboard is a minutes-long scroll, so the verdict leads in five lines. */
-.tldr { display: none; }
-@media (max-width: 860px) {
-  .tldr { display: block; padding: 1rem 1.1rem; }
-  .tldr-head { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.7rem; }
-  .tldr-score {
-    font-family: var(--font-display); font-size: 2.6rem; font-weight: 700;
-    letter-spacing: -0.04em; line-height: 1; color: var(--brand);
-  }
-  .tldr-grade { font-weight: 600; font-size: 1.02rem; }
-  .tldr-row {
-    display: flex; justify-content: space-between; gap: 1rem;
-    padding: 0.45rem 0; border-top: 1px solid var(--line);
-  }
-  .tldr-k { color: var(--second); font-size: 0.88rem; }
-  .tldr-v { font-weight: 600; font-size: 0.9rem; text-align: right; }
+/* ---- the recommendation, first, on every screen ---- */
+.tldr { display: block; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.tldr-head { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.7rem; }
+.tldr-score {
+  font-family: var(--font-display); font-size: 2.6rem; font-weight: 700;
+  letter-spacing: -0.04em; line-height: 1; color: var(--brand);
 }
+.tldr-grade { font-weight: 600; font-size: 1.02rem; }
+.tldr-rec { font-size: 1.15rem; margin: 0.15rem 0; }
+.tldr-rec b { color: var(--ink); }
+.tldr-row {
+  display: flex; justify-content: space-between; gap: 1rem;
+  padding: 0.45rem 0; border-top: 1px solid var(--line);
+}
+.tldr-k { color: var(--second); font-size: 0.92rem; }
+.tldr-v { font-weight: 600; font-size: 0.95rem; text-align: right; }
+.tldr-jumps { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.8rem; }
+.tldr-jump { border: 1px solid var(--line-2, var(--line)); background: transparent; color: var(--ink); font: inherit;
+  font-size: 0.88rem; padding: 0.35rem 0.8rem; border-radius: 999px; cursor: pointer; }
+.tldr-jump:hover { border-color: var(--brand); }
+.card-anchor { display: block; position: relative; top: -84px; visibility: hidden; height: 0; }
 
 .core-line {
   margin: 0 0 .55rem; font-size: 1.02rem; line-height: 1.5; color: #f6ead8;
@@ -4977,8 +4979,10 @@ body::after {
 /* Plain / technical view (S3-03) and the visitor's intent (S3-04). */
 .dash-head { position: relative; }
 .view-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; margin-top: 0.6rem; }
-.view-toggle button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 0.85rem;
-  padding: 0.3rem 0.9rem; border-radius: 999px; cursor: pointer; }
+.view-toggle button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 1rem; font-weight: 600;
+  padding: 0.45rem 1.25rem; border-radius: 999px; cursor: pointer; }
+.view-toggle-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.8rem; }
+.view-toggle-hint { font-size: 0.88rem; color: var(--second); margin-top: 0.6rem; }
 .view-toggle button.on { background: var(--brand); color: #fff; }
 .dash.is-plain .tech-only, .dash.is-plain .wf-detail { display: none; }
 .intent-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.8rem; margin: 0.2rem 0 0.9rem; }

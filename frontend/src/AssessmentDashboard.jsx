@@ -192,11 +192,12 @@ export default function AssessmentDashboard({ data, payload, wipe }) {
         <ViewToggle technical={technical} />
       </div>
 
-      {/* Phone-only TL;DR. The full dashboard is a long scroll of cards that a
-          phone reader mostly will not finish, so the verdict comes first in a
-          few lines, read from the same fields as the cards below it. Hidden on
-          desktop, where the cards fit on screen. */}
-      <MobileTldr data={data} />
+      {/* The recommendation first, on every screen. It used to show on phones
+          only; in user testing (26 Oct) desktop users asked for the
+          recommendation to be clearer, and three of five needed help finding
+          the carbon answer and the working. Every row is read from the same
+          fields as the cards below, and the links jump to those cards. */}
+      <Recommendation data={data} technical={technical} />
 
       {/* The thesis, stated plainly -- only shows when there's an actual gap
           between what Windows says and what the real numbers say. */}
@@ -249,7 +250,7 @@ export default function AssessmentDashboard({ data, payload, wipe }) {
       )}
 
       <IntentBar intent={intent} />
-      {order.map((k) => <Fragment key={k}>{blocks[k]}</Fragment>)}
+      {order.map((k) => <Fragment key={k}>{blocks[k] && <span id={`card-${k}`} className="card-anchor" />}{blocks[k]}</Fragment>)}
 
       {technical && <TheWorking data={data} />}
 
@@ -272,34 +273,53 @@ export default function AssessmentDashboard({ data, payload, wipe }) {
   );
 }
 
-// "Windows says X, AfterLife says Y" -- the tagline made literal. Only appears
-// when there's a real gap to show (Win11 ineligible); if Windows already agrees
-/* The short phone verdict. Derives every row from the same assessment fields
-   as the full cards, so the two can never tell different stories. Rows with no
-   data simply do not render -- no dashes, no placeholders. */
-function MobileTldr({ data }) {
-  const { blend, pipeline, support_horizon: sh, pathways } = data;
+/* The recommendation, in a few lines, with links to the cards that explain it.
+   Derives every row from the same assessment fields as the full cards, so the
+   two can never tell different stories. Rows with no data simply do not render. */
+function jumpTo(selector) {
+  const el = document.querySelector(selector);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function Recommendation({ data, technical }) {
+  const { blend, pipeline, support_horizon: sh, pathways, carbon_tradeoff: ct } = data;
   const when = (iso) => {
     const dt = new Date(`${iso}T00:00:00`);
     return Number.isNaN(dt.getTime())
       ? iso : dt.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
   };
-  const top = Array.isArray(pathways) ? (pathways.find((p) => p?.recommended) || pathways[0]) : null;
+  const top = Array.isArray(pathways)
+    ? (pathways.find((p) => p?.recommended) || pathways.find((p) => p?.status === "best_fit") || pathways[0])
+    : null;
+  const grade = String(blend.grade || "").replace(/\s*-\s*/, " — ");
 
   const rows = [];
   if (pipeline?.estimated_remaining_years != null) {
     const y = pipeline.estimated_remaining_years;
-    rows.push(["Useful life left", y < 1 ? `~${Math.round(y * 12)} months` : `~${y.toFixed(1)} years`]);
+    rows.push(["Useful life left", y < 1 ? `~${Math.round(y * 12)} months` : `~${Number(y).toFixed(1)} years`]);
   }
   if (sh) rows.push(["Security updates", sh.is_eol ? `ended ${when(sh.eol_from)}` : `until ${when(sh.eol_from)}`]);
-  if (top?.label) rows.push(["Best move", top.label]);
+  if (ct) {
+    const sc = (ct.scenarios || []).find((s) => s.name === ct.picked);
+    const repays = sc ? sc.repays : ct.repays;
+    const years = sc ? sc.years : ct.years;
+    rows.push(["Would a new one be greener?", repays === false || years == null
+      ? "No: it would never repay the carbon spent making it"
+      : `Only after ~${years} years of use`]);
+  }
+
+  const openWorking = () => {
+    if (!technical) setTechnical(true);
+    setTimeout(() => jumpTo(".working-table"), 120);
+  };
 
   return (
-    <div className="tldr card">
+    <div className="tldr card" id="tour-recommendation">
       <div className="tldr-head">
         <span className="tldr-score">{blend.combined_score}</span>
         <div>
-          <div className="tldr-grade">{String(blend.grade || "").replace(/\s*-\s*/, " — ")}</div>
+          <div className="tldr-grade">{grade}</div>
+          {top?.label && <div className="tldr-rec">AfterLife recommends: <b>{top.label}</b></div>}
           <div className="note">the short version · full detail below</div>
         </div>
       </div>
@@ -309,10 +329,18 @@ function MobileTldr({ data }) {
           <span className="tldr-v">{v}</span>
         </div>
       ))}
+      <div className="tldr-jumps">
+        {ct && <button type="button" className="tldr-jump" onClick={() => jumpTo("#card-carbon")}>Greener? See why ↓</button>}
+        <button type="button" className="tldr-jump" onClick={() => jumpTo("#card-pathways")}>All options ↓</button>
+        <button type="button" className="tldr-jump" onClick={() => jumpTo("#card-outlook")}>Is repair worth it? ↓</button>
+        <button type="button" className="tldr-jump" onClick={openWorking}>How it's worked out ↓</button>
+      </div>
     </div>
   );
 }
 
+// "Windows says X, AfterLife says Y" -- the tagline made literal. Only appears
+// when there's a real gap to show (Win11 ineligible); if Windows already agrees
 // the device is fine, there's no contrast to dramatize, so it renders nothing.
 function ThesisContrast({ win11, grade, remainingYears }) {
   if (win11 !== "NOT ELIGIBLE") return null;
@@ -435,11 +463,14 @@ function Dial({ value, color }) {
    verdicts. Stored per browser (prefs.js). */
 function ViewToggle({ technical }) {
   return (
-    <div className="view-toggle" role="group" aria-label="How much detail to show">
-      <button type="button" aria-pressed={!technical} className={!technical ? "on" : ""}
-              onClick={() => setTechnical(false)}>Plain</button>
-      <button type="button" aria-pressed={technical} className={technical ? "on" : ""}
-              onClick={() => setTechnical(true)}>Technical</button>
+    <div className="view-toggle-wrap">
+      <div className="view-toggle" role="group" aria-label="How much detail to show">
+        <button type="button" aria-pressed={!technical} className={!technical ? "on" : ""}
+                onClick={() => setTechnical(false)}>Plain</button>
+        <button type="button" aria-pressed={technical} className={technical ? "on" : ""}
+                onClick={() => setTechnical(true)}>Technical</button>
+      </div>
+      <span className="view-toggle-hint">{technical ? "Showing every calculation" : "Switch to Technical to see every calculation"}</span>
     </div>
   );
 }
