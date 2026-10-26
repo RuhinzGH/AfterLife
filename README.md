@@ -110,6 +110,20 @@ own key, so a valid signature alone is never reported as "issued by AfterLife".
 
 ---
 
+## Technologies used
+
+| Layer | Technology |
+|---|---|
+| Website | React 18, Vite, plain CSS (responsive, with a mobile menu) |
+| Server | Python 3.12, FastAPI, Pydantic, Uvicorn |
+| Machine learning | scikit-learn (calibrated random forest, TF-IDF text features), pandas, joblib |
+| Passport | Ed25519 signatures (`cryptography`), W3C Verifiable Credential envelope, QR codes (`qrcode`, `jsQR`, `pako`) |
+| Plain-words summary | Groq API (`openai/gpt-oss-20b`), with every number checked in code |
+| Accounts | Supabase (Auth + PostgreSQL with row-level security) |
+| Deep scan | PowerShell (Windows) and shell (macOS/Linux) read-only collectors |
+| Testing and CI | pytest, Vitest, GitHub Actions |
+| Hosting | Vercel (website), Render (Docker container for the API) |
+
 ## Getting started
 
 The site is live at https://afterlife-ruhin.vercel.app (frontend on Vercel, API in
@@ -169,6 +183,23 @@ healthy one, that the language model's text is rejected when a number does not
 match, and that every assumed number has a reason. Outside services (Groq,
 Supabase) are replaced by fakes. GitHub Actions runs both suites and a
 production build on every push.
+
+## Sample outputs
+
+[docs/sample_outputs/](docs/sample_outputs/) holds real outputs of the API for
+one example laptop (6 years old, "battery drains fast"), made by
+`scripts/make_sample_outputs.py` with no network calls:
+
+| File | What it shows |
+|---|---|
+| `1_browser_scan_input.json` | What the browser reports, plus the owner's answers |
+| `2_signed_passport.json` | The signed passport, including the model's end-of-life risk |
+| `3_assessment.json` | The full assessment: score and every adjustment, years left, pathways, carbon payback, usage fit, repair outlook, repair rights |
+| `4_verify_genuine_and_tampered.json` | The verifier's answer for the genuine passport, and after one value is edited |
+
+The passport is signed with the local machine's key, so it verifies as
+"issued by AfterLife" only on the server that made it. Screenshots of the
+running site are in [docs/screenshots/](docs/screenshots/).
 
 ---
 

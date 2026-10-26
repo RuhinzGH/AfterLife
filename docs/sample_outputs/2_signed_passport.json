@@ -1,0 +1,106 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://www.w3.org/ns/credentials/examples/v2"
+  ],
+  "type": [
+    "VerifiableCredential",
+    "DigitalProductPassport"
+  ],
+  "issuer": "did:key:afterlife:-XyW3mYP5i_Rgh5t",
+  "validFrom": "2026-10-26T08:26:27.332175+00:00",
+  "credentialSubject": {
+    "device_id": "AFL-WMBUJTLLLQ",
+    "tier": "browser profile",
+    "issued": "2026-10-26",
+    "product_category": "Laptop",
+    "os": "Windows 11 (build 15.0.0)",
+    "gpu": "ANGLE (Intel, Intel(R) UHD Graphics 620 Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "gpu_vendor": null,
+    "cpu_cores": 8,
+    "ram_gb": 8,
+    "architecture": "x86 64",
+    "screen": "1920×1080",
+    "timezone": "Asia/Kolkata",
+    "windows_major": null,
+    "completeness_pct": 100,
+    "note": "Profile tier — deep fields (TPM, disk health, battery wear) need the collector for a full verified passport.",
+    "lifecycle": {
+      "device_age": 6.0,
+      "product_category": "Laptop",
+      "fault_described": true,
+      "fault_themes": [
+        "Battery"
+      ],
+      "prediction": "Fixed",
+      "eol_risk": 0.1829,
+      "probabilities": [
+        {
+          "label": "Fixed",
+          "probability": 0.5867
+        },
+        {
+          "label": "Repairable",
+          "probability": 0.2304
+        },
+        {
+          "label": "End of life",
+          "probability": 0.1829
+        }
+      ],
+      "basis": "fault + population prior"
+    }
+  },
+  "proof": {
+    "type": "Ed25519Signature2020",
+    "created": "2026-10-26T08:26:27.332175+00:00",
+    "verificationMethod": "did:key:afterlife:-XyW3mYP5i_Rgh5t",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "TaQjI3ptaHOARHkPJRPi9UV82hMrgjfeI87Z9py8NVVVX05Xqyx3smRdrxlfncUSwkpsjvU5WQrHcg1OQptMCA=="
+  },
+  "payload": {
+    "device_id": "AFL-WMBUJTLLLQ",
+    "tier": "browser profile",
+    "issued": "2026-10-26",
+    "product_category": "Laptop",
+    "os": "Windows 11 (build 15.0.0)",
+    "gpu": "ANGLE (Intel, Intel(R) UHD Graphics 620 Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "gpu_vendor": null,
+    "cpu_cores": 8,
+    "ram_gb": 8,
+    "architecture": "x86 64",
+    "screen": "1920×1080",
+    "timezone": "Asia/Kolkata",
+    "windows_major": null,
+    "completeness_pct": 100,
+    "note": "Profile tier — deep fields (TPM, disk health, battery wear) need the collector for a full verified passport.",
+    "lifecycle": {
+      "device_age": 6.0,
+      "product_category": "Laptop",
+      "fault_described": true,
+      "fault_themes": [
+        "Battery"
+      ],
+      "prediction": "Fixed",
+      "eol_risk": 0.1829,
+      "probabilities": [
+        {
+          "label": "Fixed",
+          "probability": 0.5867
+        },
+        {
+          "label": "Repairable",
+          "probability": 0.2304
+        },
+        {
+          "label": "End of life",
+          "probability": 0.1829
+        }
+      ],
+      "basis": "fault + population prior"
+    }
+  },
+  "signature": "TaQjI3ptaHOARHkPJRPi9UV82hMrgjfeI87Z9py8NVVVX05Xqyx3smRdrxlfncUSwkpsjvU5WQrHcg1OQptMCA==",
+  "issuer_pubkey": "-XyW3mYP5i_Rgh5tU6pt8CH-0CGeltsEYBCCZzShXMc=",
+  "verified": true
+}

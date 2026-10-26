@@ -1,0 +1,364 @@
+{
+  "blend": {
+    "combined_score": 67,
+    "grade": "C - serviceable",
+    "hardware_trust": 75,
+    "adjustments": [
+      {
+        "factor": "ML end-of-life risk",
+        "detail": "18% risk",
+        "delta": -2.7,
+        "source": "ml"
+      },
+      {
+        "factor": "reported fault",
+        "detail": "Battery",
+        "delta": -5
+      }
+    ]
+  },
+  "pipeline": {
+    "estimated_remaining_years": 5,
+    "projected_total_life": 11.0,
+    "stages": [
+      {
+        "stage": "New",
+        "year": 0,
+        "state": "past"
+      },
+      {
+        "stage": "In service",
+        "year": 6.0,
+        "state": "past"
+      },
+      {
+        "stage": "Now",
+        "year": 6.0,
+        "state": "current"
+      },
+      {
+        "stage": "Extended use",
+        "year": 11.0,
+        "state": "future"
+      },
+      {
+        "stage": "Recycle / harvest",
+        "year": 12.0,
+        "state": "future"
+      }
+    ]
+  },
+  "narrative": {
+    "summary": "This device scores 67/100 on the combined assessment, blending its hardware condition with the lifecycle model. It has an estimated 5 years of safe service life remaining.",
+    "lifecycle_note": "Roughly 5 more years of useful life before recycling should be considered.",
+    "suggestions": [
+      "Keep the OS and browser patched to stay secure without new hardware.",
+      "If the battery is worn, a replacement is far cheaper than a new device.",
+      "Reassign to lighter-duty or secondary use as it ages rather than retiring it.",
+      "Store the signed passport so a future buyer can trust its condition."
+    ],
+    "confidence_note": "Based on what a browser can see: battery wear and disk health are not measured in this scan.",
+    "source": "fallback",
+    "punchline": "Retirement-adjacent, not retired."
+  },
+  "key_points": {
+    "strengths": [
+      "Still within its expected prime years",
+      "About 5 years of estimated life left",
+      "Up to Browsing & office work (general use)"
+    ],
+    "weaknesses": [
+      "ML end-of-life risk: 18% risk",
+      "reported fault: Battery"
+    ]
+  },
+  "eprel": null,
+  "pathways": [
+    {
+      "key": "repurpose",
+      "label": "Repurpose",
+      "icon": "🔁",
+      "color": "brand-light",
+      "fit_score": 75,
+      "status": "best_fit",
+      "actions": [
+        "Home media PC",
+        "Linux workstation",
+        "Home server"
+      ]
+    },
+    {
+      "key": "hardening",
+      "label": "Keep with Hardening",
+      "icon": "🛡️",
+      "color": "amber",
+      "fit_score": 60,
+      "status": "also_viable",
+      "actions": [
+        "Use a currently-supported, patched browser",
+        "Remove software no longer receiving security updates",
+        "Enable full-disk encryption (BitLocker or equivalent)"
+      ]
+    },
+    {
+      "key": "primary",
+      "label": "Keep as Primary Device",
+      "icon": "🖥️",
+      "color": "green",
+      "fit_score": 45,
+      "status": "not_ideal",
+      "actions": [
+        "Usable as a primary device, but watch for slowdowns as software requirements grow."
+      ]
+    },
+    {
+      "key": "sell",
+      "label": "Sell",
+      "icon": "💰",
+      "color": "brand",
+      "fit_score": 40,
+      "status": "not_ideal",
+      "actions": [
+        "Resale value is modest: open the resale estimate below before choosing between selling and repurposing."
+      ]
+    },
+    {
+      "key": "recycle",
+      "label": "Recycle",
+      "icon": "♻️",
+      "color": "red",
+      "fit_score": 30,
+      "status": "not_ideal",
+      "actions": [
+        "A fallback if the other pathways don't fit your situation, not the first choice."
+      ]
+    }
+  ],
+  "pathways_narrative": {
+    "summary": "\"Repurpose\" is the strongest fit today, given this device's \"C - serviceable\" condition grade — though the other pathways below are real options too, not just runners-up.",
+    "source": "fallback"
+  },
+  "win11": null,
+  "carbon_tradeoff": {
+    "repays": true,
+    "years": 21.1,
+    "grid": {
+      "gco2_kwh": 670.1,
+      "year": 2025,
+      "region": "India",
+      "basis": "country",
+      "source": "Our World in Data — Carbon intensity of electricity generation",
+      "unit": "gCO2e per kWh"
+    },
+    "embodied_kg": 307.0,
+    "embodied_basis": "class",
+    "annual_saving_kg": 14.6,
+    "annual_kwh_saved": 21.8,
+    "headline": "On India's grid (670 gCO₂e/kWh), a replacement would need an estimated 21.1 years of use to repay the 307 kg of carbon spent building it.",
+    "assumptions": {
+      "hours_per_year": 2000,
+      "load_factor": 0.4,
+      "system_overhead": 1.6,
+      "old_tdp_w": 45.0,
+      "new_tdp_w": 28.0,
+      "note": "Duty cycle is authored, not measured: 8 hours a day, 250 days a year, averaging 40% of TDP, with a 1.6x whole-system multiplier over the CPU alone. Grid intensity and embodied carbon are measured. Change the duty cycle and the break-even moves."
+    },
+    "scenarios": [
+      {
+        "name": "light",
+        "hours_per_day": 4,
+        "repays": true,
+        "years": 42.1,
+        "annual_saving_kg": 7.3
+      },
+      {
+        "name": "typical",
+        "hours_per_day": 8,
+        "repays": true,
+        "years": 21.1,
+        "annual_saving_kg": 14.6
+      },
+      {
+        "name": "heavy",
+        "hours_per_day": 12,
+        "repays": true,
+        "years": 14.0,
+        "annual_saving_kg": 21.9
+      }
+    ],
+    "picked": "typical",
+    "picked_reason": "use not known, so typical",
+    "inputs": [
+      {
+        "name": "Grid carbon intensity",
+        "measured": true,
+        "source": "Our World in Data"
+      },
+      {
+        "name": "Making a replacement",
+        "measured": true,
+        "source": "median of published figures for this device class"
+      },
+      {
+        "name": "Old processor power",
+        "measured": false,
+        "source": "assumed 45 W (a 2019 performance laptop chip)"
+      },
+      {
+        "name": "Replacement processor power",
+        "measured": false,
+        "source": "assumed 28 W (a current thin-and-light chip)"
+      },
+      {
+        "name": "Hours of use",
+        "measured": false,
+        "source": "8 h a day, 250 days a year (typical)"
+      }
+    ]
+  },
+  "usage_fit": {
+    "persona": "general",
+    "label": "General use",
+    "source": "self-reported",
+    "reasons": [],
+    "current_tier": "Browsing & office work",
+    "next_tier": "Heavy multitasking",
+    "meets_top_tier": false,
+    "tiers": [
+      {
+        "name": "Browsing & office work",
+        "cores": 2,
+        "ram_gb": 8,
+        "gpu_tier": 0,
+        "met": true
+      },
+      {
+        "name": "Heavy multitasking",
+        "cores": 4,
+        "ram_gb": 16,
+        "gpu_tier": 0,
+        "met": false
+      }
+    ],
+    "gap": [
+      "16+ GB memory (shows 8+)"
+    ],
+    "specs": {
+      "cores": 8,
+      "ram_gb": 8.0,
+      "gpu": "ANGLE (Intel, Intel(R) UHD Graphics 620 Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "gpu_tier": 0,
+      "gpu_basis": "keyword"
+    },
+    "years_of_headroom": null,
+    "verdict": "Handles Browsing & office work. Short of Heavy multitasking on: 16+ GB memory (shows 8+).",
+    "timeline": null,
+    "caveats": [
+      "A browser counts logical processors (threads), which can be twice the number of physical cores.",
+      "Browsers report memory only up to 8 GB, so this machine may have more; the deep scan reads the real amount.",
+      "This graphics chip is not in the benchmark list, so its tier comes from its name."
+    ],
+    "growth": {
+      "ram_gb_per_year": 0.68,
+      "gpu_tier_years": 11.8
+    }
+  },
+  "uplift": {
+    "condition": {
+      "current_score": 67,
+      "current_grade": "C - serviceable",
+      "projected_score": 72,
+      "projected_grade": "B - good",
+      "grade_changes": true,
+      "actions": [
+        {
+          "action": "Fix the reported fault",
+          "points": 5,
+          "fixes_fault": true,
+          "detail": "Battery"
+        }
+      ],
+      "ssd_swap_available": false
+    },
+    "capability": null
+  },
+  "repair_evidence": {
+    "themes": [
+      {
+        "key": "battery",
+        "label": "Battery",
+        "plain": "battery won't hold charge, or has swollen",
+        "n": 1779,
+        "fixed": 852,
+        "fixed_pct": 47.9,
+        "eol": 244,
+        "eol_pct": 13.7,
+        "top_barrier": "Spare parts too expensive",
+        "top_barrier_n": 33
+      }
+    ],
+    "lines": [
+      "Battery: of 1,779 computers brought to repair events with this fault, 48% left working. When it couldn't be fixed, the usual reason was \"spare parts too expensive\"."
+    ],
+    "source": "Open Repair Alliance, openrepair_202507",
+    "n_records": 23748,
+    "overall_fixed_pct": 54.5
+  },
+  "repair_rights": {
+    "category": "Laptop",
+    "status": "outside",
+    "jurisdiction": "EU and EEA",
+    "applies_from": "2026-07-31",
+    "in_force": true,
+    "country": "IN",
+    "country_name": "India",
+    "sources": [
+      {
+        "label": "Right to Repair Portal India",
+        "url": "https://righttorepairindia.gov.in/"
+      }
+    ],
+    "rights": [
+      {
+        "title": "This app holds repair rules for the EU and EEA only",
+        "detail": "It makes no claim about what the law in India entitles you to; your seller's warranty and local consumer law still apply. The country comes from this browser's time zone.",
+        "source": ""
+      },
+      {
+        "title": "India: the government's Right to Repair Portal",
+        "detail": "Run by the Department of Consumer Affairs, it gathers brands' manuals, spare-part prices and warranty information for sectors including mobile phones and tablets and consumer durables. Brands join voluntarily, and it is an information portal, not a legal right to repair.",
+        "source": "Department of Consumer Affairs, Government of India"
+      }
+    ],
+    "headline": "EU repair rules don't apply in India"
+  },
+  "support_horizon": {
+    "product": "Microsoft Windows",
+    "release": "11 26H1 (W)",
+    "eol_from": "2028-03-14",
+    "eoas_from": "2028-03-14",
+    "months_remaining": 16.6,
+    "is_eol": false,
+    "eol_risk": 0.539,
+    "matched_on": "os",
+    "matched_key": "windows11",
+    "source": "endoflife.date",
+    "support_state": "supported",
+    "esu": null,
+    "months_to_state_end": 16.6,
+    "note": "Security updates end 2028-03-14 — about 17 months away. Reassess then."
+  },
+  "support_cliff": null,
+  "geo": {
+    "country": "IN",
+    "country_name": "India",
+    "currency": "INR",
+    "in_eea": false,
+    "in_eu": false,
+    "ora_records": 0,
+    "ora_share": 0.0,
+    "evidence_level": "none",
+    "evidence_note": "No repair records from India in the 305,649-record corpus. The repair-history evidence below is drawn entirely from other countries, mostly in north-western Europe — treat it as indicative, not local.",
+    "resolved_from": "timezone"
+  }
+}

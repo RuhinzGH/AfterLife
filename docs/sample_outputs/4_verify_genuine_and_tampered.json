@@ -1,0 +1,14 @@
+{
+  "genuine": {
+    "valid": true,
+    "issued_by_afterlife": true,
+    "device_id": "AFL-WMBUJTLLLQ",
+    "message": "Verified — AFL-WMBUJTLLLQ was issued by AfterLife and not edited since."
+  },
+  "after_editing_ram_8_to_32": {
+    "valid": false,
+    "issued_by_afterlife": true,
+    "device_id": "AFL-WMBUJTLLLQ",
+    "message": "Signature INVALID — this passport was altered. Do not trust."
+  }
+}
