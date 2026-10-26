@@ -1275,7 +1275,14 @@ svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
 .life-tag.fix { background: rgba(53,230,138,0.14); color: var(--green); }
 .pc-foot { display: flex; gap: 1.3rem; align-items: center; margin-top: 1.5rem; padding-top: 1.3rem;
   border-top: 1px solid var(--line); position: relative; }
-.pc-qr { width: 116px; height: 116px; border-radius: 11px; background: #fff; padding: 7px; flex-shrink: 0; }
+.pc-qr { width: 148px; height: 148px; border-radius: 11px; background: #fff; padding: 7px; flex-shrink: 0; }
+.pc-qr-btn { all: unset; cursor: zoom-in; display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+.pc-qr-btn:focus-visible { outline: 2px solid var(--brand, #8b5cf6); outline-offset: 3px; border-radius: 12px; }
+.pc-qr-tip { font-size: 0.7rem; opacity: 0.75; }
+.qr-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(5, 4, 12, 0.92); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1rem; padding: 1rem; cursor: zoom-out; }
+.qr-overlay img { width: min(88vw, 70vh, 520px); height: auto; background: #fff; padding: 14px; border-radius: 14px; image-rendering: pixelated; }
+.qr-overlay p { color: #e5e7eb; text-align: center; margin: 0; }
 .pc-sign { flex: 1; }
 .passport-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; align-items: center; }
 

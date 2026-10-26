@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 // Shared, elegant device-passport card. Renders a signed scan-passport doc
 // ({payload, signature, issuer_pubkey, verified}) with an optional QR and verify badge.
 
@@ -24,6 +25,15 @@ export default function PassportCard({ doc, qr, verified, final = null }) {
   const ok = verified ?? doc.verified;
   const isDeep = p.trust_score != null;
   const w11Color = { ELIGIBLE: "green", "NOT ELIGIBLE": "red", INDETERMINATE: "amber" }[p.win11] || "muted";
+  // Tap the QR to show it large. A passport QR holds ~1,000 characters; at card
+  // size phones struggled to read it (user testing, 26 Oct).
+  const [bigQr, setBigQr] = useState(false);
+  useEffect(() => {
+    if (!bigQr) return;
+    const close = (e) => e.key === "Escape" && setBigQr(false);
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [bigQr]);
 
   return (
     <div className="passport-card">
@@ -155,7 +165,18 @@ export default function PassportCard({ doc, qr, verified, final = null }) {
       )}
 
       <div className="pc-foot">
-        {qr && <img className="pc-qr" src={qr} alt="passport QR" />}
+        {qr && (
+          <button type="button" className="pc-qr-btn" onClick={() => setBigQr(true)} title="Show the QR large for scanning">
+            <img className="pc-qr" src={qr} alt="passport QR" />
+            <span className="pc-qr-tip">Tap to enlarge</span>
+          </button>
+        )}
+        {qr && bigQr && (
+          <div className="qr-overlay" role="dialog" aria-label="Passport QR, large" onClick={() => setBigQr(false)}>
+            <img src={qr} alt="passport QR, large" />
+            <p>Point a phone camera at this QR. Tap anywhere or press Esc to close.</p>
+          </div>
+        )}
         <div className="pc-sign">
           {ok != null && (
             <div className={`badge ${ok ? "ok" : "bad"}`}>

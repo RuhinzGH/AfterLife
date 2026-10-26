@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import jsQR from "jsqr";
+import { decodeQR } from "./qrDecode.js";
 import { api } from "./api.js";
 import PassportCard from "./PassportCard.jsx";
 import { b64decodeUtf8, b64decodeCompressed } from "./b64.js";
@@ -40,6 +40,9 @@ export default function Verifier({ onNavigate }) {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const rafRef = useRef(null);
+  const frameRef = useRef(0);
+  const startedRef = useRef(0);
+  const [hint, setHint] = useState(false);
 
   // Auto-verify if the page was opened from a QR link (?verify=...)
   useEffect(() => {
@@ -54,6 +57,7 @@ export default function Verifier({ onNavigate }) {
 
   function stopCamera() {
     cancelAnimationFrame(rafRef.current);
+    clearTimeout(rafRef.current);
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     setScanning(false);
@@ -62,12 +66,20 @@ export default function Verifier({ onNavigate }) {
   async function startCamera() {
     setErr(null); setDoc(null); setResult(null);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+      // HD where the camera offers it: a passport QR has small modules, and the
+      // default 640x480 stream was why users had to zoom in by hand.
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } },
+      });
+      try { await stream.getVideoTracks()[0].applyConstraints({ advanced: [{ focusMode: "continuous" }] }); } catch { /* not every camera can */ }
       streamRef.current = stream;
       const v = videoRef.current;
       v.srcObject = stream;
       await v.play();
       setScanning(true);
+      setHint(false);
+      startedRef.current = Date.now();
+      frameRef.current = 0;
       tick();
     } catch (e) {
       setErr("Camera unavailable: " + e.message + ". Try uploading a QR image or pasting instead.");
@@ -84,15 +96,18 @@ export default function Verifier({ onNavigate }) {
     canvas.width = v.videoWidth; canvas.height = v.videoHeight;
     const ctx = canvas.getContext("2d");
     ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
-    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const code = jsQR(img.data, img.width, img.height);
-    if (code) {
+    // About 8 looks a second, not every frame: alternating the whole frame with
+    // a 2x zoom of the centre finds small QRs, and the CPU (and battery) rest
+    // between looks.
+    const text = decodeQR(ctx.getImageData(0, 0, canvas.width, canvas.height), { quick: true, frame: frameRef.current++ });
+    if (text) {
       stopCamera();
-      const p = extractPassport(code.data);
+      const p = extractPassport(text);
       if (p) runVerify(p);
       else setErr("QR scanned, but it isn't an Afterlife passport.");
     } else {
-      rafRef.current = requestAnimationFrame(tick);
+      if (Date.now() - startedRef.current > 6000) setHint(true);
+      rafRef.current = setTimeout(() => { rafRef.current = requestAnimationFrame(tick); }, 120);
     }
   }
 
@@ -104,27 +119,56 @@ export default function Verifier({ onNavigate }) {
     } catch (e) { setErr(e.message); }
   }
 
+  function applyDecoded(text, what) {
+    if (!text) { setErr(`Couldn't find a QR code in that ${what}. Try a clearer screenshot or photo, or paste the passport instead.`); return; }
+    const p = extractPassport(text);
+    if (p) runVerify(p);
+    else setErr("QR found, but it isn't an Afterlife passport.");
+  }
+
+  // A saved PDF passport (Save as PDF) carries the same QR. PDF.js renders its
+  // pages so the QR can be read. It loads only when a PDF is chosen, so the
+  // verifier stays small for everyone else.
+  async function readPdf(file) {
+    try {
+      const pdfjs = await import("pdfjs-dist");
+      const worker = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
+      pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
+      const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer(), isEvalSupported: false }).promise;
+      for (let n = 1; n <= Math.min(pdf.numPages, 3); n++) {
+        const page = await pdf.getPage(n);
+        const viewport = page.getViewport({ scale: 3 });
+        const canvas = document.createElement("canvas");
+        canvas.width = viewport.width; canvas.height = viewport.height;
+        const ctx = canvas.getContext("2d");
+        await page.render({ canvasContext: ctx, viewport }).promise;
+        const text = decodeQR(ctx.getImageData(0, 0, canvas.width, canvas.height), { maxSide: Infinity });
+        if (text) return applyDecoded(text, "PDF");
+      }
+      applyDecoded(null, "PDF");
+    } catch {
+      setErr("Couldn't open that PDF. Try uploading a screenshot of its QR code instead.");
+    }
+  }
+
   function handleFile(e) {
     const file = e.target.files?.[0];
     if (!file) return;
     setErr(null); setDoc(null); setResult(null);
+    e.target.value = "";
+    if (file.type === "application/pdf" || /\.pdf$/i.test(file.name)) { readPdf(file); return; }
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement("canvas");
       canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0);
-      const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const code = jsQR(data.data, data.width, data.height);
+      const text = decodeQR(ctx.getImageData(0, 0, canvas.width, canvas.height));
       URL.revokeObjectURL(img.src);
-      if (!code) { setErr("Couldn't find a QR code in that image. Try a clearer screenshot or photo."); return; }
-      const p = extractPassport(code.data);
-      if (p) runVerify(p);
-      else setErr("QR found, but it isn't an Afterlife passport.");
+      applyDecoded(text, "image");
     };
     img.onerror = () => setErr("Couldn't read that image file.");
     img.src = URL.createObjectURL(file);
-    e.target.value = "";
   }
 
   function verifyPasted() {
@@ -204,17 +248,24 @@ export default function Verifier({ onNavigate }) {
               {!scanning
                 ? <button className="cta" onClick={startCamera}>Start camera</button>
                 : <button className="ghost" onClick={stopCamera}>Stop camera</button>}
-              <p className="note">Hold a passport QR up to the camera — it detects and verifies automatically.</p>
+              <p className="note">Hold the passport QR so it fills most of the box, in good light, and keep it still for a moment. It verifies automatically.</p>
+              {scanning && hint && (
+                <p className="note-strip">
+                  Not found yet? Move a little closer or further until the QR looks sharp, tap the screen to focus,
+                  or tap the QR on the passport page to enlarge it. You can also use <b>Upload</b> with a
+                  screenshot or the saved PDF.
+                </p>
+              )}
             </div>
           )}
           {mode === MODE.upload && (
             <div className="cam-wrap">
               <label className="dropzone" htmlFor="qr-file">
                 <span className="dz-icon">📁</span>
-                <span>Click to upload a QR code image</span>
-                <span className="note">PNG or JPG — the passport QR you saved earlier</span>
+                <span>Click to upload a QR image or PDF passport</span>
+                <span className="note">PNG, JPG, or the PDF from <b>Save as PDF</b></span>
               </label>
-              <input id="qr-file" ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{ display: "none" }} />
+              <input id="qr-file" ref={fileRef} type="file" accept="image/*,application/pdf,.pdf" onChange={handleFile} style={{ display: "none" }} />
             </div>
           )}
           {mode === MODE.paste && (

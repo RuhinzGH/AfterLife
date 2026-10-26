@@ -65,7 +65,7 @@ export function passportHtml(doc, { qr = null, final = null, origin = "" } = {})
   th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #e5e9e8; vertical-align: top; }
   th { width: 36%; color: #5c6b68; font-weight: 600; }
   .verify { margin-top: 16px; padding: 12px 14px; border: 1px solid #cdd6d4; border-radius: 8px; display: flex; gap: 14px; align-items: center; }
-  .verify img { width: 110px; height: 110px; }
+  .verify img { width: 170px; height: 170px; }
   .key { font-family: Consolas, monospace; font-size: 10px; color: #5c6b68; margin-top: 4px; }
   .foot { margin-top: 16px; font-size: 10px; color: #8a9794; }
 </style></head><body>
