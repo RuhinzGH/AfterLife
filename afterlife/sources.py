@@ -113,6 +113,16 @@ SOURCES: list[dict[str, Any]] = [
         "used_for": "When a device or OS stops receiving security updates, and "
                     "whether an extended-updates programme covers it.",
     },
+    {
+        "key": "model_aliases",
+        "label": "Google Play supported devices",
+        "file": "model_aliases.json",
+        "licence": "Published by Google for app developers",
+        "url": "https://storage.googleapis.com/play_public/supported_devices.csv",
+        "expected_days": 90,
+        "used_for": "Turning the model code a phone's browser reports "
+                    "into its name, so its support end date can be found.",
+    },
 ]
 
 

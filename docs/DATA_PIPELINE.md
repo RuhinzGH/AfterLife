@@ -34,6 +34,7 @@ are downloaded by the build scripts in step 2 themselves.
 | Step | Script | Reads | Makes |
 |---|---|---|---|
 | 8 | `build_device_support.py` | step 2 | `app_data/device_support.json` (support end dates) |
+| 8b | `build_model_aliases.py` | step 8, Google Play's supported-devices list (downloaded) | `app_data/model_aliases.json` (phone model code to name) |
 | 9 | `build_geo_lookup.py` | step 1 | `app_data/geo_lookup.json` (time zone to country, records per country) |
 | 10 | `build_grid_intensity.py` | Our World in Data, step 9 | `app_data/grid_intensity.json` |
 | 11 | `build_embodied_carbon.py` | Boavizta | `app_data/embodied_carbon.json` |

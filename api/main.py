@@ -436,7 +436,7 @@ def assess(body: AssessIn) -> dict:
     #
     # An explicit client value still wins. Absence stays absence -- no published end date means no support horizon in
     # the response, never an invented one.
-    horizon = support_lookup(body.make_model, body.os)
+    horizon = support_lookup(body.make_model, body.os, model_code=body.model_code)
     eol_risk = body.eol_risk if body.eol_risk is not None else (
         horizon.eol_risk if horizon else None)
 

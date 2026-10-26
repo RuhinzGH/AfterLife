@@ -104,8 +104,24 @@ def risk_from_months(months: float, is_eol: bool) -> float:
     return round(min(RISK_CAP, max(RISK_FLOOR, frac)), 3)
 
 
+_ALIASES: dict | None = None
+
+
+def model_name_for_code(code: str | None) -> str | None:
+    """A phone's model code ("SM-S711B") -> its marketing name ("Samsung Galaxy S23 FE").
+
+    Chrome on Android reports the code; the support table lists names. The map
+    comes from Google Play's supported-devices list (scripts/build_model_aliases.py)
+    and holds only codes whose name the support table knows."""
+    global _ALIASES
+    if _ALIASES is None:
+        p = APP_DATA / "model_aliases.json"
+        _ALIASES = json.loads(p.read_text(encoding="utf-8")).get("aliases", {}) if p.exists() else {}
+    return _ALIASES.get(_norm(code)) if code else None
+
+
 def lookup(make_model: str | None = None, os_name: str | None = None,
-           as_of: dt.date | None = None) -> SupportHorizon | None:
+           as_of: dt.date | None = None, model_code: str | None = None) -> SupportHorizon | None:
     """Device first, OS second.
 
     The device date wins where both exist. A Pixel running Android 14 stops
@@ -120,7 +136,12 @@ def lookup(make_model: str | None = None, os_name: str | None = None,
     # os_families before the per-release os index: a user reports "Windows 10",
     # not "10 22H2 (W)". The family entry is the consumer cycle whose security
     # support runs longest, which is the date that governs someone still on it.
-    for source, index, raw in (("device", tbl.get("devices", {}), make_model),
+    # A phone's model code, translated to its name, is the most specific
+    # evidence there is, so it is tried before anything else.
+    named = model_name_for_code(model_code)
+    for source, index, raw in (("device", tbl.get("devices", {}), named),
+                               ("device", tbl.get("devices", {}), None if named else model_code),  # a typed name
+                               ("device", tbl.get("devices", {}), make_model),
                                ("os", tbl.get("os_families", {}), os_name),
                                ("os", tbl.get("os", {}), os_name)):
         hit = _find(index, raw)
