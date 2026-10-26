@@ -73,3 +73,56 @@ export function decodeQR(img, opts = {}) {
   }
   return null;
 }
+
+// ------------------------------------------------------------ files (browser)
+// Read a QR from a file a person chose: a PNG/JPG, or the PDF from Save as PDF.
+// Resolves to the QR's text, or null if none was found. Shared by the verifier
+// and Compare. PDF.js is loaded only when a PDF is chosen.
+
+export function isPdf(file) {
+  return file?.type === "application/pdf" || /\.pdf$/i.test(file?.name || "");
+}
+
+function imagePixels(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas");
+      c.width = img.naturalWidth; c.height = img.naturalHeight;
+      const ctx = c.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      URL.revokeObjectURL(img.src);
+      resolve(ctx.getImageData(0, 0, c.width, c.height));
+    };
+    img.onerror = () => reject(new Error("Couldn't read that image file."));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+async function pdfQr(file) {
+  const pdfjs = await import("pdfjs-dist");
+  const worker = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
+  pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
+  let pdf;
+  try {
+    pdf = await pdfjs.getDocument({ data: await file.arrayBuffer(), isEvalSupported: false }).promise;
+  } catch {
+    throw new Error("Couldn't open that PDF. Try a screenshot of its QR code instead.");
+  }
+  for (let n = 1; n <= Math.min(pdf.numPages, 3); n++) {
+    const page = await pdf.getPage(n);
+    const viewport = page.getViewport({ scale: 3 });
+    const c = document.createElement("canvas");
+    c.width = viewport.width; c.height = viewport.height;
+    const ctx = c.getContext("2d");
+    await page.render({ canvasContext: ctx, viewport }).promise;
+    const text = decodeQR(ctx.getImageData(0, 0, c.width, c.height), { maxSide: Infinity });
+    if (text) return text;
+  }
+  return null;
+}
+
+export async function decodeQrFile(file) {
+  if (isPdf(file)) return pdfQr(file);
+  return decodeQR(await imagePixels(file));
+}

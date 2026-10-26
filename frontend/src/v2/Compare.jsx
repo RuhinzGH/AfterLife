@@ -12,7 +12,7 @@
 // would leave the user wondering where it went -- but it is flagged on its
 // card, its column is visibly marked, and it never wins a row.
 import { useEffect, useRef, useState } from "react";
-import jsQR from "jsqr";
+import { decodeQrFile, isPdf } from "../qrDecode.js";
 import { api } from "../api.js";
 import { b64decodeCompressed, b64decodeUtf8 } from "../b64.js";
 import { fetchAssessment } from "../assess.js";
@@ -46,25 +46,6 @@ function signedPart(doc) {
 
 function isPassport(doc) {
   return !!(doc && typeof doc === "object" && doc.payload && typeof doc.payload === "object" && doc.signature);
-}
-
-function decodeQrFile(file) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const c = document.createElement("canvas");
-      c.width = img.naturalWidth; c.height = img.naturalHeight;
-      const ctx = c.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      const d = ctx.getImageData(0, 0, c.width, c.height);
-      URL.revokeObjectURL(img.src);
-      const code = jsQR(d.data, d.width, d.height);
-      if (!code) reject(new Error("No QR code found in that image. Try a sharper screenshot."));
-      else resolve(code.data);
-    };
-    img.onerror = () => reject(new Error("Couldn't read that image file."));
-    img.src = URL.createObjectURL(file);
-  });
 }
 
 /* ----------------------------------------------------------- field readers */
@@ -418,11 +399,12 @@ function UploadMethod({ id, onLoad, onError }) {
   async function handle(file) {
     if (!file) return;
     try {
-      if (file.type.startsWith("image/")) {
+      if (file.type.startsWith("image/") || isPdf(file)) {
         const text = await decodeQrFile(file);
+        if (!text) throw new Error(`No QR code found in that ${isPdf(file) ? "PDF" : "image"}. Try a sharper screenshot.`);
         const doc = extractPassport(text);
         if (!doc) throw new Error("QR found, but it isn't an Afterlife passport.");
-        onLoad(doc, "QR image");
+        onLoad(doc, isPdf(file) ? "PDF passport" : "QR image");
       } else {
         const doc = extractPassport(await file.text());
         if (!doc) throw new Error("That file isn't passport JSON.");
@@ -436,8 +418,8 @@ function UploadMethod({ id, onLoad, onError }) {
            onDragLeave={() => setDrag(false)}
            onDrop={(e) => { e.preventDefault(); setDrag(false); handle(e.dataTransfer.files?.[0]); }}>
       <span className="cmp-drop-t">Drop or choose a file</span>
-      <span className="v2-note">A saved passport <b>.json</b>, or its <b>QR</b> as a PNG/JPG</span>
-      <input id={`${id}-file`} type="file" accept=".json,application/json,image/*" className="cmp-file"
+      <span className="v2-note">A saved passport <b>.json</b>, its <b>PDF</b>, or its <b>QR</b> as a PNG/JPG</span>
+      <input id={`${id}-file`} type="file" accept=".json,application/json,image/*,application/pdf,.pdf" className="cmp-file"
              onChange={(e) => { handle(e.target.files?.[0]); e.target.value = ""; }} />
     </label>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { decodeQR } from "./qrDecode.js";
+import { decodeQR, decodeQrFile, isPdf } from "./qrDecode.js";
 import { api } from "./api.js";
 import PassportCard from "./PassportCard.jsx";
 import { b64decodeUtf8, b64decodeCompressed } from "./b64.js";
@@ -126,49 +126,15 @@ export default function Verifier({ onNavigate }) {
     else setErr("QR found, but it isn't an Afterlife passport.");
   }
 
-  // A saved PDF passport (Save as PDF) carries the same QR. PDF.js renders its
-  // pages so the QR can be read. It loads only when a PDF is chosen, so the
-  // verifier stays small for everyone else.
-  async function readPdf(file) {
-    try {
-      const pdfjs = await import("pdfjs-dist");
-      const worker = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
-      pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
-      const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer(), isEvalSupported: false }).promise;
-      for (let n = 1; n <= Math.min(pdf.numPages, 3); n++) {
-        const page = await pdf.getPage(n);
-        const viewport = page.getViewport({ scale: 3 });
-        const canvas = document.createElement("canvas");
-        canvas.width = viewport.width; canvas.height = viewport.height;
-        const ctx = canvas.getContext("2d");
-        await page.render({ canvasContext: ctx, viewport }).promise;
-        const text = decodeQR(ctx.getImageData(0, 0, canvas.width, canvas.height), { maxSide: Infinity });
-        if (text) return applyDecoded(text, "PDF");
-      }
-      applyDecoded(null, "PDF");
-    } catch {
-      setErr("Couldn't open that PDF. Try uploading a screenshot of its QR code instead.");
-    }
-  }
-
-  function handleFile(e) {
+  // An image, or the PDF from Save as PDF (it carries the same QR).
+  async function handleFile(e) {
     const file = e.target.files?.[0];
     if (!file) return;
     setErr(null); setDoc(null); setResult(null);
     e.target.value = "";
-    if (file.type === "application/pdf" || /\.pdf$/i.test(file.name)) { readPdf(file); return; }
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      const text = decodeQR(ctx.getImageData(0, 0, canvas.width, canvas.height));
-      URL.revokeObjectURL(img.src);
-      applyDecoded(text, "image");
-    };
-    img.onerror = () => setErr("Couldn't read that image file.");
-    img.src = URL.createObjectURL(file);
+    try {
+      applyDecoded(await decodeQrFile(file), isPdf(file) ? "PDF" : "image");
+    } catch (x) { setErr(x.message); }
   }
 
   function verifyPasted() {
