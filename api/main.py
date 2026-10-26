@@ -111,7 +111,10 @@ def _load_json(name: str) -> dict:
 # ---------------------------------------------------------------- routes
 @app.get("/api/health")
 def health() -> dict:
-    return {"status": "ok", "service": "afterlife"}
+    # "store" says where deep-scan hand-offs and rate limits live: "redis"
+    # (survives restarts) or "memory" (lost on a restart or redeploy).
+    from afterlife import kvstore
+    return {"status": "ok", "service": "afterlife", "store": kvstore.backend()}
 
 
 @app.get("/api/esu")

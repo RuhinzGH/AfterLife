@@ -8,6 +8,7 @@ numpy
 scikit-learn==1.9.0     # the model was saved with 1.9.0; another version prints warnings when loading it
 xgboost                 # one of the compared models
 requests
+redis                   # optional shared store; used only when REDIS_URL is set
 
 # --- Data and training scripts (scripts/) ---
 pyarrow                 # parquet cache for the drive datasets

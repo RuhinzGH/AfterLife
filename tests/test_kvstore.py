@@ -84,3 +84,32 @@ def test_deep_scan_handoff_shape():
     assert K.get(f"deep:{token}") == doc
     assert (K.get(f"dev:{token}") or {}).get("mitigation_state") == {"x": 1}
     assert K.get("deep:wrong-token") is None
+
+
+def test_a_failed_redis_is_retried_later_not_never(monkeypatch):
+    """Redis unreachable once (e.g. while the server starts) must not pin the
+    store to memory until the next deploy: it is tried again after RETRY_AFTER."""
+    calls = []
+
+    class FakeRedis:
+        @staticmethod
+        def from_url(*a, **k):
+            calls.append(1)
+            raise ConnectionError("not yet")
+
+    import sys, types
+    monkeypatch.setitem(sys.modules, "redis", types.SimpleNamespace(Redis=FakeRedis))
+    monkeypatch.setattr(K, "REDIS_URL", "redis://example:6379")
+    monkeypatch.setattr(K, "_redis", None)
+    monkeypatch.setattr(K, "_redis_tried_at", None)
+    assert K.backend() == "memory" and len(calls) == 1
+    assert K.backend() == "memory" and len(calls) == 1      # within the minute: not retried
+    monkeypatch.setattr(K, "_redis_tried_at", time.monotonic() - K.RETRY_AFTER - 1)
+    assert K.backend() == "memory" and len(calls) == 2      # after it: tried again
+
+
+def test_health_reports_where_the_store_lives():
+    from fastapi.testclient import TestClient
+    from api.main import app
+    body = TestClient(app).get("/api/health").json()
+    assert body["status"] == "ok" and body["store"] in ("memory", "redis")

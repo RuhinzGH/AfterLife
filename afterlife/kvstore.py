@@ -33,18 +33,21 @@ from typing import Any
 REDIS_URL = os.environ.get("REDIS_URL", "")
 
 _redis = None
-_redis_tried = False
+_redis_tried_at: float | None = None   # when the last connection attempt failed
+RETRY_AFTER = 60                       # seconds before trying a failed Redis again
 
 
 def _client():
     """Connect lazily and once. A Redis that is configured but unreachable must
     degrade to memory rather than 500 the API -- losing a scan handoff is bad,
     refusing every request is worse."""
-    global _redis, _redis_tried
-    if _redis_tried:
+    global _redis, _redis_tried_at
+    if _redis is not None or not REDIS_URL:
         return _redis
-    _redis_tried = True
-    if not REDIS_URL:
+    # A failed attempt is retried after a minute rather than never: Redis being
+    # briefly unreachable while the server starts must not pin it to memory
+    # until the next deploy.
+    if _redis_tried_at is not None and time.monotonic() - _redis_tried_at < RETRY_AFTER:
         return None
     try:
         import redis  # type: ignore
@@ -57,6 +60,7 @@ def _client():
         _redis = client
     except Exception:
         _redis = None
+        _redis_tried_at = time.monotonic()
     return _redis
 
 
