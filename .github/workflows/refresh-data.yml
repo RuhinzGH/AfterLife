@@ -1,0 +1,68 @@
+name: refresh security data
+
+# Keeps the two fastest-moving sources fresh without anyone remembering to:
+#   weekly  (Mon 03:30 UTC)  CISA known-exploited list + FIRST EPSS scores
+#   monthly (1st, 04:00 UTC) also rebuilds the NVD corpus first (slow: ~1.5 h)
+# The full test suite must pass before anything is committed; if it fails, or
+# nothing changed, nothing is pushed. A push redeploys the site (Vercel, Render).
+on:
+  schedule:
+    - cron: "30 3 * * 1"
+    - cron: "0 4 1 * *"
+  workflow_dispatch:
+    inputs:
+      rebuild_nvd:
+        description: "Also rebuild the NVD corpus (slow)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Rebuild the NVD corpus (monthly, or when asked)
+        if: github.event.schedule == '0 4 1 * *' || inputs.rebuild_nvd
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/build_cve_corpus.py --major 10
+          python scripts/build_cve_corpus.py --major 11
+
+      - name: Refresh CISA KEV and EPSS
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/enrich_cve_kev.py
+          python scripts/enrich_cve_epss.py
+
+      - name: Test before committing anything
+        env:
+          PYTHONPATH: .
+        run: python -m pytest -q
+
+      - name: Commit if anything changed
+        run: |
+          git add app_data
+          if git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Scheduled refresh of security data ($(date -u +%Y-%m-%d))"
+          git push
