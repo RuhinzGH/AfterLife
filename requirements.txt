@@ -15,6 +15,7 @@ pyarrow                 # parquet cache for the drive datasets
 scipy                   # scripts/survival_failslow.py
 shap                    # scripts/research_experiment.py
 matplotlib              # scripts/train_lifecycle.py figures
+psutil                  # scripts/measure_green.py (memory and CPU of the server under test)
 
 # --- Tests ---
 pytest

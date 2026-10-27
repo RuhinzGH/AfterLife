@@ -1,0 +1,54 @@
+{
+ "label": "after",
+ "commit": "99b3f7f",
+ "measured": "2026-10-27",
+ "machine": {
+  "cpu": "Intel Core i7-1165G7 (this laptop)",
+  "tdp_w": 28.0,
+  "physical_cores": 4,
+  "logical_cpus": 8,
+  "ram_gb": 11.8
+ },
+ "model_file_mb": 4.63,
+ "server": {
+  "rss_mb_idle": 113.0,
+  "rss_mb_model_loaded": 209.6,
+  "scan_passport": {
+   "median_ms": 76.6,
+   "cpu_ms_per_request": 72.9,
+   "response_kb": 2.3
+  },
+  "assess": {
+   "median_ms": 4.9,
+   "cpu_ms_per_request": 4.2,
+   "response_kb": 6.6
+  },
+  "findings": {
+   "median_ms": 46.8,
+   "cpu_ms_per_request": 46.9,
+   "response_kb": 26.1
+  },
+  "rss_mb_after_requests": 233.6
+ },
+ "website_build": {
+  "first_page_js_kb_gzip": 75.0,
+  "first_page_css_kb_gzip": 32.9,
+  "build_total_kb": 2991.0,
+  "build_files": 33
+ },
+ "website_load": {
+  "home_load_ms_median": 650,
+  "home_transfer_kb_median": 180.4
+ },
+ "energy_estimate": {
+  "method": "server CPU seconds x 7.0 W per busy core (TDP 28 W / 4 cores); carbon at 670 gCO2e/kWh. An estimate from measured CPU time, not a meter reading.",
+  "scan_passport": {
+   "wh_per_1000": 0.142,
+   "g_co2e_per_1000": 0.095
+  },
+  "assess": {
+   "wh_per_1000": 0.008,
+   "g_co2e_per_1000": 0.005
+  }
+ }
+}
