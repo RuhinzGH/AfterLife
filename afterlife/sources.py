@@ -144,6 +144,10 @@ def _fetched(path: pathlib.Path) -> tuple[str | None, str]:
     """
     if not path.exists():
         return None, "missing"
+    # A CSV records its pull date in a companion file (build_cve_corpus.py).
+    side = path.with_suffix(".meta.json")
+    if path.suffix == ".csv" and side.exists():
+        path = side
     if path.suffix == ".json":
         try:
             blob = json.loads(path.read_text(encoding="utf-8"))

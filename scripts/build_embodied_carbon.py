@@ -147,6 +147,8 @@ def main() -> None:
     payload = {
         "source": "Boavizta environmental-footprint-data (manufacturer LCA declarations)",
         "url": "https://github.com/Boavizta/environmental-footprint-data",
+        # When this pull happened, so the Data Sources page can vouch for it.
+        "fetched": __import__("datetime").date.today().isoformat(),
         "n_models": len(models),
         "manufacturers": dict(sorted(makers.items(), key=lambda kv: -kv[1])),
         "classes": classes,

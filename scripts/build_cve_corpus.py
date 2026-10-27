@@ -160,6 +160,15 @@ def main() -> None:
         w.writeheader()
         w.writerows(rows)
 
+    # A CSV has nowhere to record when it was pulled, so a small companion file
+    # does: afterlife/sources.py reads it to show how fresh the corpus is.
+    import json as _json
+    (OUT_DIR / f"win{args.major}_cve_classified.meta.json").write_text(_json.dumps({
+        "source": "National Vulnerability Database",
+        "fetched": dt.date.today().isoformat(),
+        "records": len(rows),
+    }, indent=1) + "\n", encoding="utf-8")
+
     serious = [r for r in rows if r["severity"] in ("HIGH", "CRITICAL")]
     dates = sorted(r["published"] for r in rows if r["published"])
     print(f"\nwrote {out.relative_to(ROOT)}")

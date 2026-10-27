@@ -114,6 +114,9 @@ def main() -> None:
     OUT.write_text(json.dumps({
         "source": "endoflife.date",
         "licence": "see endoflife.date; data aggregated from vendor announcements",
+        # The day the support dates were pulled (pull_eol.py writes the CSV this reads;
+        # run the two together).
+        "fetched": __import__("datetime").date.today().isoformat(),
         "devices": devices,
         "os": os_entries,
         "os_families": families,

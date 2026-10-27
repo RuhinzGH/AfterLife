@@ -1,6 +1,7 @@
 {
  "source": "Boavizta environmental-footprint-data (manufacturer LCA declarations)",
  "url": "https://github.com/Boavizta/environmental-footprint-data",
+ "fetched": "2026-10-27",
  "n_models": 1083,
  "manufacturers": {
   "Dell": 467,
