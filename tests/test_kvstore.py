@@ -113,3 +113,19 @@ def test_health_reports_where_the_store_lives():
     from api.main import app
     body = TestClient(app).get("/api/health").json()
     assert body["status"] == "ok" and body["store"] in ("memory", "redis")
+
+
+def test_health_explains_a_rest_url_without_showing_it(monkeypatch):
+    """Upstash shows a REST URL (https://...) next to the Redis URL (rediss://...);
+    pasting the wrong one must be explained, and the value never echoed."""
+    monkeypatch.setattr(K, "REDIS_URL", "https://secret-host.upstash.io")
+    monkeypatch.setattr(K, "_redis", None)
+    monkeypatch.setattr(K, "_redis_tried_at", None)
+    s = K.status()
+    assert s["store"] == "memory" and "rediss://" in s["redis_problem"]
+    assert "secret-host" not in str(s)
+
+
+def test_a_connection_error_is_reported_without_the_password():
+    e = ConnectionError("Error connecting to rediss://default:hunter2@host.upstash.io:6379")
+    assert "hunter2" not in K._safe_error(e) and "<url>" in K._safe_error(e)

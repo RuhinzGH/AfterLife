@@ -26,14 +26,17 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
 from collections import defaultdict, deque
 from typing import Any
 
-REDIS_URL = os.environ.get("REDIS_URL", "")
+# Pasted values often carry stray spaces or quotes; neither is ever part of a URL.
+REDIS_URL = os.environ.get("REDIS_URL", "").strip().strip('"').strip("'")
 
 _redis = None
 _redis_tried_at: float | None = None   # when the last connection attempt failed
+_redis_error: str | None = None        # why it failed, with no secrets in it
 RETRY_AFTER = 60                       # seconds before trying a failed Redis again
 
 
@@ -41,7 +44,7 @@ def _client():
     """Connect lazily and once. A Redis that is configured but unreachable must
     degrade to memory rather than 500 the API -- losing a scan handoff is bad,
     refusing every request is worse."""
-    global _redis, _redis_tried_at
+    global _redis, _redis_tried_at, _redis_error
     if _redis is not None or not REDIS_URL:
         return _redis
     # A failed attempt is retried after a minute rather than never: Redis being
@@ -58,10 +61,31 @@ def _client():
             health_check_interval=30)
         client.ping()
         _redis = client
-    except Exception:
+    except Exception as e:
         _redis = None
         _redis_tried_at = time.monotonic()
+        _redis_error = _safe_error(e)
     return _redis
+
+
+def _safe_error(e: Exception) -> str:
+    """The failure, in words, with the URL (and so the password) removed."""
+    msg = re.sub(r"\b[a-z]+s?://\S+", "<url>", str(e))
+    return f"{type(e).__name__}: {msg}"[:200]
+
+
+def status() -> dict[str, Any]:
+    """What /api/health shows about the store. Never includes the URL itself."""
+    out: dict[str, Any] = {"store": backend()}
+    if REDIS_URL and out["store"] == "memory":
+        scheme = REDIS_URL.split("://", 1)[0].lower() if "://" in REDIS_URL else "none"
+        out["redis_configured"] = True
+        if scheme not in ("redis", "rediss"):
+            out["redis_problem"] = ("REDIS_URL must start with rediss:// (the Redis connection URL). "
+                                    f"It starts with {scheme}://, which looks like the REST URL.")
+        else:
+            out["redis_problem"] = _redis_error or "not connected yet"
+    return out
 
 
 def backend() -> str:

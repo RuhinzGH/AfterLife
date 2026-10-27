@@ -114,7 +114,7 @@ def health() -> dict:
     # "store" says where deep-scan hand-offs and rate limits live: "redis"
     # (survives restarts) or "memory" (lost on a restart or redeploy).
     from afterlife import kvstore
-    return {"status": "ok", "service": "afterlife", "store": kvstore.backend()}
+    return {"status": "ok", "service": "afterlife", **kvstore.status()}
 
 
 @app.get("/api/esu")
