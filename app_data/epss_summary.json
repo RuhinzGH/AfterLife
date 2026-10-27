@@ -2,94 +2,94 @@
   "source": "FIRST Exploit Prediction Scoring System (EPSS)",
   "url": "https://www.first.org/epss/",
   "feed": "https://epss.empiricalsecurity.com/epss_scores-current.csv.gz",
-  "model": "model_version:v2026.06.15,score_date:2026-10-25T12:03:13Z",
-  "fetched": "2026-10-26",
-  "scored_universe": 395308,
+  "model": "model_version:v2026.06.15,score_date:2026-10-26T12:03:22Z",
+  "fetched": "2026-10-27",
+  "scored_universe": 395492,
   "act_threshold": 0.1,
   "meaning": "Probability that exploitation activity is OBSERVED in the next 30 days. Not a probability that this device is compromised, and it says nothing about impact. A forecast, refreshed daily.",
   "caveat": "EPSS complements severity, it does not replace it. A low-EPSS critical flaw in an exposed service is still worth patching.",
   "by_version": {
     "10": {
-      "total": 7437,
-      "scored": 7437,
+      "total": 7938,
+      "scored": 7938,
       "unscored": 0,
-      "serious": 5495,
+      "serious": 5863,
       "all": {
-        "n": 7437,
-        "mean": 0.06065,
-        "median": 0.01273,
+        "n": 7938,
+        "mean": 0.05716,
+        "median": 0.01132,
         "over_threshold": 1023,
-        "expected_exploited": 451.0
+        "expected_exploited": 453.7
       },
       "serious_all": {
-        "n": 5495,
-        "mean": 0.06762,
-        "median": 0.01193,
+        "n": 5863,
+        "mean": 0.0637,
+        "median": 0.01085,
         "over_threshold": 871,
-        "expected_exploited": 371.6
+        "expected_exploited": 373.5
       },
       "serious_local": {
-        "n": 3144,
-        "mean": 0.03172,
-        "median": 0.00772,
+        "n": 3397,
+        "mean": 0.0296,
+        "median": 0.00709,
         "over_threshold": 233,
-        "expected_exploited": 99.7
+        "expected_exploited": 100.6
       },
       "serious_remote": {
-        "n": 2351,
-        "mean": 0.11563,
-        "median": 0.03843,
+        "n": 2466,
+        "mean": 0.11066,
+        "median": 0.03662,
         "over_threshold": 638,
-        "expected_exploited": 271.9
+        "expected_exploited": 272.9
       },
       "serious_kev": {
-        "n": 210,
-        "mean": 0.3656,
-        "median": 0.22325,
+        "n": 211,
+        "mean": 0.36433,
+        "median": 0.22316,
         "over_threshold": 140,
-        "expected_exploited": 76.8
+        "expected_exploited": 76.9
       },
       "local_less_exploited_than_remote": true
     },
     "11": {
-      "total": 4124,
-      "scored": 4124,
+      "total": 4663,
+      "scored": 4663,
       "unscored": 0,
-      "serious": 3132,
+      "serious": 3533,
       "all": {
-        "n": 4124,
-        "mean": 0.02872,
-        "median": 0.00677,
+        "n": 4663,
+        "mean": 0.02601,
+        "median": 0.00632,
         "over_threshold": 181,
-        "expected_exploited": 118.4
+        "expected_exploited": 121.3
       },
       "serious_all": {
-        "n": 3132,
-        "mean": 0.03181,
-        "median": 0.00669,
+        "n": 3533,
+        "mean": 0.02876,
+        "median": 0.00607,
         "over_threshold": 153,
-        "expected_exploited": 99.6
+        "expected_exploited": 101.6
       },
       "serious_local": {
-        "n": 2050,
-        "mean": 0.01709,
-        "median": 0.00396,
+        "n": 2345,
+        "mean": 0.01536,
+        "median": 0.00364,
         "over_threshold": 57,
-        "expected_exploited": 35.0
+        "expected_exploited": 36.0
       },
       "serious_remote": {
-        "n": 1082,
-        "mean": 0.0597,
-        "median": 0.01445,
+        "n": 1188,
+        "mean": 0.05521,
+        "median": 0.01312,
         "over_threshold": 96,
-        "expected_exploited": 64.6
+        "expected_exploited": 65.6
       },
       "serious_kev": {
-        "n": 91,
-        "mean": 0.28818,
-        "median": 0.15852,
+        "n": 92,
+        "mean": 0.28612,
+        "median": 0.15401,
         "over_threshold": 53,
-        "expected_exploited": 26.2
+        "expected_exploited": 26.3
       },
       "local_less_exploited_than_remote": true
     }
