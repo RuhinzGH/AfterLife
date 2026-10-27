@@ -6,7 +6,7 @@ import { b64encodeCompressed } from "./b64.js";
 import { useCountUp } from "./useCountUp.js";
 import { fetchAssessment } from "./assess.js";
 import { defaultProductCategory } from "./deviceCategory.js";
-import { markScanned } from "./deviceStore.js";
+import { markScanned, seenIds } from "./deviceStore.js";
 import { openPassportPdf } from "./passportPdf.js";
 // Loaded only when someone chooses the deep scan, so the first page stays small.
 const DeepScan = lazy(() => import("./DeepScan.jsx"));
@@ -32,6 +32,9 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
   const [scan, setScan] = useState(null);
   const [revealed, setRevealed] = useState(0);
   const [passport, setPassport] = useState(null);
+  // Whether this scan reached My Scans, shown under the passport buttons so a
+  // save that didn't happen isn't silent.
+  const [saved, setSaved] = useState(null);
   const [qr, setQr] = useState(null);
   const [verifyUrl, setVerifyUrl] = useState(null);   // the link the QR holds, for copying as text
   const [copied, setCopied] = useState(false);
@@ -104,6 +107,7 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
       // An instant scan reads this browser's own machine, so this is the moment
       // to record that this device was seen here. See deviceStore.js.
       markScanned(doc.payload?.device_id);
+      setSaved(null);
       // QR generation is a nice-to-have, not load-bearing -- isolated so a
       // large/edge-case payload that overflows a QR code's data capacity only
       // means "no QR," never silently skips the assessment below too (see the
@@ -132,7 +136,12 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
         setAssessment(result);
         // Signed in: add it to My Scans, now that the score is known. Signed out: nothing is stored.
         const tokenNow = sessionRef.current?.access_token;
-        if (tokenNow) api.saveScan(doc, "instant", tokenNow, result).catch(() => {});
+        if (tokenNow) {
+          api.saveScan(doc, "instant", tokenNow, result, seenIds())
+            .then(() => setSaved("saved")).catch(() => setSaved("failed"));
+        } else {
+          setSaved("signed-out");
+        }
       }).catch(() => {});
     } catch (e) {
       setErr("Backend unreachable: " + e.message);
@@ -349,7 +358,10 @@ export default function Scanner({ onNavigate, freshScan = 0 }) {
               <button className="cta" onClick={savePassport}>Save passport (JSON)</button>
               <button className="ghost" onClick={saveQr} disabled={!qr}>{qr ? "Save QR (PNG)" : "QR unavailable"}</button>
               <button className="ghost" onClick={copyLink} disabled={!verifyUrl}>{copied ? "Link copied" : "Copy verify link"}</button>
-              <button className="ghost" onClick={() => openPassportPdf(passport, { qr, final: assessment?.blend ? { score: assessment.blend.combined_score, grade: assessment.blend.grade } : null })}>Save as PDF</button>
+              <button className="ghost" onClick={() => openPassportPdf(passport, { qr, link: verifyUrl, final: assessment?.blend ? { score: assessment.blend.combined_score, grade: assessment.blend.grade } : null })}>Save as PDF</button>
+            {saved === "saved" && <span className="note save-note ok">✓ Saved to My Scans</span>}
+            {saved === "failed" && <span className="note save-note bad">Couldn't save to My Scans. Try again later.</span>}
+            {saved === "signed-out" && <span className="note save-note">Not saved: sign in to keep it in My Scans.</span>}
               <button className="ghost" onClick={startNew}>Start a new scan</button>
               <span className="note">
                 Scan the QR with any phone camera to open the verifier, or save it and upload it there later.

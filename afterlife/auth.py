@@ -101,6 +101,21 @@ def save_scan(user_id: str, device_id: str | None, scan_type: str, record: dict[
         return "unavailable"
 
 
+def remove_device(user_id: str, device_id: str) -> bool:
+    """Delete one device's saved scans for this user. True on success. The
+    user filter is applied here AND enforced by the table's row-level security."""
+    s = _settings()
+    if not s:
+        return False
+    url, key = s
+    try:
+        requests.delete(f"{url}/rest/v1/scans", timeout=TIMEOUT, headers=_server_headers(key),
+                        params={"user_id": f"eq.{user_id}", "device_id": f"eq.{device_id}"}).raise_for_status()
+        return True
+    except requests.RequestException:
+        return False
+
+
 def list_scans(user_id: str) -> list[dict[str, Any]]:
     """A user's saved scans, newest first; empty if Supabase is unavailable."""
     s = _settings()

@@ -9,7 +9,7 @@ import SecureBootAlert from "./SecureBootAlert.jsx";
 import ScanProgress, { ScanCoverage } from "./ScanProgress.jsx";
 import { b64encodeCompressed } from "./b64.js";
 import { fetchAssessment } from "./assess.js";
-import { markScanned } from "./deviceStore.js";
+import { markScanned, seenIds } from "./deviceStore.js";
 import { useAuth } from "./AuthContext.jsx";
 import { PLATFORM, allCommands, deepScanCommand, detectPlatform } from "./platform.js";
 
@@ -28,7 +28,11 @@ export default function DeepScan({ onBack }) {
   useEffect(() => { sessionRef.current = session; }, [session]);
   const savedRef = useRef(null);        // signature of the last reading saved: never save one twice
   const [passport, setPassport] = useState(null);
+  // Whether this scan reached My Scans, shown under the passport buttons so a
+  // save that didn't happen isn't silent.
+  const [saved, setSaved] = useState(null);
   const [qr, setQr] = useState(null);
+  const [verifyUrl, setVerifyUrl] = useState(null);
   const [assessment, setAssessment] = useState(null);
   const [copied, setCopied] = useState(false);
   const [waiting, setWaiting] = useState(true);
@@ -158,6 +162,7 @@ export default function DeepScan({ onBack }) {
     // Leave the marker now, while we know for a fact the collector just ran
     // on the machine in front of us. See deviceStore.js.
     markScanned(res.payload?.device_id);
+    setSaved(null);
     // The QR is a nice-to-have: a failure here only means "no QR", never a
     // missing assessment.
     try {
@@ -167,6 +172,7 @@ export default function DeepScan({ onBack }) {
         issuer: res.issuer, validFrom: res.validFrom,
       };
       const url = `${window.location.origin}/?verify=${b64encodeCompressed(signed)}`;
+      setVerifyUrl(url);
       setQr(await (await import("qrcode")).default.toDataURL(url, {
         margin: 4, scale: 6, errorCorrectionLevel: "M",
         color: { dark: "#0e1518", light: "#ffffff" },
@@ -181,7 +187,8 @@ export default function DeepScan({ onBack }) {
       const tokenNow = sessionRef.current?.access_token;
       if (tokenNow && savedRef.current !== res.signature) {
         savedRef.current = res.signature;
-        api.saveScan(res, "deep", tokenNow, result).catch(() => {});
+        api.saveScan(res, "deep", tokenNow, result, seenIds())
+          .then(() => setSaved("saved")).catch(() => setSaved("failed"));
       }
     }).catch(() => {});
   }
@@ -216,7 +223,10 @@ export default function DeepScan({ onBack }) {
           <div className="passport-actions">
             <button className="cta" onClick={savePassport}>Save passport (JSON)</button>
             <button className="ghost" onClick={saveQr} disabled={!qr}>{qr ? "Save QR (PNG)" : "QR unavailable"}</button>
-            <button className="ghost" onClick={() => openPassportPdf(passport, { qr, final: assessment?.blend ? { score: assessment.blend.combined_score, grade: assessment.blend.grade } : null })}>Save as PDF</button>
+            <button className="ghost" onClick={() => openPassportPdf(passport, { qr, link: verifyUrl, final: assessment?.blend ? { score: assessment.blend.combined_score, grade: assessment.blend.grade } : null })}>Save as PDF</button>
+            {saved === "saved" && <span className="note save-note ok">✓ Saved to My Scans</span>}
+            {saved === "failed" && <span className="note save-note bad">Couldn't save to My Scans. Try again later.</span>}
+            {saved === "signed-out" && <span className="note save-note">Not saved: sign in to keep it in My Scans.</span>}
             <button className="ghost" onClick={onBack}>Start a new scan</button>
             <span className="note">
               Scan the QR with any phone camera to open the verifier, or save it and upload it there later.

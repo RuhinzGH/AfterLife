@@ -101,21 +101,36 @@ function reassessReason(d) {
 // newer: the instant one cannot see battery wear or disk health, so letting it
 // take over would make the card quietly lose detail over time and look like a
 // bug. Both timestamps are kept and shown when they differ.
-function groupDevices(scans) {
+//
+// An instant scan and a deep scan of one machine carry different IDs (browser
+// facts vs maker/model/CPU). A saved scan lists the other IDs scanned from the
+// same browser (`links`), and a browser only ever scans the machine it runs on,
+// so linked IDs are joined into one card here.
+export function groupDevices(scans) {
+  const idOf = (s) => s.passport?.payload?.device_id || `row-${s.id}`;
+  const parent = new Map();
+  const find = (x) => { while (parent.get(x) !== x) { parent.set(x, parent.get(parent.get(x))); x = parent.get(x); } return x; };
+  for (const s of scans) parent.set(idOf(s), idOf(s));
+  for (const s of scans) {
+    for (const other of s.passport?.links || []) {
+      if (parent.has(other)) parent.set(find(other), find(idOf(s)));
+    }
+  }
   const byDevice = new Map();
   for (const s of scans) {
-    const id = s.passport?.payload?.device_id || `row-${s.id}`;
-    if (!byDevice.has(id)) byDevice.set(id, []);
-    byDevice.get(id).push(s);
+    const root = find(idOf(s));
+    if (!byDevice.has(root)) byDevice.set(root, []);
+    byDevice.get(root).push(s);
   }
 
   const devices = [];
-  for (const [deviceId, history] of byDevice) {
+  for (const history of byDevice.values()) {
     const sorted = [...history].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     const lastDeep = sorted.find((s) => s.scan_type === "deep");
     const primary = lastDeep || sorted[0];
     devices.push({
-      deviceId,
+      deviceId: idOf(primary),
+      ids: [...new Set(sorted.map(idOf))],
       primary,
       history: sorted,
       lastChecked: sorted[0].created_at,
@@ -137,6 +152,20 @@ export default function MyScans({ onNavigate }) {
   // collapses the rest -- an accordion, so the page never becomes a long scroll
   // of stacked expanded specs (which is what made 3+ devices unreadable).
   const [openId, setOpenId] = useState(null);
+  // Remove a device card (every ID joined into it) from the account. Asked
+  // once, because it can't be undone: the signed passports are deleted.
+  async function removeDevice(d) {
+    if (!window.confirm("Remove this device and all its saved scans from My Scans? This can't be undone.")) return;
+    try {
+      for (const id of d.ids || [d.deviceId]) {
+        if (/^AFL-/.test(id)) await api.removeDevice(id, session.access_token);
+      }
+      setScans((list) => (list || []).filter((s) => !(d.ids || [d.deviceId]).includes(s.passport?.payload?.device_id)));
+      setOpenId(null);
+    } catch (e) {
+      setErr(`Couldn't remove it: ${e.message}`);
+    }
+  }
   // Quick filters that sit beside the text search. `tone` buckets by grade
   // (the same excellent/good/fair/poor language the cards colour by), `type`
   // is instant-vs-deep, `attention` surfaces only the machines a person would
@@ -336,6 +365,7 @@ export default function MyScans({ onNavigate }) {
                 onScanAgain={() => onNavigate("scan", { fresh: true })}
                 primary={primaryId === d.deviceId}
                 onPrimary={() => togglePrimary(d.deviceId)}
+                onRemove={() => removeDevice(d)}
               />
             ))}
           </div>
@@ -374,7 +404,7 @@ function groupByCategory(devices, here) {
 }
 
 /* --------------------------------------------------------------------- card */
-function DeviceCard({ device, open, onToggle, onScanAgain, primary, onPrimary }) {
+function DeviceCard({ device, open, onToggle, onScanAgain, primary, onPrimary, onRemove }) {
   const [editing, setEditing] = useState(false);
   const [nick, setNick] = useState(() => getNickname(device.deviceId) || "");
 
@@ -385,7 +415,7 @@ function DeviceCard({ device, open, onToggle, onScanAgain, primary, onPrimary })
   const detected = deviceTitle(p);
   const tone = gradeTone(blend?.grade);
   const isDeep = scan.scan_type === "deep";
-  const mine = isThisDevice(device.deviceId);
+  const mine = (device.ids || [device.deviceId]).some(isThisDevice);
 
   function saveNick(value) {
     setNickname(device.deviceId, value);
@@ -494,6 +524,7 @@ function DeviceCard({ device, open, onToggle, onScanAgain, primary, onPrimary })
       detected={detected}
       onClose={onToggle}
       onScanAgain={onScanAgain}
+      onRemove={onRemove}
       mine={mine}
     />
   );
@@ -515,7 +546,7 @@ function Ring({ value, tone }) {
 }
 
 /* ----------------------------------------------------------------- expanded */
-function ExpandedDevice({ device, nick, detected, onClose, onScanAgain, mine }) {
+function ExpandedDevice({ device, nick, detected, onClose, onScanAgain, onRemove, mine }) {
   const [qr, setQr] = useState(null);
   const [verifyUrl, setVerifyUrl] = useState(null);
   const [copied, setCopied] = useState("");
@@ -668,11 +699,19 @@ function ExpandedDevice({ device, nick, detected, onClose, onScanAgain, mine }) 
         </div>
       )}
 
-      {mine && (
-        <button className="ghost" style={{ marginTop: "1rem" }} onClick={onScanAgain}>
-          ↻ Scan again
-        </button>
-      )}
+      <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap", marginTop: "1rem" }}>
+        {mine && (
+          <button className="ghost" onClick={onScanAgain}>
+            ↻ Scan again
+          </button>
+        )}
+        {onRemove && (
+          <button className="ghost danger" onClick={onRemove}
+                  title="Delete this device and all its saved scans from your account">
+            Remove from My Scans
+          </button>
+        )}
+      </div>
     </div>
   );
 }

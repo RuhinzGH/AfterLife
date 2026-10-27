@@ -40,7 +40,7 @@ export function passportRows(p) {
 }
 
 /** The print page's HTML. Exported so it can be tested without opening a window. */
-export function passportHtml(doc, { qr = null, final = null, origin = "" } = {}) {
+export function passportHtml(doc, { qr = null, final = null, origin = "", link = null } = {}) {
   const p = doc.payload || {};
   const deep = p.trust_score != null;
   const score = final?.score ?? (deep ? p.trust_score : null);
@@ -79,10 +79,11 @@ export function passportHtml(doc, { qr = null, final = null, origin = "" } = {})
   </div>
   <table><tbody>${rows}</tbody></table>
   <div class="verify">
-    ${qr ? `<img src="${qr}" alt="QR code holding the signed passport">` : ""}
+    ${qr ? (link ? `<a href="${esc(link)}"><img src="${qr}" alt="QR code holding the signed passport"></a>` : `<img src="${qr}" alt="QR code holding the signed passport">`) : ""}
     <div>
       <b>Check it yourself.</b> The QR holds the signed passport. Scan it with a phone camera, or open
       ${esc(origin)} and choose "Verify a passport". If anything in it was changed after signing, the check fails.
+      ${link ? `<div class="key"><a href="${esc(link)}">Open the verify link</a> (in a PDF viewer, this link works too).</div>` : ""}
       ${key ? `<div class="key">Signing key starts ${esc(key)}…</div>` : ""}
     </div>
   </div>

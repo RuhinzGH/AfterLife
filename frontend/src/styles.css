@@ -5014,3 +5014,13 @@ body::after {
 
 /* Password reset (Sprint 3) */
 .auth-forgot { display: inline-block; margin: -0.2rem 0 0.4rem; }
+.pw-wrap { position: relative; }
+.pw-wrap input { width: 100%; padding-right: 2.6rem; }
+.pw-eye { position: absolute; right: 0.45rem; top: 50%; transform: translateY(-50%); border: 0; background: transparent;
+  color: var(--muted, #94a3b8); cursor: pointer; padding: 0.25rem; display: grid; place-items: center; border-radius: 6px; }
+.pw-eye:hover, .pw-eye[aria-pressed="true"] { color: var(--ink, #fff); }
+.pw-eye:focus-visible { outline: 2px solid var(--brand, #8b5cf6); }
+.save-note { align-self: center; font-size: 0.85rem; }
+.save-note.ok { color: var(--green, #34d399); }
+.save-note.bad { color: var(--red, #f87171); }
+.ghost.danger { color: var(--red, #f87171); border-color: rgba(248, 113, 113, 0.45); }

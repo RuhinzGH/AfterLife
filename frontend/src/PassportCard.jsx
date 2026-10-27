@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 // Shared, elegant device-passport card. Renders a signed scan-passport doc
 // ({payload, signature, issuer_pubkey, verified}) with an optional QR and verify badge.
 
@@ -171,11 +172,15 @@ export default function PassportCard({ doc, qr, verified, final = null }) {
             <span className="pc-qr-tip">Tap to enlarge</span>
           </button>
         )}
-        {qr && bigQr && (
+        {/* Rendered at the top of the page, not inside the card: the cards'
+            reveal animation creates a stacking context that would otherwise
+            keep the overlay underneath the cards that follow it. */}
+        {qr && bigQr && createPortal(
           <div className="qr-overlay" role="dialog" aria-label="Passport QR, large" onClick={() => setBigQr(false)}>
             <img src={qr} alt="passport QR, large" />
             <p>Point a phone camera at this QR. Tap anywhere or press Esc to close.</p>
-          </div>
+          </div>,
+          document.body,
         )}
         <div className="pc-sign">
           {ok != null && (

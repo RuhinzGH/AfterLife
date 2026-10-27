@@ -49,12 +49,14 @@ export const api = {
   // Saved scans: the Supabase access token proves who is asking; the server
   // checks it with Supabase and only ever reads or writes that user's rows.
   myScans: (authToken) => req("/my-scans", { headers: { Authorization: `Bearer ${authToken}` } }),
-  saveScan: (passport, scanType, authToken, assessment) =>
+  saveScan: (passport, scanType, authToken, assessment, links = []) =>
     req("/save-scan", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${authToken}` },
-      body: JSON.stringify({ passport, scan_type: scanType, assessment }),
+      body: JSON.stringify({ passport, scan_type: scanType, assessment, links }),
     }),
+  removeDevice: (deviceId, authToken) =>
+    req(`/my-scans/${encodeURIComponent(deviceId)}`, { method: "DELETE", headers: { Authorization: `Bearer ${authToken}` } }),
   assess: (body) => postJson("/assess", body),
   priceEstimate: (body) => postJson("/price-estimate", body),
   explain: (assessment, tier) => postJson("/explain", { assessment, tier }),

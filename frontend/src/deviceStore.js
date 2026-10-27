@@ -50,6 +50,12 @@ export function markScanned(deviceId) {
   write(SEEN_KEY, { ...read(SEEN_KEY), [deviceId]: new Date().toISOString() });
 }
 
+/** Every device ID scanned from this browser (all the same machine: a browser
+ *  can only scan the machine it runs on). Sent with a saved scan as links. */
+export function seenIds() {
+  return Object.keys(read(SEEN_KEY));
+}
+
 /** Was this device scanned from this browser before? */
 export function isThisDevice(deviceId) {
   return Boolean(deviceId && read(SEEN_KEY)[deviceId]);

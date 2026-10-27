@@ -766,6 +766,15 @@ class SaveScanIn(BaseModel):
     passport: dict
     scan_type: str = "instant"
     assessment: dict | None = None
+    # Other device IDs this browser has scanned. A browser can only ever scan the
+    # machine it runs on, so an instant scan (ID from browser facts) and a deep
+    # scan (ID from maker, model and CPU) made in the same browser are the same
+    # machine; My Scans uses these to show them as one card. Display only:
+    # never signed, never used for any decision.
+    links: list[str] | None = None
+
+
+_DEVICE_ID = re.compile(r"^AFL-[A-Z2-7]{10}$")
 
 
 @app.get("/api/account-status")
@@ -797,8 +806,10 @@ def save_scan_route(body: SaveScanIn, authorization: str | None = Header(default
     if not verify_payload(doc) or issued_by_afterlife(doc) is False:
         raise HTTPException(400, "only a genuine, unedited AfterLife passport can be saved")
     keep = {k: doc[k] for k in ("payload", "signature", "issuer_pubkey", "issuer", "validFrom") if k in doc}
-    result = auth.save_scan(user_id, doc["payload"].get("device_id"), body.scan_type,
-                            {**keep, "assessment": body.assessment})
+    own = doc["payload"].get("device_id")
+    links = sorted({x for x in (body.links or []) if isinstance(x, str) and _DEVICE_ID.match(x) and x != own})[:20]
+    result = auth.save_scan(user_id, own, body.scan_type,
+                            {**keep, "assessment": body.assessment, **({"links": links} if links else {})})
     return {"saved": result in ("inserted", "refreshed"), "result": result}
 
 
@@ -810,6 +821,22 @@ def my_scans(authorization: str | None = Header(default=None)) -> dict:
     if not user_id:
         raise HTTPException(401, "sign in to see your saved scans")
     return {"scans": auth.list_scans(user_id)}
+
+
+@app.delete("/api/my-scans/{device_id}")
+def remove_device(device_id: str, authorization: str | None = Header(default=None)) -> dict:
+    """Remove one device (all its saved scans) from the signed-in user's history,
+    e.g. a stale card. Only ever touches that user's own rows."""
+    from afterlife import auth
+    if not _DEVICE_ID.match(device_id):
+        raise HTTPException(400, "malformed device id")
+    user_id = auth.user_from_token(authorization)
+    if not user_id:
+        raise HTTPException(401, "sign in to manage your saved scans")
+    ok = auth.remove_device(user_id, device_id)
+    if not ok:
+        raise HTTPException(503, "couldn't reach the account store; try again")
+    return {"removed": device_id}
 
 
 @app.get("/api/findings")

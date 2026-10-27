@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { decodeQR, decodeQrFile, isPdf } from "./qrDecode.js";
 import { api } from "./api.js";
+import { fetchAssessment } from "./assess.js";
 import PassportCard from "./PassportCard.jsx";
 import { b64decodeUtf8, b64decodeCompressed } from "./b64.js";
 
@@ -33,6 +34,10 @@ export default function Verifier({ onNavigate }) {
   const [mode, setMode] = useState(MODE.upload);
   const [doc, setDoc] = useState(null);
   const [result, setResult] = useState(null);
+  // The full assessed score, worked out from the passport's signed facts, so a
+  // deep passport shows the same headline here as on the scanning device
+  // (the signed hardware trust alone read 87 while the device showed 79).
+  const [final, setFinal] = useState(null);
   const [err, setErr] = useState(null);
   const [text, setText] = useState("");
   const [scanning, setScanning] = useState(false);
@@ -116,6 +121,12 @@ export default function Verifier({ onNavigate }) {
       const res = await api.verify(passport);
       setDoc(passport);
       setResult(res);
+      setFinal(null);
+      if (res?.valid && passport?.payload) {
+        fetchAssessment(passport.payload, null, passport)
+          .then((a) => a?.blend && setFinal({ score: a.blend.combined_score, grade: a.blend.grade }))
+          .catch(() => { /* the card falls back to the labelled hardware trust */ });
+      }
     } catch (e) { setErr(e.message); }
   }
 
@@ -168,7 +179,7 @@ export default function Verifier({ onNavigate }) {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.9rem", maxWidth: "560px" }}>
           <VerifyVerdict result={result} />
-          <PassportCard doc={doc} verified={result?.valid && result?.issued_by_afterlife !== false} />
+          <PassportCard doc={doc} final={final} verified={result?.valid && result?.issued_by_afterlife !== false} />
           <div style={{ display: "flex", gap: "0.7rem", flexWrap: "wrap" }}>
             <button className="cta" onClick={() => onNavigate?.("scan", { fresh: true })}>Scan your own device</button>
             <button className="ghost" onClick={() => { reset(); setFromQrLink(false); }}>Verify a different passport</button>
@@ -250,7 +261,7 @@ export default function Verifier({ onNavigate }) {
         {doc && (
           <div style={{ display: "flex", flexDirection: "column", gap: "0.9rem" }}>
             <VerifyVerdict result={result} />
-            <PassportCard doc={doc} verified={result?.valid && result?.issued_by_afterlife !== false} />
+            <PassportCard doc={doc} final={final} verified={result?.valid && result?.issued_by_afterlife !== false} />
             <button className="ghost" onClick={reset} style={{ alignSelf: "flex-start" }}>Verify another</button>
           </div>
         )}

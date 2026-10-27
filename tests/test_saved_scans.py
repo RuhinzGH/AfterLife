@@ -110,3 +110,39 @@ def test_without_supabase_settings_nothing_breaks(client, monkeypatch):
     monkeypatch.setattr(auth, "secret", lambda name: "")
     assert client.get("/api/account-status").json() == {"accounts": False}
     assert client.get("/api/my-scans", headers=AUTH).status_code == 401
+
+
+# ------------------------------------------------------------- links and removal
+
+def test_links_are_kept_only_when_they_look_like_device_ids(monkeypatch):
+    """A saved scan may list other IDs scanned in the same browser (so My Scans
+    can join an instant and a deep scan of one machine). Junk, its own ID and
+    anything not shaped like a device ID are dropped."""
+    from fastapi.testclient import TestClient
+    from api import main
+    from afterlife import auth
+    captured = {}
+    monkeypatch.setattr(auth, "user_from_token", lambda h: "user-1")
+    monkeypatch.setattr(auth, "save_scan", lambda uid, did, st, rec: captured.update(rec=rec, did=did) or "inserted")
+    c = TestClient(main.app)
+    doc = c.post("/api/scan-passport", json={"os": "Windows 11 (build 15.0.0)", "cpu_cores": 8, "ram_gb": 8}).json()
+    own = doc["payload"]["device_id"]
+    r = c.post("/api/save-scan", headers={"Authorization": "Bearer t"},
+               json={"passport": doc, "scan_type": "instant",
+                     "links": ["AFL-ABCDEFGHIJ", own, "not-an-id", "<script>", "AFL-ABCDEFGHIJ"]})
+    assert r.status_code == 200
+    assert captured["rec"]["links"] == ["AFL-ABCDEFGHIJ"]
+
+
+def test_removing_a_device_needs_sign_in_and_a_real_device_id(monkeypatch):
+    from fastapi.testclient import TestClient
+    from api import main
+    from afterlife import auth
+    c = TestClient(main.app)
+    assert c.delete("/api/my-scans/AFL-ABCDEFGHIJ").status_code == 401
+    monkeypatch.setattr(auth, "user_from_token", lambda h: "user-1")
+    assert c.delete("/api/my-scans/not-an-id", headers={"Authorization": "Bearer t"}).status_code == 400
+    calls = []
+    monkeypatch.setattr(auth, "remove_device", lambda uid, did: calls.append((uid, did)) or True)
+    r = c.delete("/api/my-scans/AFL-ABCDEFGHIJ", headers={"Authorization": "Bearer t"})
+    assert r.status_code == 200 and calls == [("user-1", "AFL-ABCDEFGHIJ")]

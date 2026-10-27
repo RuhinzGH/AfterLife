@@ -99,6 +99,31 @@ function imagePixels(file) {
   });
 }
 
+// Any pdf.js image object -> RGBA pixels.
+function pdfImagePixels(img) {
+  if (!img) return null;
+  const c = document.createElement("canvas");
+  c.width = img.width; c.height = img.height;
+  const ctx = c.getContext("2d");
+  if (img.bitmap) { ctx.drawImage(img.bitmap, 0, 0); return ctx.getImageData(0, 0, c.width, c.height); }
+  if (!img.data) return null;
+  const out = ctx.createImageData(img.width, img.height);
+  const n = img.width * img.height, src = img.data;
+  const per = src.length / n;                      // 1 = grey, 3 = RGB, 4 = RGBA
+  for (let i = 0; i < n; i++) {
+    const s = i * per, d = i * 4;
+    out.data[d] = src[s];
+    out.data[d + 1] = per >= 3 ? src[s + 1] : src[s];
+    out.data[d + 2] = per >= 3 ? src[s + 2] : src[s];
+    out.data[d + 3] = 255;
+  }
+  return out;
+}
+
+// Three ways in, most reliable first: the verify link (new PDFs carry one),
+// the QR picture embedded in the PDF at its own resolution, and only then a
+// render of the whole page. A page render shrinks the QR to however big it was
+// printed, which is what made older, smaller-QR PDFs unreadable.
 async function pdfQr(file) {
   const pdfjs = await import("pdfjs-dist");
   const worker = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
@@ -109,15 +134,38 @@ async function pdfQr(file) {
   } catch {
     throw new Error("Couldn't open that PDF. Try a screenshot of its QR code instead.");
   }
-  for (let n = 1; n <= Math.min(pdf.numPages, 3); n++) {
+  const pages = Math.min(pdf.numPages, 3);
+  for (let n = 1; n <= pages; n++) {
     const page = await pdf.getPage(n);
-    const viewport = page.getViewport({ scale: 3 });
-    const c = document.createElement("canvas");
-    c.width = viewport.width; c.height = viewport.height;
-    const ctx = c.getContext("2d");
-    await page.render({ canvasContext: ctx, viewport }).promise;
-    const text = decodeQR(ctx.getImageData(0, 0, c.width, c.height), { maxSide: Infinity });
-    if (text) return text;
+    const links = await page.getAnnotations().catch(() => []);
+    const link = links.find((a) => typeof a.url === "string" && a.url.includes("verify="));
+    if (link) return link.url;
+  }
+  for (let n = 1; n <= pages; n++) {
+    const page = await pdf.getPage(n);
+    const ops = await page.getOperatorList();
+    for (let i = 0; i < ops.fnArray.length; i++) {
+      if (ops.fnArray[i] !== pdfjs.OPS.paintImageXObject) continue;
+      const name = ops.argsArray[i][0];
+      const img = await new Promise((resolve) => {
+        try { page.objs.get(name, resolve); } catch { resolve(null); }
+      });
+      const pixels = pdfImagePixels(img);
+      const text = pixels && decodeQR(pixels);
+      if (text) return text;
+    }
+  }
+  for (const scale of [4, 6]) {
+    for (let n = 1; n <= pages; n++) {
+      const page = await pdf.getPage(n);
+      const viewport = page.getViewport({ scale });
+      const c = document.createElement("canvas");
+      c.width = viewport.width; c.height = viewport.height;
+      const ctx = c.getContext("2d");
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      const text = decodeQR(ctx.getImageData(0, 0, c.width, c.height), { maxSide: Infinity });
+      if (text) return text;
+    }
   }
   return null;
 }

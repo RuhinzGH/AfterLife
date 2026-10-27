@@ -24,6 +24,33 @@ export default function AuthModal({ onAuthed, onNavigate }) {
   );
 }
 
+/* ---------------------------------------------------------------- password box */
+// A password field with a show/hide button, so a long passphrase can be checked
+// before submitting (asked for in user testing). The button is a real button,
+// labelled for screen readers, and never submits the form.
+function PasswordInput({ value, onChange, ...rest }) {
+  const [shown, setShown] = useState(false);
+  return (
+    <div className="pw-wrap">
+      <input type={shown ? "text" : "password"} value={value} onChange={onChange} {...rest} />
+      <button type="button" className="pw-eye" onClick={() => setShown((s) => !s)}
+              aria-label={shown ? "Hide password" : "Show password"} aria-pressed={shown} title={shown ? "Hide password" : "Show password"}>
+        {shown ? (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.1A10.4 10.4 0 0 1 12 5c5 0 9 4.5 10 7-.4 1-1.3 2.4-2.6 3.7M6.2 6.2C4.3 7.5 2.9 9.4 2 12c1 2.5 5 7 10 7 1.6 0 3.1-.4 4.4-1.1"
+                  stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          </svg>
+        ) : (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M2 12c1-2.5 5-7 10-7s9 4.5 10 7c-1 2.5-5 7-10 7S3 14.5 2 12z" stroke="currentColor" strokeWidth="1.7" />
+            <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.7" />
+          </svg>
+        )}
+      </button>
+    </div>
+  );
+}
+
 /* ---------------------------------------------------------------- password strength */
 // The rules live in passwordPolicy.js (NIST SP 800-63B rev. 4: length over
 // complexity, no forced symbols, no common passwords). Shown live, in sign-up
@@ -160,7 +187,7 @@ function SignInUp({ onAuthed }) {
         {mode !== "forgot" && (
           <div className="field">
             <label>Password</label>
-            <input type="password" required minLength={mode === "signup" ? MIN_LENGTH : undefined}
+            <PasswordInput required minLength={mode === "signup" ? MIN_LENGTH : undefined}
                    maxLength={mode === "signup" ? MAX_LENGTH : undefined}
                    autoComplete={mode === "signup" ? "new-password" : "current-password"}
                    value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -174,7 +201,7 @@ function SignInUp({ onAuthed }) {
             <PasswordChecklist password={password} email={email} />
             <div className="field">
               <label>Confirm password</label>
-              <input type="password" required minLength={MIN_LENGTH} autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+              <PasswordInput required minLength={MIN_LENGTH} autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
             </div>
             {/* Live, like the checklist above: shown once something is typed in Confirm. */}
             {confirm && (
@@ -211,7 +238,7 @@ function SignInUp({ onAuthed }) {
 /* ---------------------------------------------------------------- password reset */
 // Reached from the reset email: the link signed the person in for this one
 // purpose, so only the new password is asked for. Same rules as sign-up.
-function SetNewPassword() {
+function SetNewPassword({ onDone = null, title = "Choose a new password" }) {
   const { user, updatePassword, finishRecovery, closeAuthModal } = useAuth();
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -228,7 +255,12 @@ function SetNewPassword() {
     setBusy(true);
     const { error } = await updatePassword(password);
     setBusy(false);
-    if (error) { setErr(/same/i.test(error.message) ? "That's your current password. Choose a different one." : error.message); return; }
+    if (error) {
+      setErr(/same/i.test(error.message) ? "That's your current password. Choose a different one."
+        : /reauth|recent/i.test(error.message) ? "For safety, please sign out and use \"Forgot password?\" to change it by email."
+        : error.message);
+      return;
+    }
     setDone(true);
   }
 
@@ -238,25 +270,25 @@ function SetNewPassword() {
         <div className="auth-eyebrow">Account</div>
         <h2 className="auth-title">Password changed</h2>
         <p className="auth-sub">You're signed in{email ? ` as ${email}` : ""}. Use the new password next time.</p>
-        <button className="cta" onClick={() => { finishRecovery(); closeAuthModal(); }}>Done</button>
+        <button className="cta" onClick={() => { if (onDone) onDone(); else { finishRecovery(); closeAuthModal(); } }}>Done</button>
       </>
     );
   }
   return (
     <>
       <div className="auth-eyebrow">Account</div>
-      <h2 className="auth-title">Choose a new password</h2>
+      <h2 className="auth-title">{title}</h2>
       <p className="auth-sub">{email ? <>For <b>{email}</b>.</> : null}</p>
       <form className="form" onSubmit={submit}>
         <div className="field">
           <label>New password</label>
-          <input type="password" required minLength={MIN_LENGTH} maxLength={MAX_LENGTH} autoComplete="new-password"
+          <PasswordInput required minLength={MIN_LENGTH} maxLength={MAX_LENGTH} autoComplete="new-password"
                  value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         <PasswordChecklist password={password} email={email} />
         <div className="field">
           <label>Confirm new password</label>
-          <input type="password" required minLength={MIN_LENGTH} autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+          <PasswordInput required minLength={MIN_LENGTH} autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
         </div>
         {confirm && (
           <span className={`pw-check pw-match ${confirm === password ? "ok" : "bad"}`} role="status">
@@ -265,6 +297,7 @@ function SetNewPassword() {
         )}
         {err && <div className="badge bad">⚠ {err}</div>}
         <button className="cta" type="submit" disabled={busy}>{busy ? "Saving…" : "Save new password"}</button>
+        {onDone && <button type="button" className="ghost" onClick={onDone}>Cancel</button>}
       </form>
     </>
   );
@@ -276,6 +309,8 @@ function SetNewPassword() {
 function AccountView({ onNavigate }) {
   const { user, signOut, closeAuthModal } = useAuth();
   const initial = user.email[0].toUpperCase();
+  const [changing, setChanging] = useState(false);
+  if (changing) return <SetNewPassword title="Change your password" onDone={() => setChanging(false)} />;
 
   async function handleSignOut() {
     await signOut();
@@ -297,6 +332,9 @@ function AccountView({ onNavigate }) {
       <button className="v2-btn" style={{ marginTop: "0.8rem" }}
               onClick={() => { closeAuthModal(); onNavigate?.("scans"); }}>
         Open My Scans
+      </button>
+      <button className="ghost" style={{ marginTop: "0.6rem" }} onClick={() => setChanging(true)}>
+        Change password
       </button>
       <div className="auth-divider" />
       <button className="account-signout" onClick={handleSignOut}>
