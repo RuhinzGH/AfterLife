@@ -163,6 +163,8 @@ export default function MyScans({ onNavigate }) {
       setScans((list) => (list || []).filter((s) => !(d.ids || [d.deviceId]).includes(s.passport?.payload?.device_id)));
       setOpenId(null);
     } catch (e) {
+      // Shown where the person is looking, not only at the top of the page.
+      window.alert(`Couldn't remove it: ${e.message}`);
       setErr(`Couldn't remove it: ${e.message}`);
     }
   }
