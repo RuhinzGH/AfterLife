@@ -2,94 +2,94 @@
   "source": "FIRST Exploit Prediction Scoring System (EPSS)",
   "url": "https://www.first.org/epss/",
   "feed": "https://epss.empiricalsecurity.com/epss_scores-current.csv.gz",
-  "model": "model_version:v2026.06.15,score_date:2026-10-26T12:03:22Z",
-  "fetched": "2026-10-27",
-  "scored_universe": 395492,
+  "model": "model_version:v2026.06.15,score_date:2026-10-31T12:00:27Z",
+  "fetched": "2026-11-01",
+  "scored_universe": 398713,
   "act_threshold": 0.1,
   "meaning": "Probability that exploitation activity is OBSERVED in the next 30 days. Not a probability that this device is compromised, and it says nothing about impact. A forecast, refreshed daily.",
   "caveat": "EPSS complements severity, it does not replace it. A low-EPSS critical flaw in an exposed service is still worth patching.",
   "by_version": {
     "10": {
-      "total": 7938,
-      "scored": 7938,
+      "total": 8382,
+      "scored": 8382,
       "unscored": 0,
-      "serious": 5863,
+      "serious": 6198,
       "all": {
-        "n": 7938,
-        "mean": 0.05716,
-        "median": 0.01132,
+        "n": 8382,
+        "mean": 0.0544,
+        "median": 0.01031,
         "over_threshold": 1023,
-        "expected_exploited": 453.7
+        "expected_exploited": 456.0
       },
       "serious_all": {
-        "n": 5863,
-        "mean": 0.0637,
-        "median": 0.01085,
+        "n": 6198,
+        "mean": 0.06051,
+        "median": 0.01001,
         "over_threshold": 871,
-        "expected_exploited": 373.5
+        "expected_exploited": 375.1
       },
       "serious_local": {
-        "n": 3397,
-        "mean": 0.0296,
-        "median": 0.00709,
+        "n": 3654,
+        "mean": 0.02777,
+        "median": 0.00634,
         "over_threshold": 233,
-        "expected_exploited": 100.6
+        "expected_exploited": 101.5
       },
       "serious_remote": {
-        "n": 2466,
-        "mean": 0.11066,
-        "median": 0.03662,
+        "n": 2544,
+        "mean": 0.10755,
+        "median": 0.03275,
         "over_threshold": 638,
-        "expected_exploited": 272.9
+        "expected_exploited": 273.6
       },
       "serious_kev": {
         "n": 211,
-        "mean": 0.36433,
+        "mean": 0.36479,
         "median": 0.22316,
         "over_threshold": 140,
-        "expected_exploited": 76.9
+        "expected_exploited": 77.0
       },
       "local_less_exploited_than_remote": true
     },
     "11": {
-      "total": 4663,
-      "scored": 4663,
+      "total": 5137,
+      "scored": 5137,
       "unscored": 0,
-      "serious": 3533,
+      "serious": 3897,
       "all": {
-        "n": 4663,
-        "mean": 0.02601,
-        "median": 0.00632,
+        "n": 5137,
+        "mean": 0.02405,
+        "median": 0.00577,
         "over_threshold": 181,
-        "expected_exploited": 121.3
+        "expected_exploited": 123.5
       },
       "serious_all": {
-        "n": 3533,
-        "mean": 0.02876,
-        "median": 0.00607,
+        "n": 3897,
+        "mean": 0.0265,
+        "median": 0.00553,
         "over_threshold": 153,
-        "expected_exploited": 101.6
+        "expected_exploited": 103.3
       },
       "serious_local": {
-        "n": 2345,
-        "mean": 0.01536,
-        "median": 0.00364,
+        "n": 2639,
+        "mean": 0.01403,
+        "median": 0.00353,
         "over_threshold": 57,
-        "expected_exploited": 36.0
+        "expected_exploited": 37.0
       },
       "serious_remote": {
-        "n": 1188,
-        "mean": 0.05521,
-        "median": 0.01312,
+        "n": 1258,
+        "mean": 0.05264,
+        "median": 0.01273,
         "over_threshold": 96,
-        "expected_exploited": 65.6
+        "expected_exploited": 66.2
       },
       "serious_kev": {
         "n": 92,
-        "mean": 0.28612,
+        "mean": 0.28703,
         "median": 0.15401,
         "over_threshold": 53,
-        "expected_exploited": 26.3
+        "expected_exploited": 26.4
       },
       "local_less_exploited_than_remote": true
     }
