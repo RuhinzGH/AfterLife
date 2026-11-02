@@ -2,9 +2,9 @@
   "source": "FIRST Exploit Prediction Scoring System (EPSS)",
   "url": "https://www.first.org/epss/",
   "feed": "https://epss.empiricalsecurity.com/epss_scores-current.csv.gz",
-  "model": "model_version:v2026.06.15,score_date:2026-10-31T12:00:27Z",
-  "fetched": "2026-11-01",
-  "scored_universe": 398713,
+  "model": "model_version:v2026.06.15,score_date:2026-11-01T12:00:16Z",
+  "fetched": "2026-11-02",
+  "scored_universe": 398784,
   "act_threshold": 0.1,
   "meaning": "Probability that exploitation activity is OBSERVED in the next 30 days. Not a probability that this device is compromised, and it says nothing about impact. A forecast, refreshed daily.",
   "caveat": "EPSS complements severity, it does not replace it. A low-EPSS critical flaw in an exposed service is still worth patching.",
@@ -16,14 +16,14 @@
       "serious": 6198,
       "all": {
         "n": 8382,
-        "mean": 0.0544,
+        "mean": 0.05441,
         "median": 0.01031,
         "over_threshold": 1023,
         "expected_exploited": 456.0
       },
       "serious_all": {
         "n": 6198,
-        "mean": 0.06051,
+        "mean": 0.06052,
         "median": 0.01001,
         "over_threshold": 871,
         "expected_exploited": 375.1
@@ -31,20 +31,20 @@
       "serious_local": {
         "n": 3654,
         "mean": 0.02777,
-        "median": 0.00634,
+        "median": 0.00638,
         "over_threshold": 233,
         "expected_exploited": 101.5
       },
       "serious_remote": {
         "n": 2544,
-        "mean": 0.10755,
+        "mean": 0.10757,
         "median": 0.03275,
         "over_threshold": 638,
-        "expected_exploited": 273.6
+        "expected_exploited": 273.7
       },
       "serious_kev": {
         "n": 211,
-        "mean": 0.36479,
+        "mean": 0.3648,
         "median": 0.22316,
         "over_threshold": 140,
         "expected_exploited": 77.0
@@ -59,7 +59,7 @@
       "all": {
         "n": 5137,
         "mean": 0.02405,
-        "median": 0.00577,
+        "median": 0.00579,
         "over_threshold": 181,
         "expected_exploited": 123.5
       },
@@ -79,14 +79,14 @@
       },
       "serious_remote": {
         "n": 1258,
-        "mean": 0.05264,
+        "mean": 0.05265,
         "median": 0.01273,
         "over_threshold": 96,
         "expected_exploited": 66.2
       },
       "serious_kev": {
         "n": 92,
-        "mean": 0.28703,
+        "mean": 0.28704,
         "median": 0.15401,
         "over_threshold": 53,
         "expected_exploited": 26.4
