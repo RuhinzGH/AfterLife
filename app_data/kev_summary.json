@@ -1,10 +1,10 @@
 {
   "source": "CISA Known Exploited Vulnerabilities Catalog",
   "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-  "catalog_version": "2026.11.06",
-  "date_released": "2026-11-06",
-  "fetched": "2026-11-09",
-  "kev_total": 1769,
+  "catalog_version": "2026.11.13",
+  "date_released": "2026-11-13",
+  "fetched": "2026-11-16",
+  "kev_total": 1781,
   "kev_ransomware": 361,
   "caveat": "KEV records observed, reported exploitation. Absence is not evidence of safety -- treat every count here as a floor, not a total.",
   "by_version": {
